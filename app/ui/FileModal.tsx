@@ -287,15 +287,18 @@ const FileModal = () => {
           className="flex flex-col gap-y-4"
         >
           <div>
+            <p className="pb-1 text-left">School Upload File</p>
             <Input
               type="file"
               className="mt-1"
               id="document1"
               disabled={isLoading}
               {...register('document1', { required: true })}
+              accept=".csv"
             />
           </div>
           <div>
+            <p className="pb-1 text-left">Web Input File</p>
             <Input
               type="file"
               className="mt-1"
@@ -305,6 +308,7 @@ const FileModal = () => {
             />
           </div>
           <div>
+            <p className="pb-1 text-left">Math Risk File</p>
             <Input
               type="file"
               className="mt-1"
@@ -314,6 +318,7 @@ const FileModal = () => {
             />
           </div>
           <div>
+            <p className="pb-1 text-left">Reading Risk File</p>
             <Input
               type="file"
               className="mt-1"
@@ -323,6 +328,7 @@ const FileModal = () => {
             />
           </div>
           <div>
+            <p className="pb-1 text-left">Suspension Risk File</p>
             <Input
               type="file"
               className="mt-1"
