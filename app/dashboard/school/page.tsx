@@ -21,6 +21,7 @@ import Dropdown from '@/app/ui/Dropdown';
 import useRiskOptions from '@/hooks/useRiskOptions';
 import useSchoolLevel from '@/hooks/useSchoolLevel';
 import { BarChart } from '@/app/ui/charts/BarChart';
+import RiskDropdown from '@/app/ui/RiskDropDown';
 function MidasRiskTooltipContent() {
   return (
     <div>Percentages of students at the three different MIDAS risk levels.</div>
@@ -30,6 +31,14 @@ function MidasRiskTooltipContent() {
 export default async function Page() {
   const riskOptions = useRiskOptions();
   const schooLevel = useSchoolLevel();
+
+  console.log(schooLevel.ethnicityRisk);
+  console.log(schooLevel.ellRisk);
+  const [genderState, setGenderState] = useState({
+    math_risk: false,
+    read_risk: false,
+    susp_risk: false,
+  });
   const [midasRisk, setMidasRisk] = useState({
     low: '45%',
     some: '40%',
@@ -57,10 +66,19 @@ export default async function Page() {
       'Low Risk': 0.27,
     },
   ];
+  const getCurrentState = (states: any) => {
+    const arr = Object.keys(states).filter((state: any) => {
+      if (states[state]) return state;
+    });
 
-  const titleList = ['Acadmic, Social, Emotional'];
+    if (arr) return arr[0];
+    return undefined;
+  };
 
   const colors = ['rose-500', 'yellow-400', 'green-500'];
+
+  const nameRisk = getCurrentState(genderState);
+  console.log(schooLevel);
   return (
     <main>
       <div className="flex gap-4">
@@ -144,33 +162,127 @@ export default async function Page() {
         </div>
         <div className=" flex h-full w-full flex-col gap-y-28">
           <div className="flex h-full w-full items-center justify-end">
-            <Dropdown />
+            <Dropdown riskOptions={riskOptions} />
           </div>
 
           <div className="flex justify-center">
-            {riskOptions.isEthnicity && <BarChartEthnicity />}
-            {riskOptions.isEnglishLeaner && (
+            {riskOptions.isEthnicity && schooLevel.ethnicityRisk && (
               <Card
-                className="-mb-4 mr-2  h-96 basis-1/3 rounded-xl bg-neutral-100 pb-7"
+                className=" -mb-4 mr-2 h-[26rem] w-8/12 rounded-xl bg-neutral-100 p-6"
                 shadow="md"
               >
-                <p className="-mb-8 pl-2 text-xl">
-                  English Learner Status and Risk
+                <RiskDropdown
+                  riskOptions={genderState}
+                  setRiskOption={setGenderState}
+                />
+                <p className="-mb-8 p-2 text-xl font-bold">
+                  Ethnicity and Risk
                 </p>
-                <p className="-mb-8 mt-6 pl-2 text-sm">
-                  Distribution of those at risk for each ELL and non-ELL
-                  students
+                <p className="-mb-8 mt-6 pl-2 text-sm italic">
+                  Distribution of those at risk for each ethnicity
                 </p>
                 <div className="mb-0 mt-auto flex h-full flex-col pt-10">
-                  <BarChart
-                    data={englishLearnerDataPlaceholder}
-                    colors={colors}
-                    legendVariable="ELL Status"
-                  />
+                  {nameRisk && (
+                    <BarChart
+                      data={Object.keys(schooLevel?.ethnicityRisk).map(
+                        (ele: any) => ({
+                          id: ele,
+                          'High Risk':
+                            schooLevel.ethnicityRisk[ele][nameRisk][
+                              'High Risk'
+                            ] / 100,
+                          'Some Risk':
+                            schooLevel.ethnicityRisk[ele][nameRisk][
+                              'Some Risk'
+                            ] / 100,
+                          'Low Risk':
+                            schooLevel.ethnicityRisk[ele][nameRisk][
+                              'Low Risk'
+                            ] / 100,
+                        }),
+                      )}
+                      colors={colors}
+                      legendVariable="Ethnicity"
+                    />
+                  )}
                 </div>
               </Card>
             )}
-            {riskOptions.isGender && <DonutChartGender />}
+            {riskOptions.isEnglishLeaner && schooLevel.ellRisk && (
+              <Card
+                className=" -mb-4 mr-2 h-[26rem] w-8/12 rounded-xl bg-neutral-100 p-6"
+                shadow="md"
+              >
+                <RiskDropdown
+                  riskOptions={genderState}
+                  setRiskOption={setGenderState}
+                />
+                <p className="-mb-8 p-2 text-xl font-bold">
+                  English Learner and Risk
+                </p>
+                <p className="-mb-8 mt-6 pl-2 text-sm italic">
+                  Distribution of those at risk for each english learner
+                </p>
+                <div className="mb-0 mt-auto flex h-full flex-col pt-10">
+                  {nameRisk && (
+                    <BarChart
+                      data={Object.keys(schooLevel?.ellRisk).map(
+                        (ele: any) => ({
+                          id: ele === 'Yes' ? 'ELL' : 'Non-ELL',
+                          'High Risk':
+                            schooLevel.ellRisk[ele][nameRisk]['High Risk'] /
+                            100,
+                          'Some Risk':
+                            schooLevel.ellRisk[ele][nameRisk]['Some Risk'] /
+                            100,
+                          'Low Risk':
+                            schooLevel.ellRisk[ele][nameRisk]['Low Risk'] / 100,
+                        }),
+                      )}
+                      colors={colors}
+                      legendVariable="Ethnicity"
+                    />
+                  )}
+                </div>
+              </Card>
+            )}
+            {riskOptions.isGender && schooLevel.genderRisk && (
+              <Card
+                className=" -mb-4 mr-2 h-[26rem] w-8/12 rounded-xl bg-neutral-100 p-6"
+                shadow="md"
+              >
+                <RiskDropdown
+                  riskOptions={genderState}
+                  setRiskOption={setGenderState}
+                />
+                <p className="-mb-8 p-2 text-xl font-bold">Gender and Risk</p>
+                <p className="-mb-8 mt-6 pl-2 text-sm italic">
+                  Distribution of those at risk for each gender
+                </p>
+                <div className="mb-0 mt-auto flex h-full flex-col pt-10">
+                  {nameRisk && (
+                    <BarChart
+                      data={Object.keys(schooLevel?.genderRisk).map(
+                        (ele: any) => ({
+                          id: ele,
+                          'High Risk':
+                            schooLevel.genderRisk[ele][nameRisk]['High Risk'] /
+                            100,
+                          'Some Risk':
+                            schooLevel.genderRisk[ele][nameRisk]['Some Risk'] /
+                            100,
+                          'Low Risk':
+                            schooLevel.genderRisk[ele][nameRisk]['Low Risk'] /
+                            100,
+                        }),
+                      )}
+                      colors={colors}
+                      legendVariable="Gender"
+                    />
+                  )}
+                </div>
+              </Card>
+            )}
             {riskOptions.isTotalScore && <BarChartTotal />}
             {schooLevel.saeberAcademic &&
               schooLevel.mySaeberAcademic &&

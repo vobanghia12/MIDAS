@@ -11,6 +11,7 @@ import { read, utils } from 'xlsx';
 import {
   getConfidenceLvel,
   getmyRiskStatsSchoolLevel,
+  getDemographic,
 } from '@/action/getSchoolLevelFunctions';
 import { getMyRiskStatsGradeLevel } from '@/action/getGradeLevelFunctions';
 import useSchoolLevel from '@/hooks/useSchoolLevel';
@@ -62,7 +63,6 @@ export const setSecondMatchingRiskFactor = (
     x[confidenceFactor] = null;
     m.set(x.id, x);
   });
-  console.log(m);
 
   riskFactorData.forEach(function (x: any) {
     var existing = m.get(x.id);
@@ -164,16 +164,6 @@ const FileModal = () => {
 
       uploadData = structuredClone(Array.from(m.values()));
 
-      // uploadData.filter((d1: any) =>
-      //   inputData.some((d2: any) => {
-      //     if (helperFunction(d1, d2)) {
-      //       d1['id'] = d2['id'];
-      //       return true;
-      //     }
-      //     return false;
-      //   }),
-      // );
-
       //deep clone the array after matching
 
       // //filter for math risk
@@ -247,20 +237,11 @@ const FileModal = () => {
 
       schooLevel.setlistOfAllStudents(suspRisk);
 
-      // console.log(
-      //   getmyRiskStatsSchoolLevel(
-      //     suspRisk,
-      //     'read_confidence',
-      //     'read_confidence',
-      //   ),
-      // );
-      // console.log(
-      //   getmyRiskStatsSchoolLevel(
-      //     suspRisk,
-      //     'math_confidence',
-      //     'math_confidence',
-      //   ),
-      // );
+      schooLevel.setGenderRisk(getDemographic(suspRisk, 'gender'));
+
+      schooLevel.setEllRisk(getDemographic(suspRisk, 'ell'));
+
+      schooLevel.setEthnicityRisk(getDemographic(suspRisk, 'ethnicity'));
 
       router.refresh();
       setIsLoading(false);

@@ -13,6 +13,9 @@ interface SchoolLevelStore {
   riskMath: any;
   riskReading: any;
   riskSuspension: any;
+  genderRisk: any;
+  ethnicityRisk: any;
+  ellRisk: any;
   setSaebrsEmotion: (emo: any) => void;
   setMySaebrsEmotion: (emo: any) => void;
   setSaeberAcademic: (academic: any) => void;
@@ -24,9 +27,13 @@ interface SchoolLevelStore {
   setRiskSuspension: (susp: any) => void;
   setConfidenceLevel: (confidence: any) => void;
   setlistOfAllStudents: (students: any) => void;
+  setGenderRisk: (gender: any) => void;
+  setEthnicityRisk: (ethnicity: any) => void;
+  setEllRisk: (ell: any) => void;
 }
 
 const useSchoolLevel = create<SchoolLevelStore>((set) => ({
+  genderRisk: '',
   listOfAllStudents: undefined,
   confidenceLevel: 0,
   riskMath: '',
@@ -38,6 +45,8 @@ const useSchoolLevel = create<SchoolLevelStore>((set) => ({
   mySaeberAcademic: '',
   saeberSocial: '',
   mySaeberSocial: '',
+  ethnicityRisk: '',
+  ellRisk: '',
   setSaebrsEmotion: (emo: JSON) => set({ saebrsEmotion: emo }),
   setMySaebrsEmotion: (emo: JSON) => set({ mySaebrsEmotion: emo }),
   setSaeberAcademic: (academic: JSON) => set({ saeberAcademic: academic }),
@@ -49,6 +58,9 @@ const useSchoolLevel = create<SchoolLevelStore>((set) => ({
   setRiskSuspension: (susp: any) => set({ riskSuspension: susp }),
   setConfidenceLevel: (confidence: any) => set({ confidenceLevel: confidence }),
   setlistOfAllStudents: (students: any) => set({ listOfAllStudents: students }),
+  setGenderRisk: (gender: any) => set({ genderRisk: gender }),
+  setEthnicityRisk: (ethnicity: any) => set({ ethnicityRisk: ethnicity }),
+  setEllRisk: (ell: any) => set({ ellRisk: ell }),
 }));
 
 export default useSchoolLevel;

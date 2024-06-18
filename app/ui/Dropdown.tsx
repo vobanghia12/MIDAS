@@ -17,35 +17,10 @@ import {
 } from './charts/total-demographics-charts';
 import useRiskOptions from '@/hooks/useRiskOptions';
 import { PopToRiskCharts } from './dashboard/cards/population/demographics-summary';
-const Dropdown = () => {
-  const riskOptions = useRiskOptions();
-  const colors = ['rose-500', 'yellow-400', 'green-500'];
+const Dropdown = ({ riskOptions }: { riskOptions: any }) => {
   const [title, setTitle] = useState<string>('Risk Option');
-  const dataFormatter = (number: number) =>
-    Intl.NumberFormat('us').format(number).toString();
 
   useEffect(() => {}, [riskOptions]);
-
-  const ethnicityDataPlaceholder = [
-    {
-      Ethnicity: 'White',
-      'High Risk': 58,
-      'Some Risk': 200,
-      'Low Risk': 100,
-    },
-    {
-      Ethnicity: 'Hispanic',
-      'High Risk': 20,
-      'Some Risk': 150,
-      'Low Risk': 130,
-    },
-    {
-      Ethnicity: 'Other POC',
-      'High Risk': 33,
-      'Some Risk': 156,
-      'Low Risk': 200,
-    },
-  ];
 
   return (
     <div className="">
