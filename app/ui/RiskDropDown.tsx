@@ -43,7 +43,7 @@ const RiskDropdown = ({
             >
               {Object.keys(riskOptions).map((ele: any) => {
                 return (
-                  <div>
+                  <div key={ele}>
                     <DropdownMenu.Item
                       onClick={() => {
                         setRiskOption({ ...initialState, [ele]: true });
