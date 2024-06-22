@@ -17,7 +17,7 @@ interface SearchProps {
   };
 }
 
-export default async function Page({ searchParams }: SearchProps) {
+export default function Page({ searchParams }: SearchProps) {
   const schoolLevel = useSchoolLevel();
 
   const searchData = () => {

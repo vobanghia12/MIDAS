@@ -11,8 +11,7 @@ export async function POST(request: Request) {
 
   try {
     const {email, username, password} = await request.json();
-    // Validate email/username and password
-    console.log({email, username, password});
+    // Validation
 
     const hashedPassword = await hash(password, 10);
 
