@@ -5,8 +5,6 @@ const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['norma
 
 import { Button, Input, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
-
 
 
 export default function ConfirmSignoutModal({
@@ -19,8 +17,7 @@ export default function ConfirmSignoutModal({
   onOpen: any,
   onOpenChange: any,
 }) {
-  const router = useRouter();
-
+  // NextAuth signOut function
   const handleLogout = () => {
     signOut({callbackUrl: '/'});
   }

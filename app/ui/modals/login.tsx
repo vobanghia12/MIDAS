@@ -20,18 +20,24 @@ export default function LoginModal({
   onOpenChange: any,
 }) {
   const router = useRouter();
+
+  // For displaying incorrect login message
   const  [ incorrectLogin, setIncorrectLogin ] = useState(false);
 
+  // Handle login submit button
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Logging in");
     const formData = new FormData(e.currentTarget);
+
+    // NextAuth signIn
     const response = await signIn('credentials', {
       username: formData.get('username'),
       password: formData.get('password'),
       redirect: false
     });
 
+    // If there was no error in the signIn function, go to dashboard/school
     if (!response?.error) {
       router.push('/dashboard/school');
       router.refresh();
@@ -41,6 +47,12 @@ export default function LoginModal({
       setIncorrectLogin(true);
     }
   };
+
+  // Reset the incorrect password message when updating the inputs
+  const handleTextUpdate = () => {
+    setIncorrectLogin(false);
+  };
+
   return (
     <Modal className={nunito.className} isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior='inside'>
       <ModalContent>
@@ -54,8 +66,8 @@ export default function LoginModal({
               <div className='flex flex-col justify-center'>
                 {incorrectLogin && <p className='text-red-500'>Username or password was incorrect.</p>}
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
-                  <Input label='Username' name='username' required={true}/>
-                  <Input label='Password' name='password' type='password' required={true}/>
+                  <Input label='Username' name='username' required onKeyDown={handleTextUpdate}/>
+                  <Input label='Password' name='password' type='password' required onKeyDown={handleTextUpdate}/>
                   <Button type='submit' color="success" variant="faded">
                     Login
                   </Button>

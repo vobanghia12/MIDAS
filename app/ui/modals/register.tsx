@@ -51,7 +51,7 @@ export default function RegisterModal({
                   <Input label='Email' name='email' required={true}/>
                   <Input label='Username' name='username' required={true}/>
                   <Input label='Password' name='password' type='password' required={true}/>
-                  <Button type='submit' color="success" variant="faded">
+                  <Button type='submit' color="success" variant="faded" onPress={onClose}>
                     Register
                   </Button>
                 </form>
