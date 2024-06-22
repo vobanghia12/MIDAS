@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 
 
-export default function LoginModal({
+export default function RegisterModal({
   isOpen,
   onOpen,
   onOpenChange,
@@ -19,28 +19,22 @@ export default function LoginModal({
   onOpen: any,
   onOpenChange: any,
 }) {
-  const router = useRouter();
+  
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const response = await fetch('./api/auth/register', {
+      method: "POST",
+      body: JSON.stringify({
+        email: formData.get("email"),
+        username: formData.get("username"),
+        password: formData.get("password")
+      }),
+    });
 
-  async function HandleSubmit(event: FormEvent<HTMLFormElement>) {
-    // event.preventDefault();
+    console.log({response});
+  };
 
-    // const formData = new FormData(event.currentTarget);
-    // const username = formData.get('username');
-    // const password = formData.get('password');
-
-    // const response = await fetch('/api/auth/login', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ username, password }),
-    // });
-
-    // if (response.ok) {
-    //   router.push('/dashboard/school')
-    // }
-    // else {
-    //   console.log("Error routing to dashboard from login")
-    // }
-  }
 
   return (
     <Modal className={nunito.className} isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior='inside'>
@@ -48,16 +42,17 @@ export default function LoginModal({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              Login
+              Register new account
             </ModalHeader>
 
             <ModalBody>
               <div className='flex justify-center'>
-                <form onSubmit={HandleSubmit} className="flex flex-col gap-4 w-full">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+                  <Input label='Email' name='email' required={true}/>
                   <Input label='Username' name='username' required={true}/>
                   <Input label='Password' name='password' type='password' required={true}/>
                   <Button type='submit' color="success" variant="faded">
-                    Login
+                    Register
                   </Button>
                 </form>
               </div>

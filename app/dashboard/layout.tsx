@@ -1,7 +1,11 @@
+'use client';
+
 import SideNav from '@/app/ui/dashboard/sidenav';
 import CaptureScreenshotButton from '../ui/CaptureScreenshotButton';
 import ToasterProvider from '@/providers/ToastProvider';
-export default function Layout({ children }: { children: React.ReactNode }) {
+import { SessionProvider } from 'next-auth/react';
+import { Session } from 'next-auth';
+export default function Layout({ children, pageProps}: { children: React.ReactNode; pageProps: {session: Session, pageProps: any[] }}) {
   return (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
       <div className="w-full flex-none md:w-48">

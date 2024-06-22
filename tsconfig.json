@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     "app/lib/placeholder-data.js",
     "scripts/seed.js"
-, "app/ui/dashboard/popover.jsx"  ],
+, "app/ui/dashboard/popover.jsx", "app/api/auth/[...nextauth].js"  ],
   "exclude": ["node_modules"]
 }
