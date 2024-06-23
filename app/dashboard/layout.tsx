@@ -1,7 +1,9 @@
 import SideNav from '@/app/ui/dashboard/sidenav';
 import CaptureScreenshotButton from '../ui/CaptureScreenshotButton';
 import ToasterProvider from '@/providers/ToastProvider';
-export default function Layout({ children }: { children: React.ReactNode }) {
+
+export default async function Layout({ children }: { children: React.ReactNode}) {
+
   return (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
       <div className="w-full flex-none md:w-48">
