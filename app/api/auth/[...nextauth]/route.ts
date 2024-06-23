@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 
 // Update this when switching databases if needed
 const supabaseUrl = 'https://kalbwmivszjzlnepcebm.supabase.co';
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey!);
 
 const handler = NextAuth({
