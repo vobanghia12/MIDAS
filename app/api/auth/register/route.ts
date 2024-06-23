@@ -6,7 +6,7 @@ export async function POST(request: Request) {
 
 
   const supabaseUrl = 'https://kalbwmivszjzlnepcebm.supabase.co';
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const supabase = createClient(supabaseUrl, supabaseKey!);
 
   try {
@@ -17,10 +17,10 @@ export async function POST(request: Request) {
 
     const { data, error } = await supabase
       .rpc('insert_user', {
-        _email: email, 
-        _is_admin: true, 
-        _name: username, 
-        _password: hashedPassword, 
+        _email: email,
+        _is_admin: true,
+        _name: username,
+        _password: hashedPassword,
         _school_id: 0
       })
     if (error) console.error(error)
