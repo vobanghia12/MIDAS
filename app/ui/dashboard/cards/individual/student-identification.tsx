@@ -1,4 +1,4 @@
-import { Card, CardBody,  Divider, Tooltip } from '@nextui-org/react';
+import { Card, CardBody,  Divider } from '@nextui-org/react';
 import React from 'react';
 
 import { Nunito } from "next/font/google";
@@ -22,26 +22,22 @@ function Row({
   )
 }
 
-export function CardStudentDemographics({
-  gender,
-  ethnicity,
-  englishLearner,
+export function CardStudentIdentification({
+  id,
+  classroom,
+  grade,
 }: {
-  gender: string;
-  ethnicity: string;
-  englishLearner: string;
+  id: string;
+  classroom: string;
+  grade: string;
 }) {
 
   return (
     <Card className={`${nunito.className} bg-neutral-100 w-full`} shadow='md'>
       <CardBody className={`${nunito.className} flex gap-1 justify-center`}>
-        <Row header="Gender" content={gender}/>
+        <Row header="Classroom ID" content={classroom}/>
         <Divider/>
-        <Row header="Ethnicity" content={ethnicity}/>
-        <Divider/>
-        <Tooltip content="Is this student an English language learner?" placement='bottom'>
-        <Row header="English Learner" content={englishLearner}/>
-        </Tooltip>
+        <Row header="Grade Level" content={grade}/>
       </CardBody>
     </Card>
   );

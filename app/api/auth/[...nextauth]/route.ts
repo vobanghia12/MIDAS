@@ -27,6 +27,7 @@ const handler = NextAuth({
 
       async authorize(credentials, req) {
         // TODO: Validate email, username, and password
+        console.log("authorizing")
 
         // Call Supabase database function to get the user associated with this username
         const { data, error } = await supabase
@@ -37,6 +38,7 @@ const handler = NextAuth({
         else console.log('Got user')
 
         const user = data;
+        console.log({user})
 
         // Compare encrypted password in db to inputted password
         const passwordCorrect = await compare

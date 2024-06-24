@@ -1,7 +1,16 @@
-
-import { Card, CardBody, CardHeader, Tooltip, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Divider, Table, TableColumn, TableHeader, TableBody, TableRow, TableCell } from '@nextui-org/react';
+import { 
+  Tooltip, 
+  Button, 
+  useDisclosure, 
+  Divider, 
+  Card, CardBody, CardHeader, 
+  Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, 
+  Table, TableColumn, TableHeader, TableBody, TableRow, TableCell, 
+  TableBodyProps} from '@nextui-org/react';
 import { ConfidenceIntervalVisualizer } from '../../confidence-visualizer';
 import { Nunito } from "next/font/google";
+import { JSXElementConstructor, ReactElement } from 'react';
+import { VariableWeightCell } from '@/app/types/variable-weight-cell';
 const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['normal', 'italic']})
 
 function TooltipContent() {
@@ -14,30 +23,129 @@ function TooltipContent() {
   )
 }
 
+
+
+function VariableWeightsTable({
+  variables
+}:
+{
+  variables: VariableWeightCell[]
+}) {
+
+  function mapTableBody() : ReactElement<TableBodyProps<object>, string | JSXElementConstructor<any>>{
+    const missingTrue = <TableCell className='text-xl text-red-400'>Missing!</TableCell>
+    const missingFalse = <TableCell className='text-xl'>{undefined}</TableCell>
+
+    return (
+      <TableBody>
+        {variables.map((variable: VariableWeightCell, index: number) => (
+          <TableRow key={index}>
+            <TableCell className='text-xl'>{variable.name}</TableCell>
+            {variable.missing ? missingTrue : missingFalse}
+            <TableCell className='text-xl'>{variable.weight}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    );
+  }
+
+  return (
+    <Table>
+      <TableHeader>
+          <TableColumn className='text-2xl'>Variable</TableColumn>
+          <TableColumn className='text-2xl'>Missing?</TableColumn>
+          <TableColumn className='text-2xl'>Weight</TableColumn>
+      </TableHeader>
+      {mapTableBody()}
+    </Table>
+  )
+}
+
+const variables = [
+  {  
+    name: 'Gender',
+    weight: 'Low',
+    missing: true
+  },
+  {  
+    name: 'Ethnicity',
+    weight: 'Low',
+    missing: false
+  },
+  {  
+    name: 'English Learner',
+    weight: 'Low',
+    missing: true
+  },
+  {  
+    name: 'Office Disciplinary Referrals',
+    weight: 'Low',
+    missing: false
+  },
+  {  
+    name: 'Suspensions',
+    weight: 'Low',
+    missing: false
+  },
+  {  
+    name: 'Math Test Risk',
+    weight: 'Low',
+    missing: false
+  },
+  {  
+    name: 'Reading Test Risk',
+    weight: 'Low',
+    missing: false
+  },
+  {  
+    name: 'Saebrs/MySaebrs Total',
+    weight: 'Low',
+    missing: false
+  },
+  {  
+    name: 'Saebrs/MySaebrs Social',
+    weight: 'Low',
+    missing: false
+  },
+  {  
+    name: 'Saebrs/MySaebrs Emotional',
+    weight: 'Low',
+    missing: false
+  },
+  {  
+    name: 'Saebrs/MySaebrs Academic',
+    weight: 'Low',
+    missing: false
+  },
+]
+
 export function CardConfidenceVisualizer({
   confidence,
   confidenceThresholds,
+  missingVariables,
 }: {
   confidence: number;
   confidenceThresholds: number[];
+  missingVariables: number;
 }) {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
   return (
-    <div>
-      <Tooltip content={TooltipContent()} placement='bottom'>
+      <Tooltip content={TooltipContent()} placement='bottom' className='h-full'>
         <div onClick={onOpen}>
-          <Card className={`${nunito.className} rounded-xl bg-neutral-100`} shadow='md'>
-            <CardHeader className=''>
+          <Card className={`${nunito.className} rounded-xl bg-neutral-100 h-full`} shadow='md'>
+            <CardHeader className='flex flex-col'>
               <h3 className="text-lg font-medium text-slate-800"> MIDAS Risk Confidence </h3>
+              
             </CardHeader>
             
-            <div className='flex flex-col items-center pb-4'>
-
-              <p className='text-md'> Missing variables </p>
-              <p className='text-4xl'> {1} </p>
-              <ConfidenceIntervalVisualizer confidence={confidence} thresholds={confidenceThresholds}/>
-            </div>
+            <CardBody className='px-4 -mt-4 w-full -mb-4'>
+              <div className='flex flex-col items-center pb-4'>
+                <p className='text-3xl'> {confidence + "%"} </p>
+                <ConfidenceIntervalVisualizer confidence={confidence} thresholds={confidenceThresholds}/>
+              </div>
+              <p className='italic -mt-2 mr-0 ml-auto pr-0 pb-1 text-sm '>Click to see more information</p>
+            </CardBody>
           </Card>
           
           <Modal className={nunito.className} isOpen={isOpen} onOpenChange={onOpenChange} size='3xl' scrollBehavior='inside'>
@@ -53,55 +161,16 @@ export function CardConfidenceVisualizer({
                       then the confidence will be more significantly affected than if their English Language Learner status is missing. 
                       
                       <br/><br/>
-                      Below is a breakdown of the weights of each variable. 
+                      Below is a breakdown of the weights of each variable.
+
+                      <span className='text-xl font-semibold'>Missing values: {missingVariables}</span>
+
                     </div>
 
                     <Divider/>
 
-                    <Table className='text-lg'>
-                      <TableHeader>
-                        <TableColumn className='text-2xl'>Variable</TableColumn>
-                        <TableColumn className='text-2xl'>Weight</TableColumn>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow key='1'>
-                          <TableCell className='text-xl'>Gender</TableCell>
-                          <TableCell className='text-xl'>Low</TableCell>
-                        </TableRow>
-                        <TableRow key='2'>
-                          <TableCell className='text-xl'>Ethnicity</TableCell>
-                          <TableCell className='text-xl'>Low</TableCell>
-                        </TableRow>
-                        <TableRow key='3'>
-                          <TableCell className='text-xl'>English Learner Status</TableCell>
-                          <TableCell className='text-xl'>Low</TableCell>
-                        </TableRow>
-                        <TableRow key='4'>
-                          <TableCell className='text-xl'>Office Disciplinary Referrals</TableCell>
-                          <TableCell className='text-xl'>Low</TableCell>
-                        </TableRow>
-                        <TableRow key='5'>
-                          <TableCell className='text-xl'>Suspensions</TableCell>
-                          <TableCell className='text-xl'>Low</TableCell>
-                        </TableRow>
-                        <TableRow key='6'>
-                          <TableCell className='text-xl'>Math Scores</TableCell>
-                          <TableCell className='text-xl'>Low</TableCell>
-                        </TableRow>
-                        <TableRow key='7'>
-                          <TableCell className='text-xl'>Reading Scores</TableCell>
-                          <TableCell className='text-xl'>Low</TableCell>
-                        </TableRow>
-                        <TableRow key='8'>
-                          <TableCell className='text-xl'>Saebrs</TableCell>
-                          <TableCell className='text-xl'>Low</TableCell>
-                        </TableRow>
-                        <TableRow key='9'>
-                          <TableCell className='text-xl'>MySaebrs</TableCell>
-                          <TableCell className='text-xl'>Low</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
+                    <VariableWeightsTable variables={variables}/>
+                    
                   </ModalBody>
                   <ModalFooter>
                     <Button color="danger" variant="light" onPress={onClose}>
@@ -114,6 +183,5 @@ export function CardConfidenceVisualizer({
           </Modal>
         </div>
       </Tooltip>
-    </div>
   );
 }
