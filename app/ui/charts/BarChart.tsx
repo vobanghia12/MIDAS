@@ -35,14 +35,6 @@ export function BarChart({
         legendPosition: 'middle',
         legendOffset: 32,
       }}
-      // axisLeft={{
-      //   tickSize: 0,
-      //   tickPadding: 0,
-      //   tickRotation: 0,
-      //   legend: '',
-      //   legendPosition: 'middle',
-      //   legendOffset: 0,
-      // }}
       axisLeft={null}
       labelSkipWidth={12}
       labelSkipHeight={12}

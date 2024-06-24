@@ -3,10 +3,8 @@
 import { Nunito } from "next/font/google";
 const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['normal', 'italic']})
 
-import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { FormEvent } from "react";
-import { useRouter } from "next/navigation";
-
 
 
 export default function RegisterModal({

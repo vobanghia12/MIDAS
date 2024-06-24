@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { 
   Card, 
   CardBody, 
@@ -134,8 +133,6 @@ export default function StudentSearch({
 }: {
   selectedStudent: string;
   setSelectedStudent : React.Dispatch<React.SetStateAction<string>>;
-  classroomId: string;
-  gradeLevel: string;
 }) {
 
   const SearchAction = async (formData: FormData) => {
@@ -148,7 +145,7 @@ export default function StudentSearch({
         <CardHeader className={nunito.className}>
           <h3 className="text-lg font-medium text-slate-800">Currently viewing student </h3>&nbsp;<span className="font-extrabold underline">{selectedStudent}</span>
         </CardHeader>
-        <CardBody className='-mt-4 flex flex-row w-full'>
+        <CardBody className={`${nunito.className} -mt-4 flex flex-row w-full`}>
           <div className='flex flex-col basis-full w-max gap-1'>
             <form className="flex flex-row w-full mb-4" action={SearchAction}>
               <div className='flex w-full'>

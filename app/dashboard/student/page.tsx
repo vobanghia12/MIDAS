@@ -3,17 +3,13 @@
 import { CardMidasRisk } from '@/app/ui/dashboard/cards/individual/midas-summary';
 import { SaebrsSummary } from '@/app/ui/dashboard/cards/individual/saebrs-summary';
 import StudentSearch from '../../ui/dashboard/cards/search/student-search';
-import { UserCircleIcon } from '@heroicons/react/24/outline';
-
-import { CardTripleStack } from '@/app/ui/dashboard/cards';
-import { CardStudentDemographics } from '@/app/ui/dashboard/cards/individual/student-demographics';
-// import { CardTestsAndDisciplineSummary } from '@/app/ui/dashboard/cards/individual/tests-discipline-summary';
 import { useEffect, useState } from 'react';
 import useSchoolLevel from '@/hooks/useSchoolLevel';
 import { useSearchContext } from '@/app/context/nav-search-context';
 import { CardStudentDiscipline } from '@/app/ui/dashboard/cards/individual/disciplinary';
 import { CardStudentTestScores } from '@/app/ui/dashboard/cards/individual/test-scores';
 import { CardConfidenceVisualizer } from '@/app/ui/dashboard/cards/general/card-confidence';
+import { nunito } from '@/app/ui/fonts';
 
 interface SearchProps {
   searchParams: {
@@ -41,75 +37,75 @@ export default function Page({ searchParams }: SearchProps) {
   console.log(searchParams.studentId);
 
   const [saebrsScores, setSaebrsScores] = useState({
-    saebrsTotal: '',
-    mySaebrsTotal: '',
-    saebrsEmotional: '',
-    mySaebrsEmotional: '',
-    saebrsSocial: '',
-    mySaebrsSocial: '',
-    saebrsAcademic: '',
-    mySaebrsAcademic: '',
+    saebrsTotal: 'NA',
+    mySaebrsTotal: 'NA',
+    saebrsEmotional: 'NA',
+    mySaebrsEmotional: 'NA',
+    saebrsSocial: 'NA',
+    mySaebrsSocial: 'NA',
+    saebrsAcademic: 'NA',
+    mySaebrsAcademic: 'NA',
   });
 
   const [midasSummary, setMidasSummary] = useState({
-    midasRisk: '',
+    midasRisk: 'NA',
     missingVariables: 1,
     confidence: 0,
     confidenceThreshold: [1, 2, 3, 4, 5],
   });
 
   const [identification, setIdentification] = useState({
-    studentId: data?.studentid ?? '',
-    grade: data?.gradelevel ?? '',
-    classroomId: data?.classroom ?? '',
+    studentId: data?.studentid ?? 'NA',
+    grade: data?.gradelevel ?? 'NA',
+    classroomId: data?.classroom ?? 'NA',
   });
 
   const [demographics, setDemographics] = useState({
-    gender: data?.gender ?? '',
-    ethnicity: data?.ethnicity ?? '',
-    englishLearner: data?.ell ?? '',
+    gender: data?.gender ?? 'NA',
+    ethnicity: data?.ethnicity ?? 'NA',
+    englishLearner: data?.ell ?? 'NA',
   });
 
   const [testScoreRisk, setTestScoreRisk] = useState({
-    math: data?.math_risk ?? '',
-    reading: data?.reading_risk ?? '',
-    suspension: '',
+    math: data?.math_risk ?? 'NA',
+    reading: data?.reading_risk ?? 'NA',
+    suspension: 'NA',
   });
 
 
 
   useEffect(() => {
     setDemographics({
-      gender: data?.gender ?? '',
-      ethnicity: data?.ethnicity ?? '',
-      englishLearner: data?.ell ?? '',
+      gender: data?.gender ?? 'NA',
+      ethnicity: data?.ethnicity ?? 'NA',
+      englishLearner: data?.ell ?? 'NA',
     });
 
     setIdentification({
-      studentId: data?.studentid ?? '',
-      grade: data?.gradelevel ?? '',
-      classroomId: data?.classroom ?? '',
+      studentId: data?.studentid ?? 'NA',
+      grade: data?.gradelevel ?? 'NA',
+      classroomId: data?.classroom ?? 'NA',
     });
 
-    setSaebrsScores({
-      saebrsTotal: '',
-      mySaebrsTotal: '',
-      saebrsEmotional: data?.saebrs_emo,
-      mySaebrsEmotional: data?.mysaebrs_emo,
-      saebrsSocial: data?.saebrs_soc,
-      mySaebrsSocial: data?.mysaebrs_soc,
-      saebrsAcademic: data?.saebrs_aca,
-      mySaebrsAcademic: data?.mysaebrs_aca,
-    });
+    // setSaebrsScores({
+    //   saebrsTotal: 'NA',
+    //   mySaebrsTotal: 'NA',
+    //   saebrsEmotional: data?.saebrs_emo,
+    //   mySaebrsEmotional: data?.mysaebrs_emo,
+    //   saebrsSocial: data?.saebrs_soc,
+    //   mySaebrsSocial: data?.mysaebrs_soc,
+    //   saebrsAcademic: data?.saebrs_aca,
+    //   mySaebrsAcademic: data?.mysaebrs_aca,
+    // });
 
     setTestScoreRisk({
-      math: data?.math_risk ?? '',
-      reading: data?.read_risk ?? '',
-      suspension: data?.susp_risk ?? '',
+      math: data?.math_risk ?? 'NA',
+      reading: data?.read_risk ?? 'NA',
+      suspension: data?.susp_risk ?? 'NA',
     });
 
     setMidasSummary({
-      midasRisk: '',
+      midasRisk: 'NA',
       missingVariables: 1,
       confidence:
         Math.round(
@@ -129,16 +125,14 @@ export default function Page({ searchParams }: SearchProps) {
   const setSelectedStudent = stateStudent.set
 
   return (
-    <main>
+    <main className={`${nunito.className}`}>
       <div className='flex flex-col gap-4'>
         {/* Top row */}
         <div className='flex flex-row gap-8 w-full'>
-          <div className='flex basis-1/3 w-full'>
+          <div className={`${nunito.className} flex basis-1/3 w-full`}>
             <StudentSearch 
               selectedStudent={selectedStudent} 
               setSelectedStudent={setSelectedStudent} 
-              classroomId={identification.classroomId} 
-              gradeLevel={identification.grade}
             />
           </div>
           

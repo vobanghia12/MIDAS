@@ -2,7 +2,7 @@ import { Card, CardBody,  CardHeader,  Divider, Tooltip } from '@nextui-org/reac
 import React from 'react';
 
 import { Nunito } from "next/font/google";
-const nunito = Nunito({weight: ['200', '300'], subsets:['latin'], style: ['normal', 'italic']})
+const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['normal', 'italic']})
 
 function Row({
   header,

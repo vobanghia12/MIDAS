@@ -9,7 +9,7 @@ import MaterialSymbolsLightPersonAlertOutline from '../../../icons/MaterialSymbo
 import React from 'react';
 import { Card, Tooltip, Divider, CardHeader, CardBody } from '@nextui-org/react';
 import { Nunito } from "next/font/google";
-const nunito = Nunito({weight: ['200', '300'], subsets:['latin'], style: ['normal', 'italic']})
+const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['normal', 'italic']})
 
 const iconMap = {
   total: MaterialSymbolsLightPersonAlertOutline,
@@ -28,7 +28,7 @@ function RiskTitle({
   const Icon = iconMap[type];
 
   return (
-    <div className='flex flex-row items-start justify-start -mb-4 -ml-1 mt-1'>
+    <div className={`${nunito.className} flex flex-row items-start justify-start -mb-4 -ml-1 mt-1`}>
       {Icon ? <Icon className="h-6 w-6 text-gray-700" /> : null}
       <p className='pl-2'>{title}</p>
     </div>
@@ -70,7 +70,7 @@ function CardSaebrs({
   tooltip: string;
 }) {
   return(
-  <Card className='bg-neutral-100 basis-1/4 w-full px-3 pb-4'>
+  <Card className={`${nunito.className} bg-neutral-100 basis-1/4 w-full px-3 pb-4`}>
     <CardHeader>
       <RiskTitle title={CapitalizeFirstLetter(header)} type={header}/>
     </CardHeader>
@@ -78,7 +78,7 @@ function CardSaebrs({
     <CardBody>
       <Tooltip content={tooltip} placement='bottom'>
         <div className=' w-full'>
-          <div className='flex flex-col gap-4'>
+          <div className={`${nunito.className} flex flex-col gap-4`}>
             <Row header='Saebrs' content={saebrs}/>
             <Divider orientation='horizontal' className=''/>
             <Row header='MySaebrs' content={mySaebrs}/>
