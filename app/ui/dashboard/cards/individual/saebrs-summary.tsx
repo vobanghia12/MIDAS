@@ -50,7 +50,7 @@ function Row({
   return (
     <div className=''>
       <p className='items-start'>{header}</p>
-      <div className="flex flex-col items-center text-xl">
+      <div className="flex flex-col items-center">
         <p className={`${nunito.className} text-3xl`}>{content}</p>
       </div>
     </div>
@@ -77,7 +77,7 @@ function CardSaebrs({
 
     <CardBody>
       <Tooltip content={tooltip} placement='bottom'>
-        <div className=' w-full'>
+        <div className='w-full mb-3 mt-auto'>
           <div className={`${nunito.className} flex flex-col gap-4`}>
             <Row header='Saebrs' content={saebrs}/>
             <Divider orientation='horizontal' className=''/>
