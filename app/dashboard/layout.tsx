@@ -8,7 +8,7 @@ export default async function Layout({ children }: { children: React.ReactNode})
   return (
     <SearchContextProvider>
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-      <div className="w-full flex-none md:w-48">
+      <div className="">
         <SideNav />
       </div>
       <div className="flex-grow p-6 md:overflow-y-auto ">
