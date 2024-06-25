@@ -144,6 +144,7 @@ export default function StudentSearch({
   const SearchAction = async (formData: FormData) => {
     const id = formData.get('studentId') || ""
     setSelectedStudent(id.toString())
+    console.log({selectedStudent})
   }
 
   return (

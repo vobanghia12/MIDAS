@@ -1,10 +1,12 @@
 import SideNav from '@/app/ui/dashboard/sidenav';
 import CaptureScreenshotButton from '../ui/CaptureScreenshotButton';
 import ToasterProvider from '@/providers/ToastProvider';
+import { SearchContextProvider } from '../context/nav-search-context-provider';
 
 export default async function Layout({ children }: { children: React.ReactNode}) {
 
   return (
+    <SearchContextProvider>
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
       <div className="w-full flex-none md:w-48">
         <SideNav />
@@ -15,5 +17,6 @@ export default async function Layout({ children }: { children: React.ReactNode})
         <CaptureScreenshotButton />
       </div>
     </div>
+    </SearchContextProvider>
   );
 }
