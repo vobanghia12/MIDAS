@@ -100,6 +100,7 @@ export default async function Page() {
 
             <div className="pb-4">
               <CardConfidenceVisualizer
+                missingVariables={1}
                 confidence={schooLevel.confidenceLevel}
                 confidenceThresholds={[1, 2, 3, 4, 5]}
               />
