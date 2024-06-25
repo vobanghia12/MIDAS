@@ -66,6 +66,7 @@ export default async function Page() {
 
             <div className="w-96 pb-4">
               <CardConfidenceVisualizer
+                missingVariables={1}
                 confidence={90}
                 confidenceThresholds={[85, 90, 95, 99]}
               />
