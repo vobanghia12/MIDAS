@@ -10,6 +10,7 @@ import { CardStudentDiscipline } from '@/app/ui/dashboard/cards/individual/disci
 import { CardStudentTestScores } from '@/app/ui/dashboard/cards/individual/test-scores';
 import { CardConfidenceVisualizer } from '@/app/ui/dashboard/cards/general/card-confidence';
 import { nunito } from '@/app/ui/fonts';
+import { DonutChart } from '@/app/ui/charts/donut-chart';
 
 interface SearchProps {
   searchParams: {
@@ -118,7 +119,16 @@ export default function Page({ searchParams }: SearchProps) {
     });
   }, [data]);
   // Fetch functions here for states
-
+  const genderDataPlaceholder = [
+    {
+      id: "Male",
+      value: 500
+    },
+    {
+      id: "Female",
+      value: 548
+    }
+  ]
 
   const stateStudent = useSearchContext('student')
   const selectedStudent = stateStudent.get

@@ -1,3 +1,5 @@
+'use client';
+
 import { 
   Card, 
   CardBody, 
@@ -41,11 +43,11 @@ const ethnicityDataPlaceholder = [
 
 const englishLearnerDataPlaceholder = [
   {
-    id: "ELL",
+    id: "Not ELL",
     value: 800
   },
   {
-    id: "Not ELL",
+    id: "ELL",
     value: 248
   }
 ]
@@ -53,15 +55,15 @@ const englishLearnerDataPlaceholder = [
 
 function DemographicsBox({
   label,
-  content
+  content,
 }:
 {
   label: string;
   content: string;
 }) {
   return (
-    <div className='flex flex-col basis-1/4'>
-      <p className='ml-0.5'>{label}</p>
+    <div className='flex flex-col w-full h-full basis-1/4'>
+      <p className='ml-0.5 mr-auto'>{label}</p>
       <div className='flex justify-center items-center'>
         <p className="text-xl mt-2">{content}</p>
       </div>
@@ -72,14 +74,15 @@ function DemographicsBox({
 
 function DemographicsRow({
   content,
-  className
+  className,
 }:
 {
   content: StudentDemographics;
   className?: string;
+
 }) {
   return (
-    <div className={'flex flex-row ' + className}>
+    <div className={`${nunito.className} flex flex-row ${className}`}>
       <DemographicsBox label='Grade' content={content.grade} />
 
       <Divider orientation="vertical"/>
@@ -87,13 +90,14 @@ function DemographicsRow({
       <Tooltip className="bg-neutral-100" 
         content={
           <div className='w-96 h-96'>
-            <p className='text-xl -mb-4'>School gender demographics</p>
-            <DonutChart data={genderDataPlaceholder} colors={['#f87171', '#a5f3fc']} selectedSlice={'Male'}/>
+            <p className={`${nunito.className} text-xl -mb-4`}>School Gender demographics</p>
+            <DonutChart data={genderDataPlaceholder} colors={['#f87171', '#a5f3fc']} selectedSlice={content.gender}/>
           </div>
         } 
         placement='bottom'>
-
-          <DemographicsBox label='Gender' content={content.gender} />
+          <div className='basis-1/4'>
+            <DemographicsBox label='Gender' content={content.gender} />
+          </div>
       </Tooltip>
 
       <Divider orientation="vertical"/>
@@ -101,13 +105,14 @@ function DemographicsRow({
       <Tooltip className="bg-neutral-100" 
         content={
           <div className='w-96 h-96'>
-            <p className='text-xl -mb-4'>School English-learner demographics</p>
-            <DonutChart data={englishLearnerDataPlaceholder} colors={['#4ade80', '#a3a3a3']} selectedSlice={'ELL'}/>
+            <p className={`${nunito.className} text-xl -mb-4`}>School English-learner demographics</p>
+            <DonutChart data={englishLearnerDataPlaceholder} colors={['#a3a3a3', '#4ade80']} selectedSlice={content.ell}/>
           </div>
         } 
         placement='bottom'>
-
-          <DemographicsBox label='English Learner?' content={content.ell} />
+          <div className='basis-1/4'>
+            <DemographicsBox label='English Learner?' content={content.ell} />
+          </div>
       </Tooltip>
 
       <Divider orientation="vertical"/>
@@ -115,13 +120,14 @@ function DemographicsRow({
       <Tooltip className="bg-neutral-100" 
         content={
           <div className='w-96 h-96'>
-            <p className='text-xl -mb-4'>School ethnicity demographics</p>
-            <DonutChart data={ethnicityDataPlaceholder} colors={['#f87171', '#a5f3fc', '#4ade80']} selectedSlice={'White'}/>
+            <p className={`${nunito.className} text-xl -mb-4`}>School Ethnicity demographics</p>
+            <DonutChart data={ethnicityDataPlaceholder} colors={['#f87171', '#a5f3fc', '#4ade80']} selectedSlice={content.ethnicity}/>
           </div>
         } 
         placement='bottom'>
-          
-          <DemographicsBox label='Ethnicity' content={content.ethnicity} />
+          <div className='basis-1/4'>
+            <DemographicsBox label='Ethnicity' content={content.ethnicity} />
+          </div>
       </Tooltip>
     </div>
   )
