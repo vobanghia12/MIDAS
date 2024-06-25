@@ -1,8 +1,11 @@
 'use client';
 
+/**
+ * Remember to put this as the parent of the root layout if the search isn't working.
+ */
+
 import { ReactNode, useState } from "react";
 import { SearchContext } from "./nav-search-context";
-
 
 export const SearchContextProvider = ({ children }: {children: ReactNode}) => {
   const [ selectedSchool, setSelectedSchool ] = useState<string>('');

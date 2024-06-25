@@ -8,7 +8,6 @@ import ConfirmSignoutModal from '../modals/confirm-signout';
 import { useDisclosure } from '@nextui-org/react';
 import { useState } from 'react';
 import clsx from 'clsx';
-import useFileModal from '@/hooks/useFileModal';
 
 export default function SideNav() {
   const {isOpen: isOpenSignout, onOpen: onOpenSignout, onOpenChange: onOpenChangeSignout} = useDisclosure();
@@ -41,7 +40,7 @@ export default function SideNav() {
             {!collapsed ? <p className='text-3xl'>{arrows.left}</p> : <p className='text-3xl'>{arrows.right}</p>}
           </button>
           
-          <button onSubmit={onOpenSignout} className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-green-100 hover:text-green-600 md:flex-none md:justify-start md:p-2 md:px-2">
+          <button onClick={onOpenSignout} className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-green-100 hover:text-green-600 md:flex-none md:justify-start md:p-2 md:px-2">
             <PowerIcon className="w-8" />
             {!collapsed ? <div className="hidden md:block">Sign Out</div> : <></>}
           </button>
