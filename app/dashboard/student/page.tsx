@@ -20,10 +20,13 @@ interface SearchProps {
 
 export default function Page({ searchParams }: SearchProps) {
   const schoolLevel = useSchoolLevel();
+  const stateStudent = useSearchContext('student');
+  const setSelectedStudent = stateStudent.set;
+  const selectedStudent = stateStudent.get;
 
   const searchData = () => {
     const result = schoolLevel?.listOfAllStudents?.filter(
-      (student: any) => student.studentid === searchParams.studentId,
+      (student: any) => student.studentid === selectedStudent,
     );
 
     if (result?.length > 0) return result[0];
@@ -32,10 +35,6 @@ export default function Page({ searchParams }: SearchProps) {
   };
 
   const data: any = searchData();
-  console.log(data);
-  console.log(schoolLevel.listOfAllStudents);
-
-  console.log(searchParams.studentId);
 
   const [saebrsScores, setSaebrsScores] = useState({
     saebrsTotal: 'NA',
@@ -73,8 +72,6 @@ export default function Page({ searchParams }: SearchProps) {
     suspension: 'NA',
   });
 
-
-
   useEffect(() => {
     setDemographics({
       gender: data?.gender ?? 'NA',
@@ -88,16 +85,16 @@ export default function Page({ searchParams }: SearchProps) {
       classroomId: data?.classroom ?? 'NA',
     });
 
-    // setSaebrsScores({
-    //   saebrsTotal: 'NA',
-    //   mySaebrsTotal: 'NA',
-    //   saebrsEmotional: data?.saebrs_emo,
-    //   mySaebrsEmotional: data?.mysaebrs_emo,
-    //   saebrsSocial: data?.saebrs_soc,
-    //   mySaebrsSocial: data?.mysaebrs_soc,
-    //   saebrsAcademic: data?.saebrs_aca,
-    //   mySaebrsAcademic: data?.mysaebrs_aca,
-    // });
+    setSaebrsScores({
+      saebrsTotal: 'NA',
+      mySaebrsTotal: 'NA',
+      saebrsEmotional: data?.saebrs_emo,
+      mySaebrsEmotional: data?.mysaebrs_emo,
+      saebrsSocial: data?.saebrs_soc,
+      mySaebrsSocial: data?.mysaebrs_soc,
+      saebrsAcademic: data?.saebrs_aca,
+      mySaebrsAcademic: data?.mysaebrs_aca,
+    });
 
     setTestScoreRisk({
       math: data?.math_risk ?? 'NA',
@@ -121,64 +118,69 @@ export default function Page({ searchParams }: SearchProps) {
   // Fetch functions here for states
   const genderDataPlaceholder = [
     {
-      id: "Male",
-      value: 500
+      id: 'Male',
+      value: 500,
     },
     {
-      id: "Female",
-      value: 548
-    }
-  ]
-
-  const stateStudent = useSearchContext('student')
-  const selectedStudent = stateStudent.get
-  const setSelectedStudent = stateStudent.set
+      id: 'Female',
+      value: 548,
+    },
+  ];
 
   return (
     <main className={`${nunito.className}`}>
-      <div className='flex flex-col gap-4'>
+      <div className="flex flex-col gap-4">
         {/* Top row */}
-        <div className='flex flex-row gap-8 w-full'>
-          <div className={`${nunito.className} flex basis-1/3 w-full`}>
-            <StudentSearch 
-              selectedStudent={selectedStudent} 
-              setSelectedStudent={setSelectedStudent} 
+        <div className="flex w-full flex-row gap-8">
+          <div className={`${nunito.className} flex w-full basis-1/3`}>
+            <StudentSearch
+              selectedStudent={selectedStudent}
+              setSelectedStudent={setSelectedStudent}
+              data={data}
             />
           </div>
-          
-          <div className='flex basis-1/3 w-full'>
-            <CardStudentDiscipline odr={'Placeholder 1'} suspensions={'Placeholder 2'} />
+
+          <div className="flex w-full basis-1/3">
+            <CardStudentDiscipline
+              odr={'Placeholder 1'}
+              suspensions={testScoreRisk.suspension}
+            />
           </div>
 
-          <div className='flex basis-1/3 w-full'>
-            <CardStudentTestScores math={testScoreRisk.math} reading={testScoreRisk.reading} />
+          <div className="flex w-full basis-1/3">
+            <CardStudentTestScores
+              math={testScoreRisk.math}
+              reading={testScoreRisk.reading}
+            />
           </div>
         </div>
 
-
         {/* Second row */}
-        <div className='flex flex-row gap-4 w-full'>
-          <div className='flex flex-col gap-2 basis-1/5'>
+        <div className="flex w-full flex-row gap-4">
+          <div className="flex basis-1/5 flex-col gap-2">
             <CardMidasRisk midasRisk={midasSummary.midasRisk} />
-            <CardConfidenceVisualizer confidence={90} confidenceThresholds={[85, 90, 95, 99]} missingVariables={2}/>
+            <CardConfidenceVisualizer
+              confidence={90}
+              confidenceThresholds={[85, 90, 95, 99]}
+              missingVariables={2}
+            />
           </div>
 
-          <div className='flex flex-row w-max basis-4/5'>
-            <SaebrsSummary 
-              saebrsTotal={saebrsScores.saebrsTotal} 
-              mySaebrsTotal={saebrsScores.mySaebrsTotal} 
-              saebrsEmotional={saebrsScores.saebrsEmotional} 
-              mySaebrsEmotional={saebrsScores.mySaebrsEmotional} 
-              saebrsSocial={saebrsScores.saebrsSocial} 
-              mySaebrsSocial={saebrsScores.mySaebrsSocial} 
-              saebrsAcademic={saebrsScores.saebrsAcademic} 
+          <div className="flex w-max basis-4/5 flex-row">
+            <SaebrsSummary
+              saebrsTotal={saebrsScores.saebrsTotal}
+              mySaebrsTotal={saebrsScores.mySaebrsTotal}
+              saebrsEmotional={saebrsScores.saebrsEmotional}
+              mySaebrsEmotional={saebrsScores.mySaebrsEmotional}
+              saebrsSocial={saebrsScores.saebrsSocial}
+              mySaebrsSocial={saebrsScores.mySaebrsSocial}
+              saebrsAcademic={saebrsScores.saebrsAcademic}
               mySaebrsAcademic={saebrsScores.mySaebrsAcademic}
             />
           </div>
         </div>
       </div>
     </main>
-
 
     // <main className="mt-4">
     //   <div className="mb-8 flex flex-row">

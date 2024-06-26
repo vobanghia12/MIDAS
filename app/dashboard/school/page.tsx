@@ -32,8 +32,6 @@ export default async function Page() {
   const riskOptions = useRiskOptions();
   const schooLevel = useSchoolLevel();
 
-  console.log(schooLevel.ethnicityRisk);
-  console.log(schooLevel.ellRisk);
   const [genderState, setGenderState] = useState({
     math_risk: false,
     read_risk: false,
@@ -78,7 +76,6 @@ export default async function Page() {
   const colors = ['rose-500', 'yellow-400', 'green-500'];
 
   const nameRisk = getCurrentState(genderState);
-  console.log(schooLevel);
   return (
     <main>
       <div className="flex gap-4">
@@ -284,7 +281,7 @@ export default async function Page() {
                 </div>
               </Card>
             )}
-            {riskOptions.isTotalScore && <BarChartTotal />}
+            {riskOptions.isTotalScore && 'No Chart Total'}
             {schooLevel.saeberAcademic &&
               schooLevel.mySaeberAcademic &&
               riskOptions.isAcademic && (

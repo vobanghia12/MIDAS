@@ -13,9 +13,16 @@ import {
   getmyRiskStatsSchoolLevel,
   getDemographic,
 } from '@/action/getSchoolLevelFunctions';
-import { getMyRiskStatsGradeLevel } from '@/action/getGradeLevelFunctions';
+import {
+  getMyRiskStatsGradeLevel,
+  getDemographicGradeLevel,
+  getConfidenceLevelForGradeLevel,
+} from '@/action/getGradeLevelFunctions';
 import useSchoolLevel from '@/hooks/useSchoolLevel';
 import { BounceLoader } from 'react-spinners';
+import { usePathname } from 'next/navigation';
+import useGradeLevel from '@/hooks/useGradeLevel';
+import useClassLevel from '@/hooks/useClassLevel';
 const data_frame: string[] = [
   'odr_f',
   'susp_f',
@@ -32,13 +39,6 @@ const data_frame: string[] = [
   'saebrs_soc',
   'saebrs_aca',
 ];
-
-const helperFunction = (d1: any, d2: any) => {
-  for (const data of data_frame) {
-    if (d2[data] !== d1[data]) return false;
-  }
-  return true;
-};
 
 export const convertCsvToJson = (data: ArrayBuffer) => {
   const workbook = read(data, { dense: true });
@@ -77,23 +77,13 @@ export const setSecondMatchingRiskFactor = (
   return result;
 };
 
-// export const setFirstMatching = (uploadData: any, inputData: any) => {
-//   var m = new Map();
-//   uploadData.forEach(function (x: any) {
-//     const arr = [];
-//     for (const data of data_frame) {
-//       arr.push(x[data]);
-//     }
-//     x.id = null;
-//     m.set(arr, x);
-//   });
-// };
-
 const FileModal = () => {
   const [isLoading, setIsLoading] = useState<boolean>();
   const fileModal = useFileModal();
   const router = useRouter();
   const schooLevel = useSchoolLevel();
+  const gradeLevel = useGradeLevel();
+  const classLevel = useClassLevel();
   //handle form
   const { register, handleSubmit, reset } = useForm<FieldValues>({
     defaultValues: {
@@ -174,7 +164,6 @@ const FileModal = () => {
         'math_confidence',
       );
 
-      console.log(mathRisk);
       // //filter for read risk
       const readRisk = setSecondMatchingRiskFactor(
         uploadData,
@@ -182,7 +171,7 @@ const FileModal = () => {
         'read_risk',
         'read_confidence',
       );
-      console.log(readRisk);
+
       // //filter for suspension risk
       const suspRisk = setSecondMatchingRiskFactor(
         uploadData,
@@ -190,35 +179,34 @@ const FileModal = () => {
         'susp_risk',
         'susp_confidence',
       );
-      console.log(suspRisk);
 
-      //Saeber Emotion Risk
+      //mysaeber Emotion Risk
       schooLevel.setMySaebrsEmotion(
-        getmyRiskStatsSchoolLevel(uploadData, 'mysaebrs_emo', 'MySaebrs'),
+        getmyRiskStatsSchoolLevel(suspRisk, 'mysaebrs_emo', 'MySaebrs'),
       );
 
-      //Mysaeber Emotion Risk
+      //saeber Emotion Risk
       schooLevel.setSaebrsEmotion(
-        getmyRiskStatsSchoolLevel(uploadData, 'saebrs_emo', 'Saebrs'),
+        getmyRiskStatsSchoolLevel(suspRisk, 'saebrs_emo', 'Saebrs'),
       );
 
       //Saeber Academic Risk
       schooLevel.setMySaeberAcademic(
-        getmyRiskStatsSchoolLevel(uploadData, 'mysaebrs_aca', 'MySaebrs'),
+        getmyRiskStatsSchoolLevel(suspRisk, 'mysaebrs_aca', 'MySaebrs'),
       );
 
       //Mysaeber Academic Risk
       schooLevel.setSaeberAcademic(
-        getmyRiskStatsSchoolLevel(uploadData, 'saebrs_aca', 'Saebrs'),
+        getmyRiskStatsSchoolLevel(suspRisk, 'saebrs_aca', 'Saebrs'),
       );
 
       //Saeber Social Risk
       schooLevel.setSaeberSocial(
-        getmyRiskStatsSchoolLevel(uploadData, 'saebrs_soc', 'Saebrs'),
+        getmyRiskStatsSchoolLevel(suspRisk, 'saebrs_soc', 'Saebrs'),
       );
       //Mysaeber Social Risk
       schooLevel.setMySaeberSocial(
-        getmyRiskStatsSchoolLevel(uploadData, 'mysaebrs_soc', 'MySaebrs'),
+        getmyRiskStatsSchoolLevel(suspRisk, 'mysaebrs_soc', 'MySaebrs'),
       );
 
       schooLevel.setRiskMath(
@@ -242,6 +230,122 @@ const FileModal = () => {
       schooLevel.setEllRisk(getDemographic(suspRisk, 'ell'));
 
       schooLevel.setEthnicityRisk(getDemographic(suspRisk, 'ethnicity'));
+
+      //mysaeber Emotion Risk
+      gradeLevel.setMySaebrsEmotion(
+        getMyRiskStatsGradeLevel(suspRisk, 'gradelevel', 'mysaebrs_emo'),
+      );
+
+      //saeber Emotion Risk
+      gradeLevel.setSaebrsEmotion(
+        getMyRiskStatsGradeLevel(suspRisk, 'gradelevel', 'saebrs_emo'),
+      );
+
+      //MySaeber Academic Risk
+      gradeLevel.setMySaeberAcademic(
+        getMyRiskStatsGradeLevel(suspRisk, 'gradelevel', 'mysaebrs_aca'),
+      );
+
+      //Saeber Academic Risk
+      gradeLevel.setSaeberAcademic(
+        getMyRiskStatsGradeLevel(suspRisk, 'gradelevel', 'saebrs_aca'),
+      );
+
+      //Mysaeber Social Risk
+      gradeLevel.setMySaeberSocial(
+        getMyRiskStatsGradeLevel(suspRisk, 'gradelevel', 'mysaebrs_soc'),
+      );
+      //saeber Social Risk
+      gradeLevel.setSaeberSocial(
+        getMyRiskStatsGradeLevel(suspRisk, 'gradelevel', 'saebrs_soc'),
+      );
+
+      gradeLevel.setRiskMath(
+        getMyRiskStatsGradeLevel(suspRisk, 'gradelevel', 'math_risk'),
+      );
+
+      gradeLevel.setRiskReading(
+        getMyRiskStatsGradeLevel(suspRisk, 'gradelevel', 'read_risk'),
+      );
+
+      gradeLevel.setRiskSuspension(
+        getMyRiskStatsGradeLevel(suspRisk, 'gradelevel', 'susp_risk'),
+      );
+
+      gradeLevel.setConfidenceLevel(
+        getConfidenceLevelForGradeLevel(suspRisk, 'gradelevel'),
+      );
+
+      gradeLevel.setGenderRisk(
+        getDemographicGradeLevel(suspRisk, 'gradelevel', 'gender'),
+      );
+
+      gradeLevel.setEthnicityRisk(
+        getDemographicGradeLevel(suspRisk, 'gradelevel', 'ethnicity'),
+      );
+
+      gradeLevel.setEllRisk(
+        getDemographicGradeLevel(suspRisk, 'gradelevel', 'ell'),
+      );
+
+      //classroom
+
+      //mysaeber Emotion Risk
+      classLevel.setMySaebrsEmotion(
+        getMyRiskStatsGradeLevel(suspRisk, 'classroom', 'mysaebrs_emo'),
+      );
+
+      //saeber Emotion Risk
+      classLevel.setSaebrsEmotion(
+        getMyRiskStatsGradeLevel(suspRisk, 'classroom', 'saebrs_emo'),
+      );
+
+      //MySaeber Academic Risk
+      classLevel.setMySaeberAcademic(
+        getMyRiskStatsGradeLevel(suspRisk, 'classroom', 'mysaebrs_aca'),
+      );
+
+      //Saeber Academic Risk
+      classLevel.setSaeberAcademic(
+        getMyRiskStatsGradeLevel(suspRisk, 'classroom', 'saebrs_aca'),
+      );
+
+      //Mysaeber Social Risk
+      classLevel.setMySaeberSocial(
+        getMyRiskStatsGradeLevel(suspRisk, 'classroom', 'mysaebrs_soc'),
+      );
+      //saeber Social Risk
+      classLevel.setSaeberSocial(
+        getMyRiskStatsGradeLevel(suspRisk, 'classroom', 'saebrs_soc'),
+      );
+
+      classLevel.setRiskMath(
+        getMyRiskStatsGradeLevel(suspRisk, 'classroom', 'math_risk'),
+      );
+
+      classLevel.setRiskReading(
+        getMyRiskStatsGradeLevel(suspRisk, 'classroom', 'read_risk'),
+      );
+
+      classLevel.setRiskSuspension(
+        getMyRiskStatsGradeLevel(suspRisk, 'classroom', 'susp_risk'),
+      );
+
+      classLevel.setConfidenceLevel(
+        getConfidenceLevelForGradeLevel(suspRisk, 'classroom'),
+      );
+
+      classLevel.setGenderRisk(
+        getDemographicGradeLevel(suspRisk, 'classroom', 'gender'),
+      );
+
+      classLevel.setEthnicityRisk(
+        getDemographicGradeLevel(suspRisk, 'classroom', 'ethnicity'),
+      );
+
+      classLevel.setEllRisk(
+        getDemographicGradeLevel(suspRisk, 'classroom', 'ell'),
+      );
 
       router.refresh();
       setIsLoading(false);

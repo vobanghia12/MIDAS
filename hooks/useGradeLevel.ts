@@ -1,7 +1,7 @@
 import { read } from 'fs';
 import create from 'zustand';
 
-interface SchoolLevelStore {
+interface GradeLevelStore {
   listOfAllStudents: any;
   confidenceLevel: any;
   saebrsEmotion: any;
@@ -32,7 +32,7 @@ interface SchoolLevelStore {
   setEllRisk: (ell: any) => void;
 }
 
-const useSchoolLevel = create<SchoolLevelStore>((set: any) => ({
+const useGradeLevel = create<GradeLevelStore>((set: any) => ({
   genderRisk: '',
   listOfAllStudents: undefined,
   confidenceLevel: 0,
@@ -63,4 +63,4 @@ const useSchoolLevel = create<SchoolLevelStore>((set: any) => ({
   setEllRisk: (ell: any) => set({ ellRisk: ell }),
 }));
 
-export default useSchoolLevel;
+export default useGradeLevel;

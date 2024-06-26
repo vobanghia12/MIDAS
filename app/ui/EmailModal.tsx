@@ -43,7 +43,7 @@ const EmailModal = () => {
       };
 
       const data = postData({
-        url: 'http://localhost:3000/api/send',
+        url: `${process.env.NEXTAUTH_URL}/api/send`,
         data: { emailFormat },
       });
 

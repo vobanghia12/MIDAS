@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import create from 'zustand';
 
 interface RiskOptionStore {
   isTotalScore: boolean;
@@ -17,7 +17,7 @@ interface RiskOptionStore {
   onEthnicity: () => void;
 }
 
-const useRiskOptions = create<RiskOptionStore>((set) => ({
+const useRiskOptions = create<RiskOptionStore>((set: any) => ({
   isTotalScore: false,
   isEmotional: false,
   isSocial: false,
