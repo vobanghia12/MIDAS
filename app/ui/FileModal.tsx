@@ -16,6 +16,10 @@ import {
 import { getMyRiskStatsGradeLevel } from '@/action/getGradeLevelFunctions';
 import useSchoolLevel from '@/hooks/useSchoolLevel';
 import { BounceLoader } from 'react-spinners';
+import { CompareSchoolNames } from '../api/file-auth/restrict-csv';
+import { getServerSession } from 'next-auth';
+
+
 const data_frame: string[] = [
   'odr_f',
   'susp_f',
@@ -33,12 +37,19 @@ const data_frame: string[] = [
   'saebrs_aca',
 ];
 
+/**
+ * NEED COMMENT - This is unused, but I'm curious to what it is
+ * @param d1 
+ * @param d2 
+ * @returns 
+ */
 const helperFunction = (d1: any, d2: any) => {
   for (const data of data_frame) {
     if (d2[data] !== d1[data]) return false;
   }
   return true;
 };
+
 
 export const convertCsvToJson = (data: ArrayBuffer) => {
   const workbook = read(data, { dense: true });
@@ -50,6 +61,9 @@ export const convertCsvToJson = (data: ArrayBuffer) => {
   return JSONdata;
 };
 
+/**
+ * NEED COMMENT - What does this do?
+ */
 export const setSecondMatchingRiskFactor = (
   uploadData: any,
   riskFactorData: any,
@@ -58,6 +72,8 @@ export const setSecondMatchingRiskFactor = (
 ) => {
   // const risk = uploadData.filter((d1: any) =>
   const m: any = new Map();
+
+  // ??? Is x one row in the data?
   uploadData.forEach(function (x: any) {
     x[riskFactor] = null;
     x[confidenceFactor] = null;
@@ -93,7 +109,8 @@ const FileModal = () => {
   const [isLoading, setIsLoading] = useState<boolean>();
   const fileModal = useFileModal();
   const router = useRouter();
-  const schooLevel = useSchoolLevel();
+  const schoolLevel = useSchoolLevel();
+  
   //handle form
   const { register, handleSubmit, reset } = useForm<FieldValues>({
     defaultValues: {
@@ -126,6 +143,8 @@ const FileModal = () => {
         toast.error('Missing fields');
         return;
       }
+
+      
 
       const data1 = await file1.arrayBuffer();
       const data2 = await file2.arrayBuffer();
@@ -193,66 +212,73 @@ const FileModal = () => {
       console.log(suspRisk);
 
       //Saeber Emotion Risk
-      schooLevel.setMySaebrsEmotion(
+      schoolLevel.setMySaebrsEmotion(
         getmyRiskStatsSchoolLevel(uploadData, 'mysaebrs_emo', 'MySaebrs'),
       );
 
       //Mysaeber Emotion Risk
-      schooLevel.setSaebrsEmotion(
+      schoolLevel.setSaebrsEmotion(
         getmyRiskStatsSchoolLevel(uploadData, 'saebrs_emo', 'Saebrs'),
       );
 
       //Saeber Academic Risk
-      schooLevel.setMySaeberAcademic(
+      schoolLevel.setMySaeberAcademic(
         getmyRiskStatsSchoolLevel(uploadData, 'mysaebrs_aca', 'MySaebrs'),
       );
 
       //Mysaeber Academic Risk
-      schooLevel.setSaeberAcademic(
+      schoolLevel.setSaeberAcademic(
         getmyRiskStatsSchoolLevel(uploadData, 'saebrs_aca', 'Saebrs'),
       );
 
       //Saeber Social Risk
-      schooLevel.setSaeberSocial(
+      schoolLevel.setSaeberSocial(
         getmyRiskStatsSchoolLevel(uploadData, 'saebrs_soc', 'Saebrs'),
       );
       //Mysaeber Social Risk
-      schooLevel.setMySaeberSocial(
+      schoolLevel.setMySaeberSocial(
         getmyRiskStatsSchoolLevel(uploadData, 'mysaebrs_soc', 'MySaebrs'),
       );
 
-      schooLevel.setRiskMath(
+      schoolLevel.setRiskMath(
         getmyRiskStatsSchoolLevel(suspRisk, 'math_risk', 'math_risk'),
       );
 
-      schooLevel.setRiskReading(
+      schoolLevel.setRiskReading(
         getmyRiskStatsSchoolLevel(suspRisk, 'read_risk', 'read_risk'),
       );
 
-      schooLevel.setRiskSuspension(
+      schoolLevel.setRiskSuspension(
         getmyRiskStatsSchoolLevel(suspRisk, 'susp_risk', 'susp_risk'),
       );
 
-      schooLevel.setConfidenceLevel(getConfidenceLvel(suspRisk));
+      schoolLevel.setConfidenceLevel(getConfidenceLvel(suspRisk));
 
-      schooLevel.setlistOfAllStudents(suspRisk);
+      schoolLevel.setlistOfAllStudents(suspRisk);
 
-      schooLevel.setGenderRisk(getDemographic(suspRisk, 'gender'));
+      schoolLevel.setGenderRisk(getDemographic(suspRisk, 'gender'));
 
-      schooLevel.setEllRisk(getDemographic(suspRisk, 'ell'));
+      schoolLevel.setEllRisk(getDemographic(suspRisk, 'ell'));
 
-      schooLevel.setEthnicityRisk(getDemographic(suspRisk, 'ethnicity'));
+      schoolLevel.setEthnicityRisk(getDemographic(suspRisk, 'ethnicity'));
 
       router.refresh();
       setIsLoading(false);
       toast.success('File uploaded');
       reset();
       fileModal.onClose();
+
+
+      
+      CompareSchoolNames(file1);
+
     } catch (error) {
       toast.error('Somthing went wrong');
     } finally {
       setIsLoading(false);
     }
+
+    
   };
 
   return (

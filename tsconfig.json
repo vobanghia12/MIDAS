@@ -20,7 +20,8 @@
     ],
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+
   },
   "include": [
     "next-env.d.ts",
@@ -28,7 +29,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/lib/placeholder-data.js",
-    "scripts/seed.js"
-, "app/ui/dashboard/popover.jsx", "app/api/auth/[...nextauth].js"  ],
+    "scripts/seed.js",
+    "app/ui/dashboard/popover.jsx", 
+    "app/api/auth/[...nextauth].js",
+    "types/next-auth.d.ts"],
   "exclude": ["node_modules"]
 }
