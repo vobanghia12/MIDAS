@@ -140,7 +140,7 @@ export default function Page({ searchParams }: SearchProps) {
   //handle export feature
   const handleExport = async (listStudents: any) => {
     const result = await postData({
-      url: `http://localhost:3000/api/export`,
+      url: 'https://midas-topaz.vercel.app/',
       data: { listStudents },
     });
     const res = writeFile(result, 'students.xlsx', {

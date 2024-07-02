@@ -1,7 +1,7 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { compare } from "bcrypt";
-import { createClient } from "@supabase/supabase-js";
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { compare } from 'bcrypt';
+import { createClient } from '@supabase/supabase-js';
 
 // Update this when switching databases if needed
 const supabaseUrl = 'https://kalbwmivszjzlnepcebm.supabase.co';
@@ -10,11 +10,11 @@ const supabase = createClient(supabaseUrl, supabaseKey!);
 
 const handler = NextAuth({
   session: {
-    strategy: 'jwt'
+    strategy: 'jwt',
   },
 
   pages: {
-    signIn: '/'
+    signIn: '/',
   },
 
   providers: [
@@ -22,47 +22,46 @@ const handler = NextAuth({
       credentials: {
         email: {},
         username: {},
-        password: {}
+        password: {},
       },
 
       async authorize(credentials, req) {
         // TODO: Validate email, username, and password
-        console.log("authorizing")
 
         // Call Supabase database function to get the user associated with this username
-        const { data, error } = await supabase
-        .rpc('get_user_from_username', {
-          _username: credentials?.username
-        })
-        if (error) console.error(error)
-        else console.log('Got user')
+        const { data, error } = await supabase.rpc('get_user_from_username', {
+          _username: credentials?.username,
+        });
+        if (error) console.error(error);
+        else console.log('Got user');
 
         const user = data;
-        console.log({user})
+        console.log({ user });
 
         // Compare encrypted password in db to inputted password
-        const passwordCorrect = await compare
-        (
+        const passwordCorrect = await compare(
           credentials!.password || '',
-          user.password
+          user.password,
         );
 
-        if(passwordCorrect) {
-          console.log("User password is correct. Logging in.")
+        if (passwordCorrect) {
+          console.log('User password is correct. Logging in.');
           return {
             id: user.id,
             email: user.email,
-            name: user.username
-          }
+            name: user.username,
+          };
         }
 
         // console.log(credentials);
 
-        console.log("Password was incorrect or another issue occured during login.")
+        console.log(
+          'Password was incorrect or another issue occured during login.',
+        );
         return null;
-      }
-    })
-  ]
-})
+      },
+    }),
+  ],
+});
 
-export {handler as GET, handler as POST}
+export { handler as GET, handler as POST };
