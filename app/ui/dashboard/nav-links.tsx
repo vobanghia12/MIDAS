@@ -9,13 +9,17 @@ import {
   ArrowUpTrayIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import clsx from 'clsx';
 import { Input, Textarea } from '@nextui-org/react';
 import path from 'path';
 import { useContext, useEffect, useState } from 'react';
-import { SearchContext } from '@/app/context/nav-search-context';
+import {
+  SearchContext,
+  useSearchContext,
+} from '@/app/context/nav-search-context';
 import useFileModal from '@/hooks/useFileModal';
+import { useDebouncedCallback } from 'use-debounce';
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
@@ -35,9 +39,9 @@ const links = [
 ];
 
 const NavSearchBox: React.FC<{ href: string }> = ({ href }) => {
+  const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  console.log('HREF: ' + href);
   const placeholders = {
     '/dashboard/school': 'Enter school ID',
     '/dashboard/grade': 'Enter grade level',

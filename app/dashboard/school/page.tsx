@@ -8,15 +8,6 @@ import { CardConfidenceVisualizer } from '@/app/ui/dashboard/cards/general/card-
 import { useEffect, useState } from 'react';
 import { CardThreeValue } from '@/app/ui/dashboard/cards/general/card-three-value';
 import { Card, Tooltip } from '@nextui-org/react';
-import {
-  AcademicChart,
-  BarChartEnglishLearner,
-  BarChartEthnicity,
-  BarChartTotal,
-  DonutChartGender,
-  EmotionalChart,
-  SocialChart,
-} from '@/app/ui/charts/total-demographics-charts';
 import Dropdown from '@/app/ui/Dropdown';
 import useRiskOptions from '@/hooks/useRiskOptions';
 import useSchoolLevel from '@/hooks/useSchoolLevel';
@@ -32,8 +23,6 @@ export default async function Page() {
   const riskOptions = useRiskOptions();
   const schooLevel = useSchoolLevel();
 
-  console.log(schooLevel.ethnicityRisk);
-  console.log(schooLevel.ellRisk);
   const [genderState, setGenderState] = useState({
     math_risk: false,
     read_risk: false,
@@ -45,27 +34,6 @@ export default async function Page() {
     high: '15%',
   });
 
-  const [disciplineRisk, setDisciplineRisk] = useState({
-    odrZero: '77%',
-    odrSome: '23%',
-    suspZero: '80%',
-    suspSome: '20%',
-  });
-
-  const englishLearnerDataPlaceholder = [
-    {
-      id: 'ELL', // 250
-      'High Risk': 0.2,
-      'Some Risk': 0.35,
-      'Low Risk': 0.45,
-    },
-    {
-      id: 'Not ELL',
-      'High Risk': 0.33,
-      'Some Risk': 0.4,
-      'Low Risk': 0.27,
-    },
-  ];
   const getCurrentState = (states: any) => {
     const arr = Object.keys(states).filter((state: any) => {
       if (states[state]) return state;
@@ -78,7 +46,6 @@ export default async function Page() {
   const colors = ['rose-500', 'yellow-400', 'green-500'];
 
   const nameRisk = getCurrentState(genderState);
-  console.log(schooLevel);
   return (
     <main>
       <div className="flex gap-4">
@@ -110,19 +77,25 @@ export default async function Page() {
               <CardDisciplinarySummary
                 title={'Disciplinary Action Summary'}
                 valuesTop={[
-                  disciplineRisk['odrZero'],
-                  disciplineRisk['odrSome'],
-                  disciplineRisk['odrSome'],
+                  schooLevel.riskODR
+                    ? schooLevel.riskODR['odr_risk']['Low Risk'] + '%'
+                    : '0%',
+                  schooLevel.riskODR
+                    ? schooLevel.riskODR['odr_risk']['Some Risk'] + '%'
+                    : '0%',
+                  schooLevel.riskODR
+                    ? schooLevel.riskODR['odr_risk']['High Risk'] + '%'
+                    : '0%',
                 ]}
-                subtitlesTop={['Zero', 'One Plus', 'Zeo']}
+                subtitlesTop={['Low', 'Some', 'High']}
                 valuesBottom={[
-                  schooLevel.riskMath
+                  schooLevel.riskSuspension
                     ? schooLevel.riskSuspension['susp_risk']['Low Risk'] + '%'
                     : '0%',
-                  schooLevel.riskReading
+                  schooLevel.riskSuspension
                     ? schooLevel.riskSuspension['susp_risk']['Some Risk'] + '%'
                     : '0%',
-                  schooLevel.riskReading
+                  schooLevel.riskSuspension
                     ? schooLevel.riskSuspension['susp_risk']['High Risk'] + '%'
                     : '0%',
                 ]}
@@ -284,7 +257,7 @@ export default async function Page() {
                 </div>
               </Card>
             )}
-            {riskOptions.isTotalScore && <BarChartTotal />}
+            {riskOptions.isTotalScore && 'No Chart Total'}
             {schooLevel.saeberAcademic &&
               schooLevel.mySaeberAcademic &&
               riskOptions.isAcademic && (

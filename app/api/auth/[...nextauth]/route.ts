@@ -1,3 +1,4 @@
+
 import NextAuth, { Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
@@ -30,11 +31,11 @@ interface CustomSession extends Session {
 
 const handler = NextAuth({
   session: {
-    strategy: 'jwt'
+    strategy: 'jwt',
   },
 
   pages: {
-    signIn: '/'
+    signIn: '/',
   },
 
   callbacks: {
@@ -88,32 +89,30 @@ const handler = NextAuth({
         email: {},//{ label: "Email", type: "text" },
         username: {}, //{ label: "Username", type: "text" },
         password: {}//{ label: "Password", type: "password" }
+
       },
 
       async authorize(credentials, req) {
         // TODO: Validate email, username, and password
-        console.log("authorizing")
 
         // const currentUser = useCurrentUser()
 
         // console.log({currentUser})
 
         // Call Supabase database function to get the user associated with this username
-        const { data, error } = await supabase
-        .rpc('get_user_from_username', {
-          _username: credentials?.username
-        })
-        if (error) console.error(error)
-        else console.log('Got user')
+        const { data, error } = await supabase.rpc('get_user_from_username', {
+          _username: credentials?.username,
+        });
+        if (error) console.error(error);
+        else console.log('Got user');
 
         const user = data;
-        console.log({user})
+        console.log({ user });
 
         // Compare encrypted password in db to inputted password
-        const passwordCorrect = await compare
-        (
+        const passwordCorrect = await compare(
           credentials!.password || '',
-          user.password
+          user.password,
         );
 
         if(passwordCorrect) {
@@ -136,11 +135,13 @@ const handler = NextAuth({
 
         // console.log(credentials);
 
+
         console.log("Password was incorrect or another issue occured during login.")
         return null as any;
       } 
     })
   ]
-})
+});
 
-export {handler as GET, handler as POST}
+
+export { handler as GET, handler as POST };

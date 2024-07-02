@@ -5,9 +5,10 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import useEmailModal from '@/hooks/useEmailModal';
 import { Button } from './button';
 import { EmailFormat } from '@/types';
-import { postData } from '../lib/helpers';
+
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { postData } from '../lib/helpers';
 
 const EmailModal = () => {
   const [content, setContent] = React.useState<string>('');
@@ -43,7 +44,7 @@ const EmailModal = () => {
       };
 
       const data = postData({
-        url: 'http://localhost:3000/api/send',
+        url: `${process.env.NEXTAUTH_URL}/api/send`,
         data: { emailFormat },
       });
 
