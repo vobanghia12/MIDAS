@@ -40,6 +40,18 @@ const supabase = createClient(supabaseUrl, supabaseKey!);
 export async function CompareSchoolNames(file: File) {
   const session = await getSession();
 
+  let { data: isAdminData, error: isAdminError } = await supabase
+  .rpc('get_is_admin_from_username', {
+    _username: session?.user.name
+  })
+  if (isAdminError) console.error(isAdminError)
+  else console.log(isAdminData)
+
+  console.log(isAdminData.is_admin)
+  if (isAdminData.is_admin) {
+    return true;
+  }
+
   // Get the user data from current session user.name
   let { data, error } = await supabase
   .rpc('get_school_name_from_username', {
@@ -55,6 +67,6 @@ export async function CompareSchoolNames(file: File) {
   // console.log('Compared ', userSchoolName, ' to ', processedFileName, ' Is user permitted?', processedFileName.includes(userSchoolName))
   if (!processedFileName.includes(userSchoolName)) {
     console.log("User is not permitted to view this file.")
-  } 
+  }
   return (processedFileName.includes(userSchoolName))
 }
