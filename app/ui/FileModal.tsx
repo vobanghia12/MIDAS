@@ -24,7 +24,6 @@ import { BounceLoader } from 'react-spinners';
 import { CompareSchoolNames } from '../api/file-auth/restrict-csv';
 import { getServerSession } from 'next-auth';
 
-
 import { usePathname } from 'next/navigation';
 import useGradeLevel from '@/hooks/useGradeLevel';
 import useClassLevel from '@/hooks/useClassLevel';
@@ -46,9 +45,8 @@ const data_frame: string[] = [
   'saebrs_aca',
 ];
 
-
 /**
- * @param d1 is parameter for the school upload array 
+ * @param d1 is parameter for the school upload array
  * @param d2 is parameter for the web in put
  * @return true if they have common properties or not will return false
  */
@@ -132,10 +130,10 @@ const FileModal = () => {
 
       let file1: File = values.document1?.[0];
 
-      if (await CompareSchoolNames(file1) == false) {
+      if ((await CompareSchoolNames(file1)) == false) {
         toast.error('You are not permitted to open this file');
         // throw(new Error("User is not permitted to open this file."))
-        return
+        return;
       }
 
       let file2: File = values.document2?.[0];
@@ -148,8 +146,6 @@ const FileModal = () => {
         toast.error('Missing fields');
         return;
       }
-
-      
 
       const data1 = await file1.arrayBuffer();
       const data2 = await file2.arrayBuffer();
@@ -252,21 +248,19 @@ const FileModal = () => {
       //Mysaeber Social Risk
       schooLevel.setMySaeberSocial(
         getmyRiskStatsSchoolLevel(suspRisk, 'mysaebrs_soc', 'MySaebrs'),
-
       );
 
-      schoolLevel.setRiskMath(
+      schooLevel.setRiskMath(
         getmyRiskStatsSchoolLevel(suspRisk, 'math_risk', 'math_risk'),
       );
 
-      schoolLevel.setRiskReading(
+      schooLevel.setRiskReading(
         getmyRiskStatsSchoolLevel(suspRisk, 'read_risk', 'read_risk'),
       );
 
-      schoolLevel.setRiskSuspension(
+      schooLevel.setRiskSuspension(
         getmyRiskStatsSchoolLevel(suspRisk, 'susp_risk', 'susp_risk'),
       );
-
 
       //set ODR for school level
       schooLevel.setRiskODR(
@@ -275,13 +269,13 @@ const FileModal = () => {
 
       schooLevel.setConfidenceLevel(getConfidenceLvel(suspRisk));
 
-      schoolLevel.setlistOfAllStudents(suspRisk);
+      schooLevel.setlistOfAllStudents(suspRisk);
 
-      schoolLevel.setGenderRisk(getDemographic(suspRisk, 'gender'));
+      schooLevel.setGenderRisk(getDemographic(suspRisk, 'gender'));
 
-      schoolLevel.setEllRisk(getDemographic(suspRisk, 'ell'));
+      schooLevel.setEllRisk(getDemographic(suspRisk, 'ell'));
 
-      schoolLevel.setEthnicityRisk(getDemographic(suspRisk, 'ethnicity'));
+      schooLevel.setEthnicityRisk(getDemographic(suspRisk, 'ethnicity'));
 
       //mysaeber Emotion Risk
       gradeLevel.setMySaebrsEmotion(
@@ -412,18 +406,11 @@ const FileModal = () => {
       toast.success('File uploaded');
       reset();
       fileModal.onClose();
-
-
-      
-      
-
     } catch (error) {
       toast.error('Somthing went wrong');
     } finally {
       setIsLoading(false);
     }
-
-    
   };
 
   return (
