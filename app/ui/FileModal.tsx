@@ -20,9 +20,14 @@ import {
 } from '@/action/getGradeLevelFunctions';
 import useSchoolLevel from '@/hooks/useSchoolLevel';
 import { BounceLoader } from 'react-spinners';
+
+import { CompareSchoolNames } from '../api/file-auth/restrict-csv';
+import { getServerSession } from 'next-auth';
+
 import { usePathname } from 'next/navigation';
 import useGradeLevel from '@/hooks/useGradeLevel';
 import useClassLevel from '@/hooks/useClassLevel';
+
 const data_frame: string[] = [
   'odr_f',
   'susp_f',
@@ -40,6 +45,18 @@ const data_frame: string[] = [
   'saebrs_aca',
 ];
 
+/**
+ * @param d1 is parameter for the school upload array
+ * @param d2 is parameter for the web in put
+ * @return true if they have common properties or not will return false
+ */
+const helperFunction = (d1: any, d2: any) => {
+  for (const data of data_frame) {
+    if (d2[data] !== d1[data]) return false;
+  }
+  return true;
+};
+
 export const convertCsvToJson = (data: ArrayBuffer) => {
   const workbook = read(data, { dense: true });
 
@@ -50,14 +67,18 @@ export const convertCsvToJson = (data: ArrayBuffer) => {
   return JSONdata;
 };
 
+/**
+ * This function matching with risk factor
+ */
 export const setSecondMatchingRiskFactor = (
   uploadData: any,
   riskFactorData: any,
   riskFactor: string,
   confidenceFactor: string,
 ) => {
-  // const risk = uploadData.filter((d1: any) =>
   const m: any = new Map();
+
+  //x is one row in the data?
   uploadData.forEach(function (x: any) {
     x[riskFactor] = null;
     x[confidenceFactor] = null;
@@ -108,6 +129,13 @@ const FileModal = () => {
       setIsLoading(true);
 
       let file1: File = values.document1?.[0];
+
+      if ((await CompareSchoolNames(file1)) == false) {
+        toast.error('You are not permitted to open this file');
+        // throw(new Error("User is not permitted to open this file."))
+        return;
+      }
+
       let file2: File = values.document2?.[0];
       let file3: File = values.document3?.[0];
       let file4: File = values.document4?.[0];

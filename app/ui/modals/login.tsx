@@ -46,6 +46,7 @@ export default function LoginModal({
     else {
       setIncorrectLogin(true);
     }
+
   };
 
   // Reset the incorrect password message when updating the inputs
