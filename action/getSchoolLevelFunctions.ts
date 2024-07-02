@@ -35,19 +35,22 @@ export const getConfidenceLvel = (inputData: any) => {
   let math_confidence = 0,
     read_confidence = 0,
     susp_confidence = 0,
+    odr_confidence = 0,
     count_total = 0;
   for (const data of inputData) {
     math_confidence += data.math_confidence;
     read_confidence += data.read_confidence;
     susp_confidence += data.susp_confidence;
+    odr_confidence += data.odr_confidence;
     count_total += 1;
   }
 
   return Math.round(
     (math_confidence / count_total +
       read_confidence / count_total +
-      susp_confidence / count_total) /
-      3,
+      susp_confidence / count_total +
+      odr_confidence / count_total) /
+      4,
   );
 };
 

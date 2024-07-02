@@ -17,5 +17,3 @@ export const postData = async ({ url, data }: { url: string; data?: any }) => {
 
   return res.json();
 };
-
-

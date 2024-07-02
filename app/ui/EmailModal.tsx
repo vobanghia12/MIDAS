@@ -5,9 +5,10 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import useEmailModal from '@/hooks/useEmailModal';
 import { Button } from './button';
 import { EmailFormat } from '@/types';
-import { postData } from '../lib/helpers';
+
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { postData } from '../lib/helpers';
 
 const EmailModal = () => {
   const [content, setContent] = React.useState<string>('');

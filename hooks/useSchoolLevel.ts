@@ -16,6 +16,7 @@ interface SchoolLevelStore {
   genderRisk: any;
   ethnicityRisk: any;
   ellRisk: any;
+  riskODR: any;
   setSaebrsEmotion: (emo: any) => void;
   setMySaebrsEmotion: (emo: any) => void;
   setSaeberAcademic: (academic: any) => void;
@@ -25,6 +26,7 @@ interface SchoolLevelStore {
   setRiskMath: (math: any) => void;
   setRiskReading: (reading: any) => void;
   setRiskSuspension: (susp: any) => void;
+  setRiskODR: (odr: any) => void;
   setConfidenceLevel: (confidence: any) => void;
   setlistOfAllStudents: (students: any) => void;
   setGenderRisk: (gender: any) => void;
@@ -33,6 +35,7 @@ interface SchoolLevelStore {
 }
 
 const useSchoolLevel = create<SchoolLevelStore>((set: any) => ({
+  riskODR: '',
   genderRisk: '',
   listOfAllStudents: undefined,
   confidenceLevel: 0,
@@ -61,6 +64,7 @@ const useSchoolLevel = create<SchoolLevelStore>((set: any) => ({
   setGenderRisk: (gender: any) => set({ genderRisk: gender }),
   setEthnicityRisk: (ethnicity: any) => set({ ethnicityRisk: ethnicity }),
   setEllRisk: (ell: any) => set({ ellRisk: ell }),
+  setRiskODR: (odr: any) => set({ riskODR: odr }),
 }));
 
 export default useSchoolLevel;

@@ -92,6 +92,7 @@ const FileModal = () => {
       document3: null,
       document4: null,
       document5: null,
+      document6: null,
     },
   });
 
@@ -111,6 +112,7 @@ const FileModal = () => {
       let file3: File = values.document3?.[0];
       let file4: File = values.document4?.[0];
       let file5: File = values.document5?.[0];
+      let file6: File = values.document6?.[0];
 
       if (!file1) {
         toast.error('Missing fields');
@@ -122,6 +124,7 @@ const FileModal = () => {
       const data3 = await file3.arrayBuffer();
       const data4 = await file4.arrayBuffer();
       const data5 = await file5.arrayBuffer();
+      const data6 = await file6.arrayBuffer();
 
       let uploadData: any = convertCsvToJson(data1);
 
@@ -130,6 +133,9 @@ const FileModal = () => {
       const mathRiskData: any = convertCsvToJson(data3);
 
       const readRiskData: any = convertCsvToJson(data4);
+
+      //get ODR data
+      const odrRiskData: any = convertCsvToJson(data6);
 
       const suspRiskData: any = convertCsvToJson(data5);
 
@@ -170,6 +176,13 @@ const FileModal = () => {
         readRiskData,
         'read_risk',
         'read_confidence',
+      );
+
+      const odrRisk = setSecondMatchingRiskFactor(
+        uploadData,
+        odrRiskData,
+        'odr_risk',
+        'odr_confidence',
       );
 
       // //filter for suspension risk
@@ -221,6 +234,11 @@ const FileModal = () => {
         getmyRiskStatsSchoolLevel(suspRisk, 'susp_risk', 'susp_risk'),
       );
 
+      //set ODR for school level
+      schooLevel.setRiskODR(
+        getmyRiskStatsSchoolLevel(suspRisk, 'odr_risk', 'odr_risk'),
+      );
+
       schooLevel.setConfidenceLevel(getConfidenceLvel(suspRisk));
 
       schooLevel.setlistOfAllStudents(suspRisk);
@@ -270,6 +288,10 @@ const FileModal = () => {
 
       gradeLevel.setRiskSuspension(
         getMyRiskStatsGradeLevel(suspRisk, 'gradelevel', 'susp_risk'),
+      );
+
+      gradeLevel.setRiskODR(
+        getMyRiskStatsGradeLevel(suspRisk, 'gradelevel', 'odr_risk'),
       );
 
       gradeLevel.setConfidenceLevel(
@@ -347,6 +369,10 @@ const FileModal = () => {
         getDemographicGradeLevel(suspRisk, 'classroom', 'ell'),
       );
 
+      classLevel.setRiskODR(
+        getMyRiskStatsGradeLevel(suspRisk, 'classroom', 'odr_risk'),
+      );
+
       router.refresh();
       setIsLoading(false);
       toast.success('File uploaded');
@@ -420,6 +446,16 @@ const FileModal = () => {
               id="document5"
               disabled={isLoading}
               {...register('document5', { required: true })}
+            />
+          </div>
+          <div>
+            <p className="pb-1 text-left">ODR Risk File</p>
+            <Input
+              type="file"
+              className="mt-1"
+              id="document6"
+              disabled={isLoading}
+              {...register('document6', { required: true })}
             />
           </div>
           {isLoading ? (

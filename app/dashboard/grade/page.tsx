@@ -29,7 +29,6 @@ export default async function Page() {
   });
   const riskOptions = useRiskOptions();
   const gradeLevel = useGradeLevel();
-  console.log(gradeLevel);
   const grade = useSearchContext('grade');
   grade.set;
   const selectedGrade = grade.get;
@@ -114,9 +113,21 @@ export default async function Page() {
               <CardDisciplinarySummary
                 title={'Disciplinary Action Summary'}
                 valuesTop={[
-                  disciplineRisk['odrZero'],
-                  disciplineRisk['odrSome'],
-                  disciplineRisk['odrSome'],
+                  gradeLevel.riskODR
+                    ? gradeLevel.riskODR[selectedGrade]['odr_risk'][
+                        'Low Risk'
+                      ] + '%'
+                    : '0%',
+                  gradeLevel.riskODR
+                    ? gradeLevel.riskODR[selectedGrade]['odr_risk'][
+                        'Some Risk'
+                      ] + '%'
+                    : '0%',
+                  gradeLevel.riskODR
+                    ? gradeLevel.riskODR[selectedGrade]['odr_risk'][
+                        'High Risk'
+                      ] + '%'
+                    : '0%',
                 ]}
                 subtitlesTop={['Zero', 'One Plus', 'Zeo']}
                 valuesBottom={[

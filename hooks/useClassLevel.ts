@@ -2,6 +2,7 @@ import { read } from 'fs';
 import create from 'zustand';
 
 interface ClassLevelStore {
+  riskODR: '';
   listOfAllStudents: any;
   confidenceLevel: any;
   saebrsEmotion: any;
@@ -30,9 +31,11 @@ interface ClassLevelStore {
   setGenderRisk: (gender: any) => void;
   setEthnicityRisk: (ethnicity: any) => void;
   setEllRisk: (ell: any) => void;
+  setRiskODR: (odr: any) => void;
 }
 
 const useClassLevel = create<ClassLevelStore>((set: any) => ({
+  riskODR: '',
   genderRisk: '',
   listOfAllStudents: undefined,
   confidenceLevel: 0,
@@ -61,6 +64,7 @@ const useClassLevel = create<ClassLevelStore>((set: any) => ({
   setGenderRisk: (gender: any) => set({ genderRisk: gender }),
   setEthnicityRisk: (ethnicity: any) => set({ ethnicityRisk: ethnicity }),
   setEllRisk: (ell: any) => set({ ellRisk: ell }),
+  setRiskODR: (odr: any) => set({ riskODR: odr }),
 }));
 
 export default useClassLevel;

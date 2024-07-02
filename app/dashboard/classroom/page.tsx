@@ -115,11 +115,23 @@ export default async function Page() {
               <CardDisciplinarySummary
                 title={'Disciplinary Action Summary'}
                 valuesTop={[
-                  disciplineRisk['odrZero'],
-                  disciplineRisk['odrSome'],
-                  disciplineRisk['odrSome'],
+                  classLevel.riskODR
+                    ? classLevel.riskODR[selectedClass]['odr_risk'][
+                        'Low Risk'
+                      ] + '%'
+                    : '0%',
+                  classLevel.riskODR
+                    ? classLevel.riskODR[selectedClass]['odr_risk'][
+                        'Some Risk'
+                      ] + '%'
+                    : '0%',
+                  classLevel.riskODR
+                    ? classLevel.riskODR[selectedClass]['odr_risk'][
+                        'High Risk'
+                      ] + '%'
+                    : '0%',
                 ]}
-                subtitlesTop={['Zero', 'One Plus', 'Zeo']}
+                subtitlesTop={['Low', 'Some', 'High']}
                 valuesBottom={[
                   classLevel.riskSuspension
                     ? classLevel.riskSuspension[selectedClass]['susp_risk'][

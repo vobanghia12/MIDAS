@@ -237,6 +237,7 @@ export const getConfidenceLevelForGradeLevel = (
     math_confidence: 0,
     read_confidence: 0,
     susp_confidence: 0,
+    odr_confidence: 0,
   },
 ) => {
   const gradeMapConfidence: any = {};
@@ -257,6 +258,7 @@ export const getConfidenceLevelForGradeLevel = (
       data['read_confidence'];
     gradeMapConfidence[data[field]]['susp_confidence'] +=
       data['susp_confidence'];
+    gradeMapConfidence[data[field]]['odr_confidence'] += data['odr_confidence'];
     countTotalforEachGradeMap[data[field]] += 1;
   });
 
@@ -269,8 +271,10 @@ export const getConfidenceLevelForGradeLevel = (
           gradeMapConfidence[key]['read_confidence'] /
             countTotalforEachGradeMap[key] +
           gradeMapConfidence[key]['susp_confidence'] /
+            countTotalforEachGradeMap[key] +
+          gradeMapConfidence[key]['odr_confidence'] /
             countTotalforEachGradeMap[key]) /
-          3,
+          4,
       );
       return acc;
     },

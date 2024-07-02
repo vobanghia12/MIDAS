@@ -13,6 +13,7 @@ interface GradeLevelStore {
   riskMath: any;
   riskReading: any;
   riskSuspension: any;
+  riskODR: any;
   genderRisk: any;
   ethnicityRisk: any;
   ellRisk: any;
@@ -30,9 +31,11 @@ interface GradeLevelStore {
   setGenderRisk: (gender: any) => void;
   setEthnicityRisk: (ethnicity: any) => void;
   setEllRisk: (ell: any) => void;
+  setRiskODR: (odr: any) => void;
 }
 
 const useGradeLevel = create<GradeLevelStore>((set: any) => ({
+  riskODR: '',
   genderRisk: '',
   listOfAllStudents: undefined,
   confidenceLevel: 0,
@@ -61,6 +64,7 @@ const useGradeLevel = create<GradeLevelStore>((set: any) => ({
   setGenderRisk: (gender: any) => set({ genderRisk: gender }),
   setEthnicityRisk: (ethnicity: any) => set({ ethnicityRisk: ethnicity }),
   setEllRisk: (ell: any) => set({ ellRisk: ell }),
+  setRiskODR: (odr: any) => set({ riskODR: odr }),
 }));
 
 export default useGradeLevel;

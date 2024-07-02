@@ -10,7 +10,10 @@ import { CardStudentDiscipline } from '@/app/ui/dashboard/cards/individual/disci
 import { CardStudentTestScores } from '@/app/ui/dashboard/cards/individual/test-scores';
 import { CardConfidenceVisualizer } from '@/app/ui/dashboard/cards/general/card-confidence';
 import { nunito } from '@/app/ui/fonts';
-import { DonutChart } from '@/app/ui/charts/donut-chart';
+import { Button } from '@/app/ui/button';
+import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { postData } from '@/app/lib/helpers';
+import { writeFile } from 'xlsx';
 
 interface SearchProps {
   searchParams: {
@@ -34,7 +37,23 @@ export default function Page({ searchParams }: SearchProps) {
     return '';
   };
 
+  const computeConfidenceForEachStudent = (data: any) => {
+    let confidence: number = 0;
+    if (data) {
+      confidence = Math.round(
+        (data?.math_confidence +
+          data?.susp_confidence +
+          data?.read_confidence +
+          data?.odr_confidence) /
+          4,
+      );
+    }
+    return confidence;
+  };
+
   const data: any = searchData();
+
+  let confidence: number = computeConfidenceForEachStudent(data);
 
   const [saebrsScores, setSaebrsScores] = useState({
     saebrsTotal: 'NA',
@@ -70,6 +89,7 @@ export default function Page({ searchParams }: SearchProps) {
     math: data?.math_risk ?? 'NA',
     reading: data?.reading_risk ?? 'NA',
     suspension: 'NA',
+    odr: 'NA',
   });
 
   useEffect(() => {
@@ -100,6 +120,7 @@ export default function Page({ searchParams }: SearchProps) {
       math: data?.math_risk ?? 'NA',
       reading: data?.read_risk ?? 'NA',
       suspension: data?.susp_risk ?? 'NA',
+      odr: data?.odr_risk ?? 'NA',
     });
 
     setMidasSummary({
@@ -115,20 +136,29 @@ export default function Page({ searchParams }: SearchProps) {
       confidenceThreshold: [1, 2, 3, 4, 5],
     });
   }, [data]);
-  // Fetch functions here for states
-  const genderDataPlaceholder = [
-    {
-      id: 'Male',
-      value: 500,
-    },
-    {
-      id: 'Female',
-      value: 548,
-    },
-  ];
 
+  //handle export feature
+  const handleExport = async (listStudents: any) => {
+    const result = await postData({
+      url: `http://localhost:3000/api/export`,
+      data: { listStudents },
+    });
+    const res = writeFile(result, 'students.xlsx', {
+      compression: true,
+      type: 'file',
+    });
+  };
   return (
     <main className={`${nunito.className}`}>
+      <div className="mb-10 flex w-full justify-end">
+        <Button
+          className="bg-[#1e8434] hover:bg-[#1e8434a1]"
+          onClick={() => handleExport(schoolLevel?.listOfAllStudents)}
+        >
+          <ArrowDownTrayIcon className="w-6 pr-2" />
+          <p>Export</p>
+        </Button>
+      </div>
       <div className="flex flex-col gap-4">
         {/* Top row */}
         <div className="flex w-full flex-row gap-8">
@@ -142,7 +172,7 @@ export default function Page({ searchParams }: SearchProps) {
 
           <div className="flex w-full basis-1/3">
             <CardStudentDiscipline
-              odr={'Placeholder 1'}
+              odr={testScoreRisk.odr}
               suspensions={testScoreRisk.suspension}
             />
           </div>
@@ -160,9 +190,9 @@ export default function Page({ searchParams }: SearchProps) {
           <div className="flex basis-1/5 flex-col gap-2">
             <CardMidasRisk midasRisk={midasSummary.midasRisk} />
             <CardConfidenceVisualizer
-              confidence={90}
-              confidenceThresholds={[85, 90, 95, 99]}
-              missingVariables={2}
+              confidence={confidence}
+              confidenceThresholds={[1, 2, 3, 4, 5]}
+              missingVariables={0}
             />
           </div>
 
@@ -181,78 +211,5 @@ export default function Page({ searchParams }: SearchProps) {
         </div>
       </div>
     </main>
-
-    // <main className="mt-4">
-    //   <div className="mb-8 flex flex-row">
-    //     <div className="mr-4 flex basis-1/4 flex-col items-center">
-    //       <StudentSearch></StudentSearch>
-    //       <div className="h-52 w-52 border-2 border-solid border-gray-500 shadow-md">
-    //         <UserCircleIcon className=" text-gray-700 subpixel-antialiased shadow-lg" />
-    //       </div>
-    //     </div>
-
-    //     <div className="basis-1/4 pr-4">
-    //       <CardMidasRisk
-    //         midasRisk={midasSummary['midasRisk']}
-    //         missingVariablesCount={midasSummary['missingVariables']}
-    //         confidence={midasSummary['confidence']}
-    //         confidenceThresholds={midasSummary['confidenceThreshold']}
-    //       />
-    //     </div>
-
-    //     <div className="mx-4 flex basis-1/4 flex-col rounded-xl shadow-lg">
-    //       <CardTripleStack
-    //         title={'Student Information'}
-    //         subtitles={['Student ID', 'Grade', 'Classroom ID']}
-    //         values={[
-    //           identification['studentId'],
-    //           identification['grade'],
-    //           identification['classroomId'],
-    //         ]}
-    //         capitalize={true}
-    //       />
-    //     </div>
-
-    //     <div className="mx-4 flex basis-1/4 flex-col rounded-xl shadow-lg">
-    //       <CardStudentDemographics
-    //         title={'Student Demographics'}
-    //         subtitles={['Gender', 'Ethnicity', 'English Learner?']}
-    //         values={[
-    //           demographics['gender'],
-    //           demographics['ethnicity'],
-    //           demographics['englishLearner'],
-    //         ]}
-    //         capitalize={true}
-    //       />
-    //     </div>
-    //   </div>
-
-    //   <div className="flex flex-col">
-    //     <div className="flex flex-row">
-    //       <div className="basis-3/4">
-    //         <SaebrsSummary
-    //           saebrsTotal={saebrsScores['saebrsTotal']}
-    //           mySaebrsTotal={saebrsScores['mySaebrsTotal']}
-    //           saebrsEmotional={saebrsScores['saebrsEmotional']}
-    //           mySaebrsEmotional={saebrsScores['mySaebrsEmotional']}
-    //           saebrsSocial={saebrsScores['saebrsSocial']}
-    //           mySaebrsSocial={saebrsScores['mySaebrsSocial']}
-    //           saebrsAcademic={saebrsScores['saebrsAcademic']}
-    //           mySaebrsAcademic={saebrsScores['mySaebrsAcademic']}
-    //         />
-    //       </div>
-
-    //       <div className="mx-4 flex basis-1/4 flex-col rounded-xl">
-    //         <CardTestsAndDisciplineSummary
-    //           title="Test"
-    //           subtitlesTop={['Math', 'Reading']}
-    //           subtitlesBottom={['ODR', 'Suspensions']}
-    //           valuesTop={[testScoreRisk.math, testScoreRisk.reading]}
-    //           valuesBottom={['', testScoreRisk.suspension]}
-    //         />
-    //       </div>
-    //     </div>
-    //   </div>
-    // </main>
   );
 }
