@@ -37,7 +37,7 @@ const supabase = createClient(supabaseUrl, supabaseKey!);
 /**
  * Read file name and compare current session's school name
  */
-export async function CompareSchoolNames(file: File | undefined) {
+export async function CompareSchoolNames(file: File) {
   const session = await getSession();
 
   // Get the user data from current session user.name
@@ -48,10 +48,13 @@ export async function CompareSchoolNames(file: File | undefined) {
   if (error) console.error(error)
   else console.log(data)
 
-  const userSchoolName = data?.userSchoolName;
+  const userSchoolName = data;
 
   const processedFileName = file!.name.replace(/\s+/g, '') // Replace all spaces with empty
 
-  console.log('Compared ', userSchoolName, ' to ', processedFileName, ' Is user permitted?', processedFileName.includes(userSchoolName))
+  // console.log('Compared ', userSchoolName, ' to ', processedFileName, ' Is user permitted?', processedFileName.includes(userSchoolName))
+  if (!processedFileName.includes(userSchoolName)) {
+    console.log("User is not permitted to view this file.")
+  } 
   return (processedFileName.includes(userSchoolName))
 }

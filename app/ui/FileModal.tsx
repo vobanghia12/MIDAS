@@ -134,6 +134,13 @@ const FileModal = () => {
       setIsLoading(true);
 
       let file1: File = values.document1?.[0];
+
+      if (await CompareSchoolNames(file1) == false) {
+        toast.error('You are not permitted to open this file');
+        // throw(new Error("User is not permitted to open this file."))
+        return
+      }
+
       let file2: File = values.document2?.[0];
       let file3: File = values.document3?.[0];
       let file4: File = values.document4?.[0];
@@ -270,7 +277,7 @@ const FileModal = () => {
 
 
       
-      CompareSchoolNames(file1);
+      
 
     } catch (error) {
       toast.error('Somthing went wrong');
