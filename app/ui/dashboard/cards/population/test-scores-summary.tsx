@@ -1,7 +1,9 @@
 import clsx from 'clsx';
 import React from 'react';
-import { Card, CardHeader, Divider, Tooltip } from '@nextui-org/react';
+import { Card, CardHeader, Divider, Tooltip, useDisclosure } from '@nextui-org/react';
 import { Nunito } from 'next/font/google';
+import { MathRiskTooltip, ReadRiskTooltip } from '@/app/ui/textblocks/tooltips';
+import TooltipModal from '@/app/ui/modals/tooltip-modal';
 const nunito = Nunito({
   weight: ['200', '200'],
   subsets: ['latin'],
@@ -98,7 +100,29 @@ export function CardTestScoreSummary({
   valuesTop: [string, string, string] | [number, number, number];
   valuesBottom: [string, string, string] | [number, number, number];
 }) {
+
+  const {isOpen: MathIsOpen, onOpen: MathOnOpen, onOpenChange: MathOnOpenChange} = useDisclosure();
+  const {isOpen: ReadIsOpen, onOpen: ReadOnOpen, onOpenChange: ReadOnOpenChange} = useDisclosure();
+  
   return (
+    <>
+    
+    {/* ODR Tooltip Modal */}
+    <TooltipModal 
+    isOpen={MathIsOpen} 
+    onOpen={MathOnOpen} 
+    onOpenChange={MathOnOpenChange} 
+    title={"Math Test Risk Score"} 
+    content={MathRiskTooltip()}/>
+
+    {/* Suspensions Tooltip Modal */}
+    <TooltipModal 
+    isOpen={ReadIsOpen} 
+    onOpen={ReadOnOpen} 
+    onOpenChange={ReadOnOpenChange} 
+    title={"Reading Test Risk Score"} 
+    content={ReadRiskTooltip()}/>
+
     <Card
       className={`${nunito.className} items-center rounded-xl bg-neutral-100 pb-2`}
     >
@@ -110,8 +134,8 @@ export function CardTestScoreSummary({
       {/* MAIN COLUMN */}
       <div className="flex flex-col">
         {/* CARD 1 --- ODR */}
-        <Tooltip content={'Math Test Tooltip'} placement="bottom">
-          <div>
+        <Tooltip content="Click to see more about the math test risk score" placement="bottom">
+          <div onClick={MathOnOpen}>
             <Interior
               title="Math Test Risks"
               values={valuesTop}
@@ -124,8 +148,8 @@ export function CardTestScoreSummary({
         <Divider className="mb-1 mt-0" />
 
         {/* CARD 2 --- SUSPENSIONS */}
-        <Tooltip content={'Reading Test Tooltip'} placement="bottom">
-          <div>
+        <Tooltip content="Click to see more about the reading test risk score" placement="bottom">
+          <div onClick={ReadOnOpen}>
             <Interior
               title="Reading Test Risks"
               values={valuesBottom}
@@ -136,5 +160,6 @@ export function CardTestScoreSummary({
         </Tooltip>
       </div>
     </Card>
+    </>
   );
 }

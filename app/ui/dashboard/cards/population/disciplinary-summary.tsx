@@ -1,7 +1,9 @@
 import clsx from 'clsx';
 import React from 'react';
-import { Card, CardHeader, Tooltip, Divider } from '@nextui-org/react';
+import { Card, CardHeader, Tooltip, Divider, useDisclosure } from '@nextui-org/react';
 import { Nunito } from 'next/font/google';
+import { OdrTooltip, SuspensionsTooltip } from '@/app/ui/textblocks/tooltips';
+import TooltipModal from '@/app/ui/modals/tooltip-modal';
 const nunito = Nunito({
   weight: ['200', '200'],
   subsets: ['latin'],
@@ -98,43 +100,62 @@ export function CardDisciplinarySummary({
   valuesTop: [string, string, string] | [number, number, number];
   valuesBottom: [string, string, string] | [number, number, number];
 }) {
+  const {isOpen: OdrIsOpen, onOpen: OdrOnOpen, onOpenChange: OdrOnOpenChange} = useDisclosure();
+  const {isOpen: SuspIsOpen, onOpen: SuspOnOpen, onOpenChange: SuspOnOpenChange} = useDisclosure();
+
   return (
-    <Card
-      className={`${nunito.className} items-center rounded-xl bg-neutral-100 pb-2`}
-    >
-      {/* MAIN TITLE */}
-      <CardHeader className="">
-        <h3 className="text-lg font-medium text-slate-800">{title}</h3>
-      </CardHeader>
+    <>
+      {/* ODR Tooltip Modal */}
+      <TooltipModal 
+      isOpen={OdrIsOpen} 
+      onOpen={OdrOnOpen} 
+      onOpenChange={OdrOnOpenChange} 
+      title={"Office Disciplinary Referrals Risk Score"} 
+      content={OdrTooltip()}/>
 
-      {/* MAIN CONTENT */}
-      <div className="flex flex-col">
-        {/* CARD 1 --- ODR */}
-        <Tooltip content={'ODR Tooltip'} placement="bottom">
-          <div>
-            <Interior
-              title="ODR"
-              values={valuesTop}
-              subtitles={subtitlesTop}
-              padding=""
-            />
-          </div>
-        </Tooltip>
+      {/* Suspensions Tooltip Modal */}
+      <TooltipModal 
+      isOpen={SuspIsOpen} 
+      onOpen={SuspOnOpen} 
+      onOpenChange={SuspOnOpenChange} 
+      title={"Suspensions Risk Score"} 
+      content={SuspensionsTooltip()}/>
+      
+      <Card className={`${nunito.className} items-center rounded-xl bg-neutral-100 pb-2`}>
+        {/* MAIN TITLE */}
+        <CardHeader className="">
+          <h3 className="text-lg font-medium text-slate-800">{title}</h3>
+        </CardHeader>
 
-        <Divider className="mb-1 mt-0" />
+        {/* MAIN CONTENT */}
+        <div className="flex flex-col">
+          {/* CARD 1 --- ODR */}
+          <Tooltip content={OdrTooltip()} placement="bottom-start" className='w-1/2'>
+            <div>
+              <Interior
+                title="ODR"
+                values={valuesTop}
+                subtitles={subtitlesTop}
+                padding=""
+              />
+            </div>
+          </Tooltip>
 
-        {/* CARD 2 --- SUSPENSIONS */}
-        <Tooltip content={'Suspensions Tooltip'} placement="bottom">
-          <div>
-            <Interior
-              title="Suspensions"
-              values={valuesBottom}
-              subtitles={subtitlesBottom}
-              padding=""
-            />
-          </div>
-        </Tooltip>
-      </div>
-    </Card>
+          <Divider className="mb-1 mt-0" />
+
+          {/* CARD 2 --- SUSPENSIONS */}
+          <Tooltip content={SuspensionsTooltip()} placement="bottom-start" className='w-3/5'>
+            <div>
+              <Interior
+                title="Suspensions"
+                values={valuesBottom}
+                subtitles={subtitlesBottom}
+                padding=""
+              />
+            </div>
+          </Tooltip>
+        </div>
+      </Card>
+    </>
   );
 }

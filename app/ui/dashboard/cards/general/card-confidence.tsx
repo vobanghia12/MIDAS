@@ -13,18 +13,6 @@ import { JSXElementConstructor, ReactElement } from 'react';
 import { VariableWeightCell } from '@/app/types/variable-weight-cell';
 const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['normal', 'italic']})
 
-function TooltipContent() {
-  return (
-    <div className='flex-wrap max-w-80'>
-      The amount of missing variables affect the confidence of the MIDAS risk score calculation
-      <br/><br/>
-      Click on this card to see a breakdown of the importance of each variable
-    </div>
-  )
-}
-
-
-
 function VariableWeightsTable({
   variables
 }:
@@ -131,7 +119,7 @@ export function CardConfidenceVisualizer({
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
   return (
-      <Tooltip content={TooltipContent()} placement='bottom' className='h-full'>
+      <Tooltip content="Click to see more information about the MIDAS Confidence Score" placement='bottom' className='h-full'>
         <div onClick={onOpen}>
           <Card className={`${nunito.className} rounded-xl bg-neutral-100 h-full`} shadow='md'>
             <CardHeader className='flex flex-col'>

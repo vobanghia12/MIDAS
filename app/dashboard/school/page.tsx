@@ -22,6 +22,8 @@ import useRiskOptions from '@/hooks/useRiskOptions';
 import useSchoolLevel from '@/hooks/useSchoolLevel';
 import { BarChart } from '@/app/ui/charts/BarChart';
 import RiskDropdown from '@/app/ui/RiskDropDown';
+import { MidasRiskScoreTooltip } from '@/app/ui/textblocks/tooltips';
+import { CardSaebrsSummary } from '@/app/ui/dashboard/cards';
 function MidasRiskTooltipContent() {
   return (
     <div>Percentages of students at the three different MIDAS risk levels.</div>
@@ -94,7 +96,7 @@ export default async function Page() {
                   midasRisk['high'],
                 ]}
                 subtitles={['Low', 'Some', 'High']}
-                tooltip={MidasRiskTooltipContent()}
+                tooltip={MidasRiskScoreTooltip()}
               />
             </div>
 
@@ -161,12 +163,23 @@ export default async function Page() {
             </div>
           </div>
         </div>
-        <div className=" flex h-full w-full flex-col gap-y-28">
+        <div className=" flex h-full w-full flex-col gap-y-2">
+          
+          {/* <CardSaebrsSummary title={''} emotional={['NA', 'NA']} social={['NA', 'NA']} academic={['NA', 'NA']}/> */}
+          <SaebrsSummary saebrsTotal={['NA', 'NA', 'NA']}
+          mySaebrsTotal={['NA', 'NA', 'NA']} 
+          saebrsEmotional={['NA', 'NA', 'NA']} 
+          mySaebrsEmotional={['NA', 'NA', 'NA']} 
+          saebrsSocial={['NA', 'NA', 'NA']} 
+          mySaebrsSocial={['NA', 'NA', 'NA']} 
+          saebrsAcademic={['NA', 'NA', 'NA']} 
+          mySaebrsAcademic={['NA', 'NA', 'NA']}/>
+
           <div className="flex h-full w-full items-center justify-end">
             <Dropdown riskOptions={riskOptions} />
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex h-full justify-center">
             {riskOptions.isEthnicity && schooLevel.ethnicityRisk && (
               <Card
                 className=" -mb-4 mr-2 h-[26rem] w-8/12 rounded-xl bg-neutral-100 p-6"

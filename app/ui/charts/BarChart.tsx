@@ -15,6 +15,8 @@ export function BarChart({
   legendVariable: string;
 }) {
   return (
+    <div className='min-h-full'>
+
     <ResponsiveBar
       data={data}
       keys={['High Risk', 'Some Risk', 'Low Risk']}
@@ -65,5 +67,6 @@ export function BarChart({
       ]}
       animate={true}
     />
+        </div>
   );
 }
