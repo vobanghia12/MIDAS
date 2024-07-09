@@ -28,6 +28,17 @@ export default async function Page() {
     read_risk: false,
     susp_risk: false,
   });
+  const [ethnicityState, setEthnicityState] = useState({
+    math_risk: false,
+    read_risk: false,
+    susp_risk: false,
+  });
+
+  const [ellState, setEllState] = useState({
+    math_risk: false,
+    read_risk: false,
+    susp_risk: false,
+  });
   const [midasRisk, setMidasRisk] = useState({
     low: '45%',
     some: '40%',
@@ -45,7 +56,9 @@ export default async function Page() {
 
   const colors = ['rose-500', 'yellow-400', 'green-500'];
 
-  const nameRisk = getCurrentState(genderState);
+  const genderRisk = getCurrentState(genderState);
+  const ellRisk = getCurrentState(ellState);
+  const ethRisk = getCurrentState(ethnicityState);
   return (
     <main>
       <div className="flex gap-4">
@@ -134,7 +147,230 @@ export default async function Page() {
             </div>
           </div>
         </div>
-        <div className=" flex h-full w-full flex-col gap-y-28">
+        {schooLevel?.saebrsEmotion && (
+          <div className="h-full w-full flex-col">
+            <div className="flex w-full justify-between">
+              <div className="-mb-8">
+                <SaebrsSummary
+                  title={'Total'}
+                  valuesTop={['N/A', 'N/A', 'N/A']}
+                  subtitlesTop={['Low', 'Some', 'High']}
+                  valuesBottom={['N/A', 'N/A', 'N/A']}
+                  subtitlesBottom={['Low', 'Some', 'High']}
+                />
+              </div>
+
+              <div className="-mb-8">
+                <SaebrsSummary
+                  title={'Emotional'}
+                  valuesTop={[
+                    schooLevel
+                      ? schooLevel.saebrsEmotion['Saebrs']['Low Risk'] + '%'
+                      : '0%',
+                    schooLevel
+                      ? schooLevel.saebrsEmotion['Saebrs']['Some Risk'] + '%'
+                      : '0%',
+                    schooLevel.riskMath
+                      ? schooLevel.saebrsEmotion['Saebrs']['High Risk'] + '%'
+                      : '0%',
+                  ]}
+                  subtitlesTop={['Low', 'Some', 'High']}
+                  valuesBottom={[
+                    schooLevel
+                      ? schooLevel.mySaebrsEmotion['MySaebrs']['Low Risk'] + '%'
+                      : '0%',
+                    schooLevel
+                      ? schooLevel.mySaebrsEmotion['MySaebrs']['Some Risk'] +
+                        '%'
+                      : '0%',
+                    schooLevel
+                      ? schooLevel.mySaebrsEmotion['MySaebrs']['High Risk'] +
+                        '%'
+                      : '0%',
+                  ]}
+                  subtitlesBottom={['Low', 'Some', 'High']}
+                />
+              </div>
+              <div className="-mb-8">
+                <SaebrsSummary
+                  title={'Social'}
+                  valuesTop={[
+                    schooLevel
+                      ? schooLevel.saeberSocial['Saebrs']['Low Risk'] + '%'
+                      : '0%',
+                    schooLevel
+                      ? schooLevel.saeberSocial['Saebrs']['Some Risk'] + '%'
+                      : '0%',
+                    schooLevel.riskMath
+                      ? schooLevel.saeberSocial['Saebrs']['High Risk'] + '%'
+                      : '0%',
+                  ]}
+                  subtitlesTop={['Low', 'Some', 'High']}
+                  valuesBottom={[
+                    schooLevel
+                      ? schooLevel.mySaebrsEmotion['MySaebrs']['Low Risk'] + '%'
+                      : '0%',
+                    schooLevel.riskReading
+                      ? schooLevel.mySaebrsEmotion['MySaebrs']['Some Risk'] +
+                        '%'
+                      : '0%',
+                    schooLevel.riskReading
+                      ? schooLevel.mySaebrsEmotion['MySaebrs']['High Risk'] +
+                        '%'
+                      : '0%',
+                  ]}
+                  subtitlesBottom={['Low', 'Some', 'High']}
+                />
+              </div>
+              <div className="-mb-8">
+                <SaebrsSummary
+                  title={'Academic'}
+                  valuesTop={[
+                    schooLevel
+                      ? schooLevel.saeberAcademic['Saebrs']['Low Risk'] + '%'
+                      : '0%',
+                    schooLevel
+                      ? schooLevel.saeberAcademic['Saebrs']['Some Risk'] + '%'
+                      : '0%',
+                    schooLevel.riskMath
+                      ? schooLevel.saeberAcademic['Saebrs']['High Risk'] + '%'
+                      : '0%',
+                  ]}
+                  subtitlesTop={['Low', 'Some', 'High']}
+                  valuesBottom={[
+                    schooLevel
+                      ? schooLevel.mySaeberAcademic['MySaebrs']['Low Risk'] +
+                        '%'
+                      : '0%',
+                    schooLevel.riskReading
+                      ? schooLevel.mySaeberAcademic['MySaebrs']['Some Risk'] +
+                        '%'
+                      : '0%',
+                    schooLevel.riskReading
+                      ? schooLevel.mySaeberAcademic['MySaebrs']['High Risk'] +
+                        '%'
+                      : '0%',
+                  ]}
+                  subtitlesBottom={['Low', 'Some', 'High']}
+                />
+              </div>
+            </div>
+            <div className=" mt-16 flex justify-between">
+              <Card
+                className="-mb-4 mr-2 flex h-[31rem] w-1/3 rounded-xl bg-neutral-100 p-6 "
+                shadow="md"
+              >
+                <RiskDropdown
+                  riskOptions={ethnicityState}
+                  setRiskOption={setEthnicityState}
+                />
+                <p className="-mb-8 p-2 text-xl font-bold">
+                  Ethnicity and Risk
+                </p>
+                <p className="-mb-8 mt-6 pl-2 text-sm italic">
+                  Distribution of those at risk for each ethnicity
+                </p>
+                <div className="mb-0 mt-auto flex h-full flex-col pt-10">
+                  {ethRisk && (
+                    <BarChart
+                      data={Object.keys(schooLevel?.ethnicityRisk).map(
+                        (ele: any) => ({
+                          id: ele,
+                          'High Risk':
+                            schooLevel.ethnicityRisk[ele][ethRisk][
+                              'High Risk'
+                            ] / 100,
+                          'Some Risk':
+                            schooLevel.ethnicityRisk[ele][ethRisk][
+                              'Some Risk'
+                            ] / 100,
+                          'Low Risk':
+                            schooLevel.ethnicityRisk[ele][ethRisk]['Low Risk'] /
+                            100,
+                        }),
+                      )}
+                      colors={colors}
+                      legendVariable="Ethnicity"
+                    />
+                  )}
+                </div>
+              </Card>
+              <Card
+                className=" -mb-4 mr-2 h-[31rem] w-1/3 rounded-xl bg-neutral-100 p-6"
+                shadow="md"
+              >
+                <RiskDropdown
+                  riskOptions={ellState}
+                  setRiskOption={setEllState}
+                />
+                <p className="-mb-8 p-2 text-xl font-bold">
+                  English Learner and Risk
+                </p>
+                <p className="-mb-8 mt-6 pl-2 text-sm italic">
+                  Distribution of those at risk for each english learner
+                </p>
+                <div className="mb-0 mt-auto flex h-full flex-col pt-10">
+                  {ellRisk && (
+                    <BarChart
+                      data={Object.keys(schooLevel?.ellRisk).map(
+                        (ele: any) => ({
+                          id: ele === 'Yes' ? 'ELL' : 'Non-ELL',
+                          'High Risk':
+                            schooLevel.ellRisk[ele][ellRisk]['High Risk'] / 100,
+                          'Some Risk':
+                            schooLevel.ellRisk[ele][ellRisk]['Some Risk'] / 100,
+                          'Low Risk':
+                            schooLevel.ellRisk[ele][ellRisk]['Low Risk'] / 100,
+                        }),
+                      )}
+                      colors={colors}
+                      legendVariable="Ell"
+                    />
+                  )}
+                </div>
+              </Card>
+              <Card
+                className=" -mb-4 mr-2 h-[31rem] w-1/3 rounded-xl bg-neutral-100 p-6"
+                shadow="md"
+              >
+                <RiskDropdown
+                  riskOptions={genderState}
+                  setRiskOption={setGenderState}
+                />
+                <p className="-mb-8 p-2 text-xl font-bold">Gender and Risk</p>
+                <p className="-mb-8 mt-6 pl-2 text-sm italic">
+                  Distribution of those at risk for each gender
+                </p>
+                <div className="mb-0 mt-auto flex h-full flex-col pt-10">
+                  {genderRisk && (
+                    <BarChart
+                      data={Object.keys(schooLevel?.genderRisk).map(
+                        (ele: any) => ({
+                          id: ele,
+                          'High Risk':
+                            schooLevel.genderRisk[ele][genderRisk][
+                              'High Risk'
+                            ] / 100,
+                          'Some Risk':
+                            schooLevel.genderRisk[ele][genderRisk][
+                              'Some Risk'
+                            ] / 100,
+                          'Low Risk':
+                            schooLevel.genderRisk[ele][genderRisk]['Low Risk'] /
+                            100,
+                        }),
+                      )}
+                      colors={colors}
+                      legendVariable="Gender"
+                    />
+                  )}
+                </div>
+              </Card>
+            </div>
+          </div>
+        )}
+
+        {/* <div className=" flex h-full w-full flex-col gap-y-28">
           <div className="flex h-full w-full items-center justify-end">
             <Dropdown riskOptions={riskOptions} />
           </div>
@@ -402,7 +638,7 @@ export default async function Page() {
                 </Card>
               )}
           </div>
-        </div>
+        </div> */}
       </div>
     </main>
   );
