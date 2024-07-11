@@ -116,12 +116,6 @@ const FileModal = () => {
         return;
       }
 
-      // let file2: File = values.document2?.[0];
-      // let file3: File = values.document3?.[0];
-      // let file4: File = values.document4?.[0];
-      // let file5: File = values.document5?.[0];
-      // let file6: File = values.document6?.[0];
-
       if (!file1) {
         toast.error('Missing fields');
         return;
