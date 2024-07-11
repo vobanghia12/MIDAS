@@ -15,8 +15,8 @@ function Interior({
   padding,
 }: {
   title: string;
-  values: [string | number, string | number, string | number];
-  subtitles: [string, string, string];
+  values: [string | number, string | number];
+  subtitles: [string, string];
   padding: string;
 }) {
   return (
@@ -61,25 +61,6 @@ function Interior({
             <p className="text-sm font-extralight italic">{subtitles[1]}</p>
           </div>
         </div>
-
-        {/* RIGHT COLUMN */}
-        <div className="ml-16 mr-4 flex basis-1/2 flex-col items-center">
-          {/* VALUE DIV */}
-          <div className="">
-            <p
-              className={clsx('text-3xl', {
-                'text-slate-600': values[1].toString().toLowerCase() === 'na',
-              })}
-            >
-              {values[2].toString().toUpperCase()}
-            </p>
-          </div>
-
-          {/* SUBTITLE DIV */}
-          <div className="">
-            <p className="text-sm font-extralight italic">{subtitles[2]}</p>
-          </div>
-        </div>
       </div>
     </div>
   );
@@ -93,10 +74,10 @@ export function CardDisciplinarySummary({
   valuesBottom,
 }: {
   title: string;
-  subtitlesTop: [string, string, string];
-  subtitlesBottom: [string, string, string];
-  valuesTop: [string, string, string] | [number, number, number];
-  valuesBottom: [string, string, string] | [number, number, number];
+  subtitlesTop: [string, string];
+  subtitlesBottom: [string, string];
+  valuesTop: [string, string] | [number, number];
+  valuesBottom: [string, string] | [number, number];
 }) {
   return (
     <Card
