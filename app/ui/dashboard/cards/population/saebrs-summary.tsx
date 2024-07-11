@@ -1,103 +1,83 @@
-import {
-  FaceSmileIcon,
-  AcademicCapIcon,
-  UsersIcon
-  
-} from '@heroicons/react/24/outline';
-import MaterialSymbolsLightPersonAlertOutline from '../../../icons/MaterialSymbolsLightPersonAlertOutline';
-
 import clsx from 'clsx';
 import React from 'react';
-import { Card, Tooltip, Divider } from '@nextui-org/react';
-import { Nunito } from "next/font/google";
-const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['normal', 'italic']})
+import { Card, CardHeader, Tooltip, Divider } from '@nextui-org/react';
+import { Nunito } from 'next/font/google';
+const nunito = Nunito({
+  weight: ['200', '200'],
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+});
 
-function VerticalDivider() {
-  return (
-    <div className="w-0 border border-neutral-200 mx-4">&nbsp;</div>
-  );
-}
-
-function HorizontalDivider() {
-  return (
-    <div className="h-0 border border-neutral-200 -mt-2">&nbsp;</div>
-  );
-}
-
-const iconMap = {
-  total: MaterialSymbolsLightPersonAlertOutline,
-  emotional: FaceSmileIcon,
-  social: UsersIcon,
-  academic: AcademicCapIcon,
-};
-
-function RiskTitle({
+function Interior({
   title,
-  type,
+  values,
+  subtitles,
+  padding,
 }: {
   title: string;
-  type: 'total' | 'emotional' | 'social' | 'academic';
-}) {
-  const Icon = iconMap[type];
-
-  return (
-    <div className='flex flex-row items-start justify-start -mt-2 mb-1'>
-      {Icon ? <Icon className="h-6 w-6 text-gray-700" /> : null}
-      <p className='pl-2'>{title}</p>
-    </div>
-  )
-}
-
-function RiskRow({
-  title,
-  type,
-  riskValues,
-}: {
-  title: string;
-  type: string;
-  riskValues: string[];
+  values: [string | number, string | number, string | number];
+  subtitles: [string, string, string];
+  padding: string;
 }) {
   return (
-    <div className=''>
-      {/* SAEBRS ROW */}
-      <div className='flex flex-row items-center h-20 mb-2 mx-5 '>
-        <div className='flex flex-col'>
-          <p className='-ml-2'>{title}</p>
-          {/* LOW RISK COLUMN */}
-          <div className='flex flex-row gap-1' >
-            <div className='flex flex-col items-center pr-4'>
-              {/* VALUE */}
-              <p className=' text-2xl'>
-                {riskValues[0]}
-              </p>
-              
-              {/* SUBTITLE */}
-              <p className='font-extralight italic text-sm'>
-                Low
-              </p>
-            </div>
-            
-            <div className='flex flex-col items-center px-4'>
-              {/* VALUE */}
-              <p className=' text-2xl'>
-                {riskValues[1]}
-              </p>
-              {/* SUBTITLE */}
-              <p className='font-extralight italic text-sm'>
-                Some
-              </p>
-            </div>
+    <div className={'mx-2 flex h-20 flex-col rounded-xl' + padding}>
+      {/* CONTENT ROW */}
+      <p className={` text-md ml-2`}> {title} </p>
+      <div className="-mx-2 flex flex-row px-8">
+        {/* LEFT COLUMN */}
+        <div className="flex basis-1/2 flex-col items-center">
+          {/* VALUE DIV */}
+          <div className="-mb-1">
+            <p
+              className={clsx('text-2xl', {
+                'text-slate-600': values[0].toString().toLowerCase() === 'na',
+              })}
+            >
+              {values[0].toString().toUpperCase()}
+            </p>
+          </div>
 
-            <div className='flex flex-col items-center pl-4'>
-              {/* VALUE */}
-              <p className=' text-2xl'>
-                {riskValues[2]}
-              </p>
-              {/* SUBTITLE */}
-              <p className='font-extralight italic text-sm'>
-                High
-              </p>
-            </div>
+          {/* SUBTITLE DIV */}
+          <div>
+            <p className="text-sm font-extralight italic">{subtitles[0]}</p>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN */}
+        <div className="ml-10 flex basis-1/2 flex-col items-center">
+          {/* VALUE DIV */}
+          <div className="">
+            <p
+              className={clsx('text-2xl', {
+                'text-slate-600': values[1].toString().toLowerCase() === 'na',
+              })}
+            >
+              {values[1].toString().toUpperCase()}
+            </p>
+          </div>
+
+          {/* SUBTITLE DIV */}
+          <div className="">
+            <p className="text-sm font-extralight italic">{subtitles[1]}</p>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN */}
+        <div className="ml-10 flex basis-1/2 flex-col items-center">
+          {/* VALUE DIV */}
+          <div className="">
+            <p
+              className={clsx('text-2xl', {
+                'text-slate-600': values[1].toString().toLowerCase() === 'na',
+              })}
+            >
+              {values[2].toString().toUpperCase()}
+            </p>
+          </div>
+
+          {/* SUBTITLE DIV */}
+          <div className="">
+            <p className="text-sm font-extralight italic">{subtitles[2]}</p>
           </div>
         </div>
       </div>
@@ -106,149 +86,55 @@ function RiskRow({
 }
 
 export function SaebrsSummary({
-  saebrsTotal,
-  mySaebrsTotal,
-  saebrsEmotional,
-  mySaebrsEmotional,
-  saebrsSocial,
-  mySaebrsSocial,
-  saebrsAcademic,
-  mySaebrsAcademic,
+  title,
+  subtitlesTop,
+  subtitlesBottom,
+  valuesTop,
+  valuesBottom,
 }: {
-  saebrsTotal: string[];
-  mySaebrsTotal: string[];
-  saebrsEmotional: string[];
-  mySaebrsEmotional: string[];
-  saebrsSocial: string[];
-  mySaebrsSocial: string[];
-  saebrsAcademic: string[];
-  mySaebrsAcademic: string[];
+  title: string;
+  subtitlesTop: [string, string, string];
+  subtitlesBottom: [string, string, string];
+  valuesTop: [string, string, string] | [number, number, number];
+  valuesBottom: [string, string, string] | [number, number, number];
 }) {
-
-// min-w-fit max-w-sm on tooltip className if break
   return (
-      // MAIN ROW
-      <div className={`${nunito.className} flex flex-row gap-2 min-w-full w-full`}>
-        <Card className='flex bg-neutral-100 pt-6 pb-3 px-2 basis-1/4 w-full'>
-          {/* TOTAL RISK COLUMN */}
-          <Tooltip content="Total Saebrs and MySaebrs score tooltip" placement='bottom'>
-            <div className='flex flex-col items-center'>
-              <div className='ml-3 mr-auto'>
-                <RiskTitle title='Total' type='total'/>
-              </div>
-              
-              <div className='items-center justify-center'>
-                <RiskRow title='Saebrs' type='total' riskValues={saebrsTotal}/>
-                <Divider orientation='horizontal' className='-mt-1'/>
-                <RiskRow title='MySaebrs' type='total' riskValues={mySaebrsTotal}/>
-              </div>
-              
-            </div>
-          </Tooltip>
-          </Card>
-          
-          <Card className='flex bg-neutral-100 pt-6 pb-3 px-2 basis-1/4 w-full'>
+    <Card
+      className={`${nunito.className} items-center rounded-xl bg-neutral-100 pb-2`}
+    >
+      {/* MAIN TITLE */}
+      <CardHeader className="">
+        <h3 className="text-lg font-medium text-slate-800">{title}</h3>
+      </CardHeader>
 
-          {/* EMOTIONAL RISK COLUMN */}
-          <Tooltip content="Emotional Saebrs and MySaebrs score tooltip" placement='bottom'>
-            <div className='flex flex-col  items-center'>  
-              <div className='ml-3 mr-auto'>
-                <RiskTitle title='Emotional' type='emotional'/>
-              </div>
-              
-              <div className='items-center justify-center'>
-                <RiskRow title='Saebrs' type='emotional' riskValues={saebrsEmotional}/>
-                <Divider orientation='horizontal' className='-mt-1'/>
-                <RiskRow title='MySaebrs' type='emotional' riskValues={mySaebrsEmotional}/>
-              </div>
-            </div>
-          </Tooltip>
+      {/* MAIN CONTENT */}
+      <div className="flex flex-col">
+        {/* CARD 1 --- ODR */}
+        <Tooltip content={'Saebrs Tooltip'} placement="bottom">
+          <div>
+            <Interior
+              title="Saebrs"
+              values={valuesTop}
+              subtitles={subtitlesTop}
+              padding=""
+            />
+          </div>
+        </Tooltip>
 
-          </Card>
+        <Divider className="mb-1 mt-0" />
 
-          <Card className='flex  bg-neutral-100 pt-6 pb-3 px-2 basis-1/4 w-full'>
-          {/* SOCIAL RISK COLUMN */}
-          <Tooltip content="Social Saebrs and MySaebrs score tooltip" placement='bottom'>
-            <div className='flex flex-col  items-center'>
-              <div className='ml-3 mr-auto'>
-                <RiskTitle title='Social' type='social'/>
-              </div>
-              
-              <div className='items-center justify-center'>
-                <RiskRow title='Saebrs' type='social' riskValues={saebrsSocial}/>
-                <Divider orientation='horizontal' className='-mt-1'/>
-                <RiskRow title='MySaebrs' type='social' riskValues={mySaebrsSocial}/>
-              </div>
-            </div>
-          </Tooltip>
-          </Card>
-
-          
-          <Card className='flex  bg-neutral-100 pt-6 pb-3 px-2 basis-1/4 w-full'>
-          {/* ACADEMIC RISK COLUMN */}
-          <Tooltip content="Academic Saebrs and MySaebrs score tooltip" placement='bottom'>
-            <div className='flex flex-col items-center'>
-              <div className='ml-3 mr-auto'>
-                <RiskTitle title='Academic' type='academic'/>
-              </div>
-              
-              <div className='items-center justify-center'>
-                <RiskRow title='Saebrs' type='academic' riskValues={saebrsAcademic}/>
-                <Divider orientation='horizontal' className='-mt-1'/>
-                <RiskRow title='MySaebrs' type='academic' riskValues={mySaebrsAcademic}/>
-              </div>
-            </div>
-          </Tooltip>
-        </Card>
+        {/* CARD 2 --- SUSPENSIONS */}
+        <Tooltip content={'MySaebrs Tooltip'} placement="bottom">
+          <div>
+            <Interior
+              title="MySaebrs"
+              values={valuesBottom}
+              subtitles={subtitlesBottom}
+              padding=""
+            />
+          </div>
+        </Tooltip>
       </div>
+    </Card>
   );
 }
-
-
-{/* <Card className={`${nunito.className} flex flex-row  bg-neutral-100 pt-6 pb-3 px-8 max-w-screen-2xl`}>
-        
-        <Tooltip content="Total Saebrs and MySaebrs score tooltip" placement='bottom'>
-          <div className='flex flex-col basis-1/4'> 
-            <RiskTitle title='Total' type='total'/>
-            <RiskRow title='Saebrs' type='total' riskValues={saebrsTotal}/>
-            <Divider orientation='horizontal' className='-mt-1'/>
-            <RiskRow title='MySaebrs' type='total' riskValues={mySaebrsTotal}/>
-          </div>
-        </Tooltip>
-        
-        <Divider orientation='vertical' className='mx-4'/>
-
-        
-        <Tooltip content="Emotional Saebrs and MySaebrs score tooltip" placement='bottom'>
-          <div className='flex flex-col basis-1/4'>  
-            <RiskTitle title='Emotional' type='emotional'/>
-            <RiskRow title='Saebrs' type='total' riskValues={saebrsEmotional}/>
-            <Divider orientation='horizontal' className='-mt-1'/>
-            <RiskRow title='MySaebrs' type='total' riskValues={mySaebrsEmotional}/>
-          </div>
-        </Tooltip>
-
-        <Divider orientation='vertical' className='mx-4'/>
-
-        
-        <Tooltip content="Social Saebrs and MySaebrs score tooltip" placement='bottom'>
-          <div className='flex flex-col basis-1/4'>
-            <RiskTitle title='Social' type='social'/>
-            <RiskRow title='Saebrs' type='total' riskValues={saebrsSocial}/>
-            <Divider orientation='horizontal' className='-mt-1'/>
-            <RiskRow title='MySaebrs' type='total' riskValues={mySaebrsSocial}/>
-          </div>
-        </Tooltip>
-
-        <Divider orientation='vertical' className='mx-4'/>
-
-        
-        <Tooltip content="Academic Saebrs and MySaebrs score tooltip" placement='bottom'>
-          <div className='flex flex-col basis-1/4'>
-            <RiskTitle title='Academic' type='academic'/>
-            <RiskRow title='Saebrs' type='total' riskValues={saebrsAcademic}/>
-            <Divider orientation='horizontal' className='-mt-1'/>
-            <RiskRow title='MySaebrs' type='total' riskValues={mySaebrsAcademic}/>
-          </div>
-        </Tooltip>
-      </Card> */}
