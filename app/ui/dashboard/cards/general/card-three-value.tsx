@@ -1,6 +1,8 @@
 import clsx from "clsx";
-import { Card, CardBody, CardHeader, Tooltip } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Tooltip, useDisclosure } from "@nextui-org/react";
 import { Nunito } from "next/font/google";
+import { MidasRiskScoreTooltip } from "@/app/ui/textblocks/tooltips";
+import TooltipModal from "@/app/ui/modals/tooltip-modal";
 const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['normal', 'italic']})
 
 export function ThreeValueInterior({
@@ -108,17 +110,30 @@ export function CardThreeValue({
   subtitles: [string, string, string];
   tooltip: React.ReactNode;
 }) {
+  const {isOpen: TooltipIsOpen, onOpen: TooltipOnOpen, onOpenChange: TooltipOnOpenChange} = useDisclosure();
+
   return (
-    <Tooltip content={tooltip} placement='bottom'>
-      <Card className=" bg-neutral-100" shadow='md'>
-        <CardHeader className={nunito.className}>
-          <h3 className="text-lg font-medium text-slate-800">{title}</h3>
-        </CardHeader>
-        <CardBody className=''>
-          <ThreeValueInterior values={values} subtitles={subtitles}/>
-        </CardBody>
-      </Card>
-    </Tooltip>
+    <>
+      <TooltipModal 
+      isOpen={TooltipIsOpen} 
+      onOpen={TooltipOnOpen} 
+      onOpenChange={TooltipOnOpenChange} 
+      title={"MIDAS Risk Score"} 
+      content={MidasRiskScoreTooltip()}/>
+
+      <div onClick={TooltipOnOpen}>
+      <Tooltip content="Click to see more information about the MIDAS risk score" placement='bottom' className="">
+        <Card className=" bg-neutral-100" shadow='md' >
+          <CardHeader className={nunito.className}>
+            <h3 className="text-lg font-medium text-slate-800">{title}</h3>
+          </CardHeader>
+          <CardBody className=''>
+            <ThreeValueInterior values={values} subtitles={subtitles}/>
+          </CardBody>
+        </Card>
+      </Tooltip>
+      </div>
+    </>
   );
 }
 

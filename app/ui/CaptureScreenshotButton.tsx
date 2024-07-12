@@ -41,15 +41,14 @@ const CaptureScreenshotButton = () => {
       <Button
         onClick={handleCaptureClick}
         disabled={loading}
-        className="hover:opacity-2 w-[10rem]
-        "
+        className="hover:opacity-2"
       >
         {loading ? (
           'Capturing...'
         ) : (
           <div className="flex items-center justify-center">
-            <p className=" font-semibold">Screenshot</p>
-            <CameraIcon width={100} height={25} className=" font-bold" />
+            {/* <p className=" font-semibold">Screenshot</p> */}
+            <CameraIcon width={25} height={25} className=" font-bold" />
           </div>
         )}
       </Button>

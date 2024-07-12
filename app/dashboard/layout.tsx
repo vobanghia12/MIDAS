@@ -14,6 +14,10 @@ export default async function Layout({ children }: { children: React.ReactNode})
       <div className="flex-grow p-6 md:overflow-y-auto ">
         <ToasterProvider />
         {children}
+        
+      </div>
+
+      <div className='z-10 absolute bottom-0 right-0 opacity-75'>
         <CaptureScreenshotButton />
       </div>
     </div>

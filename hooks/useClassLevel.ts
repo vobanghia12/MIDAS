@@ -1,5 +1,5 @@
 import { read } from 'fs';
-import create from 'zustand';
+import { create } from 'zustand';
 
 interface ClassLevelStore {
   riskODR: '';

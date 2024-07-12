@@ -13,6 +13,8 @@ import { Card } from '@nextui-org/react';
 import RiskDropdown from '@/app/ui/RiskDropDown';
 import { BarChart } from '@/app/ui/charts/BarChart';
 import { ethnicity, genders, ell } from '@/constants/constants';
+import ClassSearch from '@/app/ui/dashboard/cards/search/class-search-card';
+import ClassSearchInputOnly from '@/app/ui/dashboard/cards/search/class-search-input';
 
 function MidasRiskTooltipContent() {
   return (
@@ -86,22 +88,35 @@ export default async function Page() {
   const ellRisk = getCurrentState(ellState);
   const ethRisk = getCurrentState(ethnicityState);
 
-  if (!selectedClass || classLevel.saeberAcademic[selectedClass] === undefined)
+  if (classLevel.confidenceLevel[selectedClass] === undefined && process.env.NODE_ENV !== 'development') {
     return (
-      <div className="flex h-full items-center justify-center">
-        <div>Enter the grade first</div>
+      <div className="flex flex-col h-full gap-2 items-center justify-center">
+        <div>Please upload all of the data files first.</div>
       </div>
     );
-  console.log(
-    classLevel.saebrsEmotion[selectedClass]['saebrs_emo']['High Risk'],
-  );
+  }
+
+  // Stops proceeding to dashboard before selecting a classroom level
+  if (!selectedClass && process.env.NODE_ENV !== 'development') {
+    return (
+      <div className="flex flex-col h-full gap-2 items-center justify-center">
+        <div>Please enter a classroom ID to view the dashboard.</div>
+        <div className='w-1/4'>
+          <ClassSearchInputOnly selectedClass={selectedClass} setSelectedClass={classroom.set}/>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <main>
       <div className="flex h-full gap-4">
         {/* LEFT COL */}
-        <div className="mb-4 flex flex-col">
-          <div className="flex flex-col">
-            <div className="pb-4">
+        <div className="mb-4 flex flex-col basis-1/4">
+          <div className="flex flex-col gap-3 ">
+            <ClassSearch selectedClass={selectedClass} setSelectedClass={classroom.set}/>
+            
+            <div className="">
               <CardThreeValue
                 title="MIDAS Risk Scores"
                 values={[
@@ -114,7 +129,7 @@ export default async function Page() {
               />
             </div>
 
-            <div className="pb-4">
+            <div className="">
               <CardConfidenceVisualizer
                 missingVariables={1}
                 confidence={classLevel.confidenceLevel[selectedClass]}
@@ -122,7 +137,7 @@ export default async function Page() {
               />
             </div>
 
-            <div className="pb-4">
+            <div className="">
               <CardDisciplinarySummary
                 title={'Disciplinary Action Summary'}
                 valuesTop={['76%', '24%']}
@@ -143,9 +158,10 @@ export default async function Page() {
             </div>
           </div>
         </div>
-        <div className="h-full w-full flex-col">
-          <div className="flex w-full justify-between">
-            <div className="-mb-8">
+
+        <div className="h-full w-full flex-col basis-3/4">
+          <div className="flex flex-row gap-3 w-full">
+            <div className="basis-1/4">
               <SaebrsSummary
                 title={'Total'}
                 valuesTop={['N/A', 'N/A', 'N/A']}
@@ -154,7 +170,7 @@ export default async function Page() {
                 subtitlesBottom={['Low', 'Some', 'High']}
               />
             </div>
-            <div className="-mb-8">
+            <div className="basis-1/4">
               <SaebrsSummary
                 title={'Social'}
                 valuesTop={[
@@ -195,7 +211,7 @@ export default async function Page() {
                 subtitlesBottom={['Low', 'Some', 'High']}
               />
             </div>
-            <div className="-mb-8">
+            <div className="basis-1/4">
               <SaebrsSummary
                 title={'Academic'}
                 valuesTop={[
@@ -236,7 +252,7 @@ export default async function Page() {
                 subtitlesBottom={['Low', 'Some', 'High']}
               />
             </div>
-            <div className="-mb-8">
+            <div className="basis-1/4">
               <SaebrsSummary
                 title={'Emotional'}
                 valuesTop={[
@@ -278,9 +294,9 @@ export default async function Page() {
               />
             </div>
           </div>
-          <div className=" mt-16 flex justify-between">
+          <div className="mt-16 flex flex-row gap-2 justify-between">
             <Card
-              className="-mb-4 mr-2 flex h-[31rem] w-1/3 rounded-xl bg-neutral-100 p-6"
+              className="-mt-12 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
               shadow="md"
             >
               <p className="-mb-8 p-2 text-xl font-bold">Ethnicity and Risk</p>
@@ -303,7 +319,7 @@ export default async function Page() {
               </div>
             </Card>
             <Card
-              className=" -mb-4 mr-2 h-[31rem] w-1/3 rounded-xl bg-neutral-100 p-6"
+              className="-mt-12 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
               shadow="md"
             >
               <p className="-mb-8 p-2 text-xl font-bold">
@@ -328,7 +344,7 @@ export default async function Page() {
               </div>
             </Card>
             <Card
-              className=" -mb-4 mr-2 h-[31rem] w-1/3 rounded-xl bg-neutral-100 p-6"
+              className="-mt-12 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
               shadow="md"
             >
               <p className="-mb-8 p-2 text-xl font-bold">Gender and Risk</p>

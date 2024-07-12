@@ -18,8 +18,8 @@ function MidasRiskTooltipContent() {
 }
 
 export default async function Page() {
-  const schooLevel = useSchoolLevel();
-  console.log(schooLevel);
+  const schoolLevel = useSchoolLevel();
+  console.log(schoolLevel);
 
   const [genderState, setGenderState] = useState({
     math_risk: false,
@@ -47,6 +47,14 @@ export default async function Page() {
     return undefined;
   };
 
+  if (schoolLevel.listOfAllStudents === undefined) {
+    return (
+      <div className="flex flex-col h-full gap-2 items-center justify-center">
+        <div>Please upload all of the data files first.</div>
+      </div>
+    );
+  }
+
   const colors = ['rose-500', 'yellow-400', 'green-500'];
 
   const genderRisk = getCurrentState(genderState);
@@ -55,8 +63,8 @@ export default async function Page() {
       <div className="flex gap-4">
         {/* LEFT COL */}
         <div className="mb-4 flex basis-1/4 flex-col">
-          <div className="flex flex-col">
-            <div className="pb-4">
+          <div className="flex flex-col gap-3 ">
+            <div className="">
               <CardThreeValue
                 title="MIDAS Risk Scores"
                 values={[
@@ -69,7 +77,7 @@ export default async function Page() {
               />
             </div>
 
-            <div className="pb-4">
+            <div className="">
               <CardConfidenceVisualizer
                 missingVariables={1}
                 confidence={3}
@@ -77,7 +85,7 @@ export default async function Page() {
               />
             </div>
 
-            <div className="pb-4">
+            <div className="">
               <CardDisciplinarySummary
                 title={'Disciplinary Action Summary'}
                 valuesTop={['76%', '24%']}
@@ -98,10 +106,10 @@ export default async function Page() {
             </div>
           </div>
         </div>
-        {schooLevel?.saebrsEmotion && (
-          <div className="h-full w-full flex-col">
-            <div className="flex w-full justify-between">
-              <div className="-mb-8">
+        {schoolLevel?.saebrsEmotion && (
+          <div className="h-full w-full flex-col basis-3/4">
+            <div className="flex flex-row gap-3 -mb-8 w-full">
+              <div className="basis-1/4">
                 <SaebrsSummary
                   title={'Total'}
                   valuesTop={['N/A', 'N/A', 'N/A']}
@@ -110,92 +118,92 @@ export default async function Page() {
                   subtitlesBottom={['Low', 'Some', 'High']}
                 />
               </div>
-              <div className="-mb-8">
+              <div className="basis-1/4">
                 <SaebrsSummary
                   title={'Social'}
                   valuesTop={[
-                    schooLevel
-                      ? schooLevel.saeberSocial['Saebrs']['Low Risk'] + '%'
+                    schoolLevel
+                      ? schoolLevel.saeberSocial['Saebrs']['Low Risk'] + '%'
                       : '0%',
-                    schooLevel
-                      ? schooLevel.saeberSocial['Saebrs']['Some Risk'] + '%'
+                    schoolLevel
+                      ? schoolLevel.saeberSocial['Saebrs']['Some Risk'] + '%'
                       : '0%',
-                    schooLevel
-                      ? schooLevel.saeberSocial['Saebrs']['High Risk'] + '%'
+                    schoolLevel
+                      ? schoolLevel.saeberSocial['Saebrs']['High Risk'] + '%'
                       : '0%',
                   ]}
                   subtitlesTop={['Low', 'Some', 'High']}
                   valuesBottom={[
-                    schooLevel
-                      ? schooLevel.mySaeberSocial['MySaebrs']['Low Risk'] + '%'
+                    schoolLevel
+                      ? schoolLevel.mySaeberSocial['MySaebrs']['Low Risk'] + '%'
                       : '0%',
-                    schooLevel
-                      ? schooLevel.mySaeberSocial['MySaebrs']['Some Risk'] + '%'
+                    schoolLevel
+                      ? schoolLevel.mySaeberSocial['MySaebrs']['Some Risk'] + '%'
                       : '0%',
-                    schooLevel
-                      ? schooLevel.mySaeberSocial['MySaebrs']['High Risk'] + '%'
+                    schoolLevel
+                      ? schoolLevel.mySaeberSocial['MySaebrs']['High Risk'] + '%'
                       : '0%',
                   ]}
                   subtitlesBottom={['Low', 'Some', 'High']}
                 />
               </div>
-              <div className="-mb-8">
+              <div className="basis-1/4">
                 <SaebrsSummary
                   title={'Academic'}
                   valuesTop={[
-                    schooLevel
-                      ? schooLevel.saeberAcademic['Saebrs']['Low Risk'] + '%'
+                    schoolLevel
+                      ? schoolLevel.saeberAcademic['Saebrs']['Low Risk'] + '%'
                       : '0%',
-                    schooLevel
-                      ? schooLevel.saeberAcademic['Saebrs']['Some Risk'] + '%'
+                    schoolLevel
+                      ? schoolLevel.saeberAcademic['Saebrs']['Some Risk'] + '%'
                       : '0%',
-                    schooLevel
-                      ? schooLevel.saeberAcademic['Saebrs']['High Risk'] + '%'
+                    schoolLevel
+                      ? schoolLevel.saeberAcademic['Saebrs']['High Risk'] + '%'
                       : '0%',
                   ]}
                   subtitlesTop={['Low', 'Some', 'High']}
                   valuesBottom={[
-                    schooLevel
-                      ? schooLevel.mySaeberAcademic['MySaebrs']['Low Risk'] +
+                    schoolLevel
+                      ? schoolLevel.mySaeberAcademic['MySaebrs']['Low Risk'] +
                         '%'
                       : '0%',
-                    schooLevel
-                      ? schooLevel.mySaeberAcademic['MySaebrs']['Some Risk'] +
+                    schoolLevel
+                      ? schoolLevel.mySaeberAcademic['MySaebrs']['Some Risk'] +
                         '%'
                       : '0%',
-                    schooLevel
-                      ? schooLevel.mySaeberAcademic['MySaebrs']['High Risk'] +
+                    schoolLevel
+                      ? schoolLevel.mySaeberAcademic['MySaebrs']['High Risk'] +
                         '%'
                       : '0%',
                   ]}
                   subtitlesBottom={['Low', 'Some', 'High']}
                 />
               </div>
-              <div className="-mb-8">
+              <div className="basis-1/4">
                 <SaebrsSummary
                   title={'Emotional'}
                   valuesTop={[
-                    schooLevel
-                      ? schooLevel.saebrsEmotion['Saebrs']['Low Risk'] + '%'
+                    schoolLevel
+                      ? schoolLevel.saebrsEmotion['Saebrs']['Low Risk'] + '%'
                       : '0%',
-                    schooLevel
-                      ? schooLevel.saebrsEmotion['Saebrs']['Some Risk'] + '%'
+                    schoolLevel
+                      ? schoolLevel.saebrsEmotion['Saebrs']['Some Risk'] + '%'
                       : '0%',
-                    schooLevel
-                      ? schooLevel.saebrsEmotion['Saebrs']['High Risk'] + '%'
+                    schoolLevel
+                      ? schoolLevel.saebrsEmotion['Saebrs']['High Risk'] + '%'
                       : '0%',
                   ]}
                   subtitlesTop={['Low', 'Some', 'High']}
                   valuesBottom={[
-                    schooLevel
-                      ? schooLevel.mySaebrsEmotion['MySaebrs']['Low Risk'] + '%'
+                    schoolLevel
+                      ? schoolLevel.mySaebrsEmotion['MySaebrs']['Low Risk'] + '%'
                       : '0%',
-                    schooLevel
-                      ? schooLevel.mySaebrsEmotion['MySaebrs']['Some Risk'] +
+                    schoolLevel
+                      ? schoolLevel.mySaebrsEmotion['MySaebrs']['Some Risk'] +
                         '%'
                       : '0%',
-                    schooLevel
-                      ? schooLevel.mySaebrsEmotion['MySaebrs']['High Risk'] +
+                    schoolLevel
+                      ? schoolLevel.mySaebrsEmotion['MySaebrs']['High Risk'] +
                         '%'
                       : '0%',
                   ]}
@@ -203,9 +211,10 @@ export default async function Page() {
                 />
               </div>
             </div>
-            <div className=" mt-16 flex justify-between">
+
+            <div className="mt-16 flex flex-row gap-2 justify-between">
               <Card
-                className="-mb-4 mr-2 flex h-[31rem] w-1/3 rounded-xl bg-neutral-100 p-6"
+                className="-mt-4 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
                 shadow="md"
               >
                 <p className="-mb-8 p-2 text-xl font-bold">
@@ -230,7 +239,7 @@ export default async function Page() {
                 </div>
               </Card>
               <Card
-                className=" -mb-4 mr-2 h-[31rem] w-1/3 rounded-xl bg-neutral-100 p-6"
+                className="-mt-4 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
                 shadow="md"
               >
                 <p className="-mb-8 p-2 text-xl font-bold">
@@ -255,7 +264,7 @@ export default async function Page() {
                 </div>
               </Card>
               <Card
-                className=" -mb-4 mr-2 h-[31rem] w-1/3 rounded-xl bg-neutral-100 p-6"
+                className="-mt-4 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
                 shadow="md"
               >
                 <p className="-mb-8 p-2 text-xl font-bold">Gender and Risk</p>

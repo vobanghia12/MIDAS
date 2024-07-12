@@ -83,7 +83,7 @@ function VariableWeightsTable({
 const variables = [
   {
     name: 'Gender',
-    weight: 'Low',
+    weight: 'Medium',
     missing: true,
   },
   {
