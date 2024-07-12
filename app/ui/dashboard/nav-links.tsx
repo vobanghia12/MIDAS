@@ -68,15 +68,15 @@ const NavSearchBox: React.FC<{ href: string }> = ({ href }) => {
       console.log('Searched school ' + id);
     } else if (href === '/dashboard/grade') {
       const id = formData.get('gradeId') || '';
-      grade[1](id.toString());
+      grade[1](id.toString().toUpperCase());
       console.log('Searched grade ' + id);
     } else if (href === '/dashboard/classroom') {
       const id = formData.get('classroomId') || '';
-      classroom[1](id.toString());
+      classroom[1](id.toString().toUpperCase());
       console.log('Searched classroom ' + id);
     } else {
       const id = formData.get('studentId') || '';
-      student[1](id.toString());
+      student[1](id.toString().toUpperCase());
       console.log('Searched student ' + student[0]);
     }
   };

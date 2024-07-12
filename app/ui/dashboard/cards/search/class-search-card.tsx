@@ -24,7 +24,7 @@ export default function ClassSearch({
 }) {
   const SearchAction = async (formData: FormData) => {
     const id = formData.get('classroomId') || ""
-    setSelectedClass(id.toString())
+    setSelectedClass(id.toString().toUpperCase())
   }
 
   return (

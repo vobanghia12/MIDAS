@@ -185,7 +185,7 @@ export default function StudentSearch({
 }) {
   const SearchAction = async (formData: FormData) => {
     const id = formData.get('studentId') || '';
-    setSelectedStudent(id.toString());
+    setSelectedStudent(id.toString().toUpperCase());
     console.log({ selectedStudent });
   };
 
