@@ -15,7 +15,6 @@ import { BarChart } from '@/app/ui/charts/BarChart';
 import { ethnicity, genders, ell } from '@/constants/constants';
 import ClassSearch from '@/app/ui/dashboard/cards/search/class-search-card';
 import ClassSearchInputOnly from '@/app/ui/dashboard/cards/search/class-search-input';
-import useSchoolLevel from '@/hooks/useSchoolLevel';
 
 function MidasRiskTooltipContent() {
   return (
@@ -89,22 +88,28 @@ export default async function Page() {
   const ellRisk = getCurrentState(ellState);
   const ethRisk = getCurrentState(ethnicityState);
 
-  const schoolLevel = useSchoolLevel()
-  if (schoolLevel.listOfAllStudents === undefined) {
+  if (process.env.NODE_ENV !== 'development') {
     return (
-      <div className="flex flex-col h-full gap-2 items-center justify-center">
+      <div className="flex h-full flex-col items-center justify-center gap-2">
         <div>Please upload all of the data files first.</div>
       </div>
     );
   }
 
   // Stops proceeding to dashboard before selecting a classroom level
-  if (!selectedClass) {
+  if (
+    !selectedClass ||
+    classLevel.mySaeberSocial[selectedClass] === undefined ||
+    process.env.NODE_ENV !== 'development'
+  ) {
     return (
-      <div className="flex flex-col h-full gap-2 items-center justify-center">
+      <div className="flex h-full flex-col items-center justify-center gap-2">
         <div>Please enter a classroom ID to view the dashboard.</div>
-        <div className='w-1/4'>
-          <ClassSearchInputOnly selectedClass={selectedClass} setSelectedClass={classroom.set}/>
+        <div className="w-1/4">
+          <ClassSearchInputOnly
+            selectedClass={selectedClass}
+            setSelectedClass={classroom.set}
+          />
         </div>
       </div>
     );
@@ -114,10 +119,13 @@ export default async function Page() {
     <main>
       <div className="flex h-full gap-4">
         {/* LEFT COL */}
-        <div className="mb-4 flex flex-col basis-1/4">
+        <div className="mb-4 flex basis-1/4 flex-col">
           <div className="flex flex-col gap-3 ">
-            <ClassSearch selectedClass={selectedClass} setSelectedClass={classroom.set}/>
-            
+            <ClassSearch
+              selectedClass={selectedClass}
+              setSelectedClass={classroom.set}
+            />
+
             <div className="">
               <CardThreeValue
                 title="MIDAS Risk Scores"
@@ -161,8 +169,8 @@ export default async function Page() {
           </div>
         </div>
 
-        <div className="h-full w-full flex-col basis-3/4">
-          <div className="flex flex-row gap-3 w-full">
+        <div className="h-full w-full basis-3/4 flex-col">
+          <div className="flex w-full flex-row gap-3">
             <div className="basis-1/4">
               <SaebrsSummary
                 title={'Total'}
@@ -296,7 +304,7 @@ export default async function Page() {
               />
             </div>
           </div>
-          <div className="mt-16 flex flex-row gap-2 justify-between">
+          <div className="mt-16 flex flex-row justify-between gap-2">
             <Card
               className="-mt-12 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
               shadow="md"

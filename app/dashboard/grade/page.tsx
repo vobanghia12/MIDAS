@@ -83,19 +83,40 @@ export default async function Page() {
   // Stops proceeding to dashboard before uploading data
   if (gradeLevel.saeberSocial === '') {
     return (
-      <div className="flex flex-col h-full gap-2 items-center justify-center">
+      <div className="flex h-full flex-col items-center justify-center gap-2">
         <div>Please upload all of the data files first.</div>
       </div>
     );
   }
+  console.log(gradeLevel);
 
   // Stops proceeding to dashboard before selecting a grade level
-  if (!selectedGrade) {
+  if (
+    !selectedGrade ||
+    gradeLevel.mySaeberSocial[selectedGrade] === undefined
+  ) {
     return (
-      <div className="flex flex-col h-full gap-2 items-center justify-center">
+      <div className="flex h-full flex-col items-center justify-center gap-2">
         <div>Please enter a grade to view the dashboard.</div>
-        <div className='w-1/4'>
-          <GradeSearchInputOnly selectedGrade={selectedGrade} setSelectedGrade={grade.set} gradeList={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']}/>
+        <div className="w-1/4">
+          <GradeSearchInputOnly
+            selectedGrade={selectedGrade}
+            setSelectedGrade={grade.set}
+            gradeList={[
+              '1',
+              '2',
+              '3',
+              '4',
+              '5',
+              '6',
+              '7',
+              '8',
+              '9',
+              '10',
+              '11',
+              '12',
+            ]}
+          />
         </div>
       </div>
     );
@@ -105,9 +126,27 @@ export default async function Page() {
     <main>
       <div className="flex h-full gap-4">
         {/* LEFT COL */}
-        <div className="mb-4 flex flex-col basis-1/4">
+        <div className="mb-4 flex basis-1/4 flex-col">
           <div className="flex flex-col gap-3 ">
-            <GradeSearch selectedGrade={selectedGrade} setSelectedGrade={grade.set} gradeList={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']} classList={['C1', 'C2', 'C3']}/>
+            <GradeSearch
+              selectedGrade={selectedGrade}
+              setSelectedGrade={grade.set}
+              gradeList={[
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6',
+                '7',
+                '8',
+                '9',
+                '10',
+                '11',
+                '12',
+              ]}
+              classList={['C1', 'C2', 'C3']}
+            />
 
             <div className="">
               <CardThreeValue
@@ -152,8 +191,8 @@ export default async function Page() {
           </div>
         </div>
 
-        <div className="h-full w-full flex-col basis-3/4">
-          <div className="flex flex-row gap-3 w-full">
+        <div className="h-full w-full basis-3/4 flex-col">
+          <div className="flex w-full flex-row gap-3">
             <div className="basis-1/4">
               <SaebrsSummary
                 title={'Total'}
@@ -287,8 +326,8 @@ export default async function Page() {
               />
             </div>
           </div>
-          
-          <div className="mt-16 flex flex-row gap-2 justify-between">
+
+          <div className="mt-16 flex flex-row justify-between gap-2">
             <Card
               className="-mt-12 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
               shadow="md"
