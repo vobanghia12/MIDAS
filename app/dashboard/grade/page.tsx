@@ -13,6 +13,7 @@ import { BarChart } from '@/app/ui/charts/BarChart';
 import { ethnicity, genders, ell } from '@/constants/constants';
 import GradeSearchInputOnly from '@/app/ui/dashboard/cards/search/grade-search-input';
 import GradeSearch from '@/app/ui/dashboard/cards/search/grade-search-card';
+import useSchoolLevel from '@/hooks/useSchoolLevel';
 function MidasRiskTooltipContent() {
   return (
     <div>Percentages of students at the three different MIDAS risk levels.</div>
@@ -81,20 +82,17 @@ export default async function Page() {
   const colors = ['rose-500', 'yellow-400', 'green-500'];
 
   // Stops proceeding to dashboard before uploading data
-  if (gradeLevel.saeberSocial === '') {
+  const schoolLevel = useSchoolLevel()
+  if (schoolLevel.listOfAllStudents === undefined) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-2">
         <div>Please upload all of the data files first.</div>
       </div>
     );
   }
-  console.log(gradeLevel);
 
   // Stops proceeding to dashboard before selecting a grade level
-  if (
-    !selectedGrade ||
-    gradeLevel.mySaeberSocial[selectedGrade] === undefined
-  ) {
+  if (!selectedGrade) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-2">
         <div>Please enter a grade to view the dashboard.</div>

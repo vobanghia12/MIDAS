@@ -15,6 +15,7 @@ import { BarChart } from '@/app/ui/charts/BarChart';
 import { ethnicity, genders, ell } from '@/constants/constants';
 import ClassSearch from '@/app/ui/dashboard/cards/search/class-search-card';
 import ClassSearchInputOnly from '@/app/ui/dashboard/cards/search/class-search-input';
+import useSchoolLevel from '@/hooks/useSchoolLevel';
 
 function MidasRiskTooltipContent() {
   return (
@@ -88,7 +89,8 @@ export default async function Page() {
   const ellRisk = getCurrentState(ellState);
   const ethRisk = getCurrentState(ethnicityState);
 
-  if (process.env.NODE_ENV !== 'development') {
+  const schoolLevel = useSchoolLevel()
+  if (schoolLevel.listOfAllStudents === undefined) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-2">
         <div>Please upload all of the data files first.</div>
@@ -97,11 +99,7 @@ export default async function Page() {
   }
 
   // Stops proceeding to dashboard before selecting a classroom level
-  if (
-    !selectedClass ||
-    classLevel.mySaeberSocial[selectedClass] === undefined ||
-    process.env.NODE_ENV !== 'development'
-  ) {
+  if (!selectedClass) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-2">
         <div>Please enter a classroom ID to view the dashboard.</div>
