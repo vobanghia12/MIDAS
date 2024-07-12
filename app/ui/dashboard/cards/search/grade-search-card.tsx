@@ -14,6 +14,7 @@ import {
 import { Nunito } from "next/font/google";
 import { useState } from "react";
 import Link from "next/link";
+import { useSearchContext } from "@/app/context/nav-search-context";
 const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['normal', 'italic']})
 
 export default function GradeSearch({
@@ -27,8 +28,12 @@ export default function GradeSearch({
   gradeList: string[];
   classList: string[];
 }) {
+  
+  const classContext = useSearchContext('classroom');
 
   return (
+    
+
     <Card className="bg-neutral-100 w-full" shadow='md'>
         <CardHeader className={nunito.className}>
           <h3 className="text-lg font-medium text-slate-800">Currently viewing grade </h3>&nbsp;<span className="font-extrabold underline">{selectedGrade}</span>
@@ -82,6 +87,7 @@ export default function GradeSearch({
                           pathname: '/dashboard/classroom',
                           query: { classroom },
                         }}
+                        onClick={() => {classContext.set(classroom)}}
                       >
                         <div className="w-full">
                           {classroom}

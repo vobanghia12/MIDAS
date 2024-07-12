@@ -122,6 +122,7 @@ export default async function Page() {
             <ClassSearch
               selectedClass={selectedClass}
               setSelectedClass={classroom.set}
+              studentList={["6A_129", "6A_251", "6B_151", "6H_194"]}
             />
 
             <div className="">

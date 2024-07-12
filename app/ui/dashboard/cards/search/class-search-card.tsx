@@ -13,19 +13,25 @@ import {
 } from "@nextui-org/react";
 import { Nunito } from "next/font/google";
 import SimpleLineIconsMagnifier from "@/app/ui/icons/SimpleLineIconsMagnifier";
+import { useSearchContext } from "@/app/context/nav-search-context";
+import Link from "next/link";
 const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['normal', 'italic']})
 
 export default function ClassSearch({
   selectedClass,
-  setSelectedClass
+  setSelectedClass,
+  studentList
 }: {
   selectedClass: string;
   setSelectedClass : React.Dispatch<React.SetStateAction<string>>;
+  studentList: string[];
 }) {
   const SearchAction = async (formData: FormData) => {
     const id = formData.get('classroomId') || ""
     setSelectedClass(id.toString().toUpperCase())
   }
+
+  const studentContext = useSearchContext('student');
 
   return (
     <Card className="bg-neutral-100" shadow='md'>
@@ -67,9 +73,27 @@ export default function ClassSearch({
               </DropdownTrigger>
 
               <DropdownMenu aria-label="Static Actions">
-                <DropdownItem key="1">S01AEE</DropdownItem>
-                <DropdownItem key="2">S02AFG</DropdownItem>
-                <DropdownItem key="3">S03AG0</DropdownItem>
+              {studentList.map((student: string) => {
+                  return (
+
+                    <DropdownItem key={student}>
+                      <Link
+                        key={student}
+                        href={{
+                          pathname: '/dashboard/student',
+                          query: { student },
+                        }}
+                        onClick={() => {studentContext.set(student)}}
+                      >
+                        <div className="w-full">
+                          {student}
+                        </div>
+
+                      </Link>
+                    </DropdownItem>
+
+                  );
+                })}
               </DropdownMenu>
             </Dropdown>
           </div>}
