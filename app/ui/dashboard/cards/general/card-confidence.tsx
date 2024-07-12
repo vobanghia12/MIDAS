@@ -83,57 +83,47 @@ function VariableWeightsTable({
 const variables = [
   {
     name: 'Gender',
-    weight: 'Low',
+    weight: 'Medium',
     missing: true,
   },
   {
     name: 'Ethnicity',
-    weight: 'Low',
+    weight: 'Medium',
     missing: false,
   },
   {
     name: 'English Learner',
-    weight: 'Low',
+    weight: 'Medium',
     missing: true,
   },
   {
     name: 'Office Disciplinary Referrals',
-    weight: 'Low',
+    weight: 'Large',
     missing: false,
   },
   {
     name: 'Suspensions',
-    weight: 'Low',
+    weight: 'Medium',
     missing: false,
   },
   {
     name: 'Math Test Risk',
-    weight: 'Low',
+    weight: 'Large',
     missing: false,
   },
   {
     name: 'Reading Test Risk',
-    weight: 'Low',
+    weight: 'Large',
     missing: false,
   },
   {
-    name: 'Saebrs/MySaebrs Total',
-    weight: 'Low',
+    name: 'MySaebrs',
+    weight: 'Small',
     missing: false,
   },
   {
-    name: 'Saebrs/MySaebrs Social',
-    weight: 'Low',
-    missing: false,
-  },
-  {
-    name: 'Saebrs/MySaebrs Emotional',
-    weight: 'Low',
-    missing: false,
-  },
-  {
-    name: 'Saebrs/MySaebrs Academic',
-    weight: 'Low',
+    name: 'Saebrs',
+    weight: 'Medium',
     missing: false,
   },
 ];

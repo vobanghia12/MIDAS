@@ -12,6 +12,9 @@ import { useSearchContext } from '@/app/context/nav-search-context';
 import { Card } from '@nextui-org/react';
 import RiskDropdown from '@/app/ui/RiskDropDown';
 import { BarChart } from '@/app/ui/charts/BarChart';
+import { BarChartTotal } from '@/app/ui/charts/total-demographics-charts';
+import ClassSearch from '@/app/ui/dashboard/cards/search/class-search-card';
+import ClassSearchInputOnly from '@/app/ui/dashboard/cards/search/class-search-input';
 import { ethnicity, genders, ell } from '@/constants/constants';
 
 function MidasRiskTooltipContent() {
@@ -41,7 +44,6 @@ export default async function Page() {
   const classLevel = useClassLevel();
   console.log(classLevel);
   const classroom = useSearchContext('classroom');
-  classroom.set;
   const selectedClass = classroom.get;
 
   const [midasRisk, setMidasRisk] = useState({
@@ -86,19 +88,40 @@ export default async function Page() {
   const ellRisk = getCurrentState(ellState);
   const ethRisk = getCurrentState(ethnicityState);
 
+
+  // Stops proceeding to dashboard before uploading files
+  if (classLevel.confidenceLevel[selectedClass] === undefined && process.env.NODE_ENV !== 'development') {
+=======
   if (!selectedClass || classLevel.saeberAcademic[selectedClass] === undefined)
+
     return (
-      <div className="flex h-full items-center justify-center">
-        <div>Enter the grade first</div>
+      <div className="flex flex-col h-full gap-2 items-center justify-center">
+        <div>Please upload all of the data files first.</div>
       </div>
     );
-  console.log(
-    classLevel.saebrsEmotion[selectedClass]['saebrs_emo']['High Risk'],
-  );
+  }
+
+  // Stops proceeding to dashboard before selecting a classroom level
+  if (!selectedClass && process.env.NODE_ENV !== 'development') {
+    return (
+      <div className="flex flex-col h-full gap-2 items-center justify-center">
+        <div>Please enter a classroom ID to view the dashboard.</div>
+        <div className='w-1/4'>
+          <ClassSearchInputOnly selectedClass={selectedClass} setSelectedClass={classroom.set}/>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <main>
       <div className="flex h-full gap-4">
         {/* LEFT COL */}
+        <div className="mb-4 flex basis-1/4 flex-col">
+          <div className="flex flex-col gap-3">
+            <ClassSearch selectedClass={selectedClass} setSelectedClass={classroom.set}/>
+
+            <div className="">
         <div className="mb-4 flex flex-col">
           <div className="flex flex-col">
             <div className="pb-4">
@@ -114,7 +137,7 @@ export default async function Page() {
               />
             </div>
 
-            <div className="pb-4">
+            <div className="">
               <CardConfidenceVisualizer
                 missingVariables={1}
                 confidence={classLevel.confidenceLevel[selectedClass]}
@@ -122,7 +145,7 @@ export default async function Page() {
               />
             </div>
 
-            <div className="pb-4">
+            <div className="">
               <CardDisciplinarySummary
                 title={'Disciplinary Action Summary'}
                 valuesTop={['76%', '24%']}

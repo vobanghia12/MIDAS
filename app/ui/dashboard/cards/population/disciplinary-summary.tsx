@@ -61,6 +61,7 @@ function Interior({
             <p className="text-sm font-extralight italic">{subtitles[1]}</p>
           </div>
         </div>
+
       </div>
     </div>
   );
@@ -74,6 +75,7 @@ export function CardDisciplinarySummary({
   valuesBottom,
 }: {
   title: string;
+  subtitlesTop: [string, string]
   subtitlesTop: [string, string];
   subtitlesBottom: [string, string];
   valuesTop: [string, string] | [number, number];
@@ -81,7 +83,7 @@ export function CardDisciplinarySummary({
 }) {
   return (
     <Card
-      className={`${nunito.className} items-center rounded-xl bg-neutral-100 pb-2`}
+      className={`${nunito.className} items-center rounded-xl bg-neutral-100 pb-2 px-2`}
     >
       {/* MAIN TITLE */}
       <CardHeader className="">
@@ -89,7 +91,7 @@ export function CardDisciplinarySummary({
       </CardHeader>
 
       {/* MAIN CONTENT */}
-      <div className="flex flex-col">
+      <div className="flex flex-col w-full">
         {/* CARD 1 --- ODR */}
         <Tooltip content={'ODR Tooltip'} placement="bottom">
           <div>
@@ -101,6 +103,7 @@ export function CardDisciplinarySummary({
             />
           </div>
         </Tooltip>
+        
 
         <Divider className="mb-1 mt-0" />
 

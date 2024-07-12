@@ -5,11 +5,15 @@ import { PopToRiskCharts } from '@/app/ui/dashboard/cards/population/demographic
 import { CardDisciplinarySummary } from '@/app/ui/dashboard/cards/population/disciplinary-summary';
 import { CardTestScoreSummary } from '@/app/ui/dashboard/cards/population/test-scores-summary';
 import { CardConfidenceVisualizer } from '@/app/ui/dashboard/cards/general/card-confidence';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { CardThreeValue } from '@/app/ui/dashboard/cards/general/card-three-value';
 import { Card, Tooltip } from '@nextui-org/react';
 import useSchoolLevel from '@/hooks/useSchoolLevel';
 import { BarChart } from '@/app/ui/charts/BarChart';
+import RiskDropdown from '@/app/ui/RiskDropDown';
+import { CountMissingValues } from '@/action/getSchoolLevelFunctions';
+import { useSearchContext } from '@/app/context/nav-search-context';
+import SchoolSearch from '@/app/ui/dashboard/cards/search/school-search-card';
 import { ethnicity, genders, ell } from '@/constants/constants';
 function MidasRiskTooltipContent() {
   return (
@@ -18,8 +22,15 @@ function MidasRiskTooltipContent() {
 }
 
 export default async function Page() {
+  const riskOptions = useRiskOptions();
+  const schoolLevel = useSchoolLevel();
+  
+  // const school = useSearchContext('school');
+  // school.set();
+
+  const missingVariables = CountMissingValues(schoolLevel);
+  
   const schooLevel = useSchoolLevel();
-  console.log(schooLevel);
 
   const [genderState, setGenderState] = useState({
     math_risk: false,
@@ -47,6 +58,14 @@ export default async function Page() {
     return undefined;
   };
 
+  if (schoolLevel.listOfAllStudents === undefined && process.env.NODE_ENV !== 'development') {
+    return (
+      <div className="flex flex-col h-full gap-2 items-center justify-center">
+        <div>Please upload all of the data files first.</div>
+      </div>
+    );
+  }
+
   const colors = ['rose-500', 'yellow-400', 'green-500'];
 
   const genderRisk = getCurrentState(genderState);
@@ -56,6 +75,7 @@ export default async function Page() {
         {/* LEFT COL */}
         <div className="mb-4 flex basis-1/4 flex-col">
           <div className="flex flex-col">
+
             <div className="pb-4">
               <CardThreeValue
                 title="MIDAS Risk Scores"
@@ -71,6 +91,8 @@ export default async function Page() {
 
             <div className="pb-4">
               <CardConfidenceVisualizer
+                missingVariables={missingVariables}
+                confidence={schoolLevel.confidenceLevel}
                 missingVariables={1}
                 confidence={3}
                 confidenceThresholds={[1, 2, 3, 4, 5]}
@@ -287,7 +309,7 @@ export default async function Page() {
           </div>
 
           <div className="flex justify-center">
-            {riskOptions.isEthnicity && schooLevel.ethnicityRisk && (
+            {riskOptions.isEthnicity && schoolLevel.ethnicityRisk && (
               <Card
                 className=" -mb-4 mr-2 h-[26rem] w-8/12 rounded-xl bg-neutral-100 p-6"
                 shadow="md"
@@ -305,19 +327,19 @@ export default async function Page() {
                 <div className="mb-0 mt-auto flex h-full flex-col pt-10">
                   {nameRisk && (
                     <BarChart
-                      data={Object.keys(schooLevel?.ethnicityRisk).map(
+                      data={Object.keys(schoolLevel?.ethnicityRisk).map(
                         (ele: any) => ({
                           id: ele,
                           'High Risk':
-                            schooLevel.ethnicityRisk[ele][nameRisk][
+                            schoolLevel.ethnicityRisk[ele][nameRisk][
                               'High Risk'
                             ] / 100,
                           'Some Risk':
-                            schooLevel.ethnicityRisk[ele][nameRisk][
+                            schoolLevel.ethnicityRisk[ele][nameRisk][
                               'Some Risk'
                             ] / 100,
                           'Low Risk':
-                            schooLevel.ethnicityRisk[ele][nameRisk][
+                            schoolLevel.ethnicityRisk[ele][nameRisk][
                               'Low Risk'
                             ] / 100,
                         }),
@@ -329,7 +351,7 @@ export default async function Page() {
                 </div>
               </Card>
             )}
-            {riskOptions.isEnglishLeaner && schooLevel.ellRisk && (
+            {riskOptions.isEnglishLeaner && schoolLevel.ellRisk && (
               <Card
                 className=" -mb-4 mr-2 h-[26rem] w-8/12 rounded-xl bg-neutral-100 p-6"
                 shadow="md"
@@ -347,17 +369,17 @@ export default async function Page() {
                 <div className="mb-0 mt-auto flex h-full flex-col pt-10">
                   {nameRisk && (
                     <BarChart
-                      data={Object.keys(schooLevel?.ellRisk).map(
+                      data={Object.keys(schoolLevel?.ellRisk).map(
                         (ele: any) => ({
                           id: ele === 'Yes' ? 'ELL' : 'Non-ELL',
                           'High Risk':
-                            schooLevel.ellRisk[ele][nameRisk]['High Risk'] /
+                            schoolLevel.ellRisk[ele][nameRisk]['High Risk'] /
                             100,
                           'Some Risk':
-                            schooLevel.ellRisk[ele][nameRisk]['Some Risk'] /
+                            schoolLevel.ellRisk[ele][nameRisk]['Some Risk'] /
                             100,
                           'Low Risk':
-                            schooLevel.ellRisk[ele][nameRisk]['Low Risk'] / 100,
+                            schoolLevel.ellRisk[ele][nameRisk]['Low Risk'] / 100,
                         }),
                       )}
                       colors={colors}
@@ -367,7 +389,7 @@ export default async function Page() {
                 </div>
               </Card>
             )}
-            {riskOptions.isGender && schooLevel.genderRisk && (
+            {riskOptions.isGender && schoolLevel.genderRisk && (
               <Card
                 className=" -mb-4 mr-2 h-[26rem] w-8/12 rounded-xl bg-neutral-100 p-6"
                 shadow="md"
@@ -383,17 +405,17 @@ export default async function Page() {
                 <div className="mb-0 mt-auto flex h-full flex-col pt-10">
                   {nameRisk && (
                     <BarChart
-                      data={Object.keys(schooLevel?.genderRisk).map(
+                      data={Object.keys(schoolLevel?.genderRisk).map(
                         (ele: any) => ({
                           id: ele,
                           'High Risk':
-                            schooLevel.genderRisk[ele][nameRisk]['High Risk'] /
+                            schoolLevel.genderRisk[ele][nameRisk]['High Risk'] /
                             100,
                           'Some Risk':
-                            schooLevel.genderRisk[ele][nameRisk]['Some Risk'] /
+                            schoolLevel.genderRisk[ele][nameRisk]['Some Risk'] /
                             100,
                           'Low Risk':
-                            schooLevel.genderRisk[ele][nameRisk]['Low Risk'] /
+                            schoolLevel.genderRisk[ele][nameRisk]['Low Risk'] /
                             100,
                         }),
                       )}
@@ -405,8 +427,8 @@ export default async function Page() {
               </Card>
             )}
             {riskOptions.isTotalScore && 'No Chart Total'}
-            {schooLevel.saeberAcademic &&
-              schooLevel.mySaeberAcademic &&
+            {schoolLevel.saeberAcademic &&
+              schoolLevel.mySaeberAcademic &&
               riskOptions.isAcademic && (
                 <Card
                   className=" -mb-4 mr-2 h-[26rem] w-8/12 rounded-xl bg-neutral-100 p-6"
@@ -424,27 +446,27 @@ export default async function Page() {
                         {
                           id: 'Saebrs',
                           'High Risk':
-                            schooLevel.saeberAcademic['Saebrs']['High Risk'] /
+                            schoolLevel.saeberAcademic['Saebrs']['High Risk'] /
                             100,
                           'Some Risk':
-                            schooLevel.saeberAcademic['Saebrs']['Some Risk'] /
+                            schoolLevel.saeberAcademic['Saebrs']['Some Risk'] /
                             100,
                           'Low Risk':
-                            schooLevel.saeberAcademic['Saebrs']['Low Risk'] /
+                            schoolLevel.saeberAcademic['Saebrs']['Low Risk'] /
                             100,
                         },
                         {
                           id: 'MySaebrs',
                           'High Risk':
-                            schooLevel.mySaeberAcademic['MySaebrs'][
+                            schoolLevel.mySaeberAcademic['MySaebrs'][
                               'High Risk'
                             ] / 100,
                           'Some Risk':
-                            schooLevel.mySaeberAcademic['MySaebrs'][
+                            schoolLevel.mySaeberAcademic['MySaebrs'][
                               'Some Risk'
                             ] / 100,
                           'Low Risk':
-                            schooLevel.mySaeberAcademic['MySaebrs'][
+                            schoolLevel.mySaeberAcademic['MySaebrs'][
                               'Low Risk'
                             ] / 100,
                         },
@@ -455,8 +477,8 @@ export default async function Page() {
                   </div>
                 </Card>
               )}
-            {schooLevel.saebrsEmotion &&
-              schooLevel.mySaebrsEmotion &&
+            {schoolLevel.saebrsEmotion &&
+              schoolLevel.mySaebrsEmotion &&
               riskOptions.isEmotional && (
                 <Card
                   className=" -mb-4 mr-2 h-[26rem] w-8/12 rounded-xl bg-neutral-100 p-6"
@@ -474,27 +496,27 @@ export default async function Page() {
                         {
                           id: 'Saebrs',
                           'High Risk':
-                            schooLevel.saebrsEmotion['Saebrs']['High Risk'] /
+                            schoolLevel.saebrsEmotion['Saebrs']['High Risk'] /
                             100,
                           'Some Risk':
-                            schooLevel.saebrsEmotion['Saebrs']['Some Risk'] /
+                            schoolLevel.saebrsEmotion['Saebrs']['Some Risk'] /
                             100,
                           'Low Risk':
-                            schooLevel.saebrsEmotion['Saebrs']['Low Risk'] /
+                            schoolLevel.saebrsEmotion['Saebrs']['Low Risk'] /
                             100,
                         },
                         {
                           id: 'MySaebrs',
                           'High Risk':
-                            schooLevel.mySaebrsEmotion['MySaebrs'][
+                            schoolLevel.mySaebrsEmotion['MySaebrs'][
                               'High Risk'
                             ] / 100,
                           'Some Risk':
-                            schooLevel.mySaebrsEmotion['MySaebrs'][
+                            schoolLevel.mySaebrsEmotion['MySaebrs'][
                               'Some Risk'
                             ] / 100,
                           'Low Risk':
-                            schooLevel.mySaebrsEmotion['MySaebrs']['Low Risk'] /
+                            schoolLevel.mySaebrsEmotion['MySaebrs']['Low Risk'] /
                             100,
                         },
                       ]}
@@ -504,8 +526,8 @@ export default async function Page() {
                   </div>
                 </Card>
               )}
-            {schooLevel.saeberSocial &&
-              schooLevel.mySaeberSocial &&
+            {schoolLevel.saeberSocial &&
+              schoolLevel.mySaeberSocial &&
               riskOptions.isSocial && (
                 <Card
                   className=" -mb-4 mr-2 h-[26rem] w-8/12 rounded-xl bg-neutral-100 p-6"
@@ -521,24 +543,24 @@ export default async function Page() {
                         {
                           id: 'Saebrs',
                           'High Risk':
-                            schooLevel.saeberSocial['Saebrs']['High Risk'] /
+                            schoolLevel.saeberSocial['Saebrs']['High Risk'] /
                             100,
                           'Some Risk':
-                            schooLevel.saeberSocial['Saebrs']['Some Risk'] /
+                            schoolLevel.saeberSocial['Saebrs']['Some Risk'] /
                             100,
                           'Low Risk':
-                            schooLevel.saeberSocial['Saebrs']['Low Risk'] / 100,
+                            schoolLevel.saeberSocial['Saebrs']['Low Risk'] / 100,
                         },
                         {
                           id: 'MySaebrs',
                           'High Risk':
-                            schooLevel.mySaeberSocial['MySaebrs']['High Risk'] /
+                            schoolLevel.mySaeberSocial['MySaebrs']['High Risk'] /
                             100,
                           'Some Risk':
-                            schooLevel.mySaeberSocial['MySaebrs']['Some Risk'] /
+                            schoolLevel.mySaeberSocial['MySaebrs']['Some Risk'] /
                             100,
                           'Low Risk':
-                            schooLevel.mySaeberSocial['MySaebrs']['Low Risk'] /
+                            schoolLevel.mySaeberSocial['MySaebrs']['Low Risk'] /
                             100,
                         },
                       ]}

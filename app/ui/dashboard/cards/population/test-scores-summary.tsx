@@ -81,7 +81,7 @@ export function CardTestScoreSummary({
 }) {
   return (
     <Card
-      className={`${nunito.className} items-center rounded-xl bg-neutral-100 pb-2`}
+      className={`${nunito.className} items-center rounded-xl bg-neutral-100 pb-2 px-2`}
     >
       {/* MAIN TITLE */}
       <CardHeader>
@@ -89,7 +89,7 @@ export function CardTestScoreSummary({
       </CardHeader>
 
       {/* MAIN COLUMN */}
-      <div className="flex flex-col">
+      <div className="flex flex-col w-full">
         {/* CARD 1 --- ODR */}
         <Tooltip content={'Math Test Tooltip'} placement="bottom">
           <div>
