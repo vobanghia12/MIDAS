@@ -62,24 +62,6 @@ function Interior({
           </div>
         </div>
 
-        {/* RIGHT COLUMN */}
-        {/* <div className="ml-16 mr-4 flex basis-1/2 flex-col items-center">
-
-          <div className="">
-            <p
-              className={clsx('text-3xl', {
-                'text-slate-600': values[1].toString().toLowerCase() === 'na',
-              })}
-            >
-              {values[2].toString().toUpperCase()}
-            </p>
-          </div>
-
-
-          <div className="">
-            <p className="text-sm font-extralight italic">{subtitles[2]}</p>
-          </div>
-        </div> */}
       </div>
     </div>
   );
@@ -94,6 +76,7 @@ export function CardDisciplinarySummary({
 }: {
   title: string;
   subtitlesTop: [string, string]
+  subtitlesTop: [string, string];
   subtitlesBottom: [string, string];
   valuesTop: [string, string] | [number, number];
   valuesBottom: [string, string] | [number, number];
