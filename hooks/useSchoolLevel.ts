@@ -1,7 +1,7 @@
 import { read } from 'fs';
-import create from 'zustand';
+import { create } from 'zustand';
 
-interface SchoolLevelStore {
+export interface SchoolLevelStore {
   listOfAllStudents: any;
   confidenceLevel: any;
   saebrsEmotion: any;

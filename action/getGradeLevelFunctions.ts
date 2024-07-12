@@ -1,5 +1,6 @@
 import { hash } from 'bcrypt';
 import { fileURLToPath } from 'url';
+import { GradeLevelStore } from '../hooks/useGradeLevel';
 
 export const getMyRiskStatsGradeLevel = (
   inputData: any,
@@ -283,3 +284,32 @@ export const getConfidenceLevelForGradeLevel = (
 
   return resultObj;
 };
+
+export function CountMissingValues(obj: GradeLevelStore): number {
+  let count = 0;
+
+  const keys = [
+    'saebrsEmotion',
+    'mySaebrsEmotion',
+    'saeberAcademic',
+    'mySaeberAcademic',
+    'saeberSocial',
+    'mySaeberSocial',
+    'riskMath',
+    'riskReading',
+    'riskSuspension',
+    'genderRisk',
+    'ethnicityRisk',
+    'ellRisk',
+    'riskODR'
+  ]
+
+  for (const key of keys as (keyof GradeLevelStore)[]) {
+    console.log(obj[key]);
+    if (obj[key] === 'NA' || obj[key] === '' || obj[key] === undefined) {
+      count++;
+    }
+  }
+
+  return count;
+}

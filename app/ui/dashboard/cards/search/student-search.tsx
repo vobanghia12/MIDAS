@@ -86,7 +86,7 @@ function DemographicsRow({
 
       <Divider orientation="vertical" />
 
-      <Tooltip
+      {content.gender && <Tooltip
         className="bg-neutral-100"
         content={
           <div className="h-96 w-96">
@@ -105,11 +105,17 @@ function DemographicsRow({
         <div className="basis-1/4">
           <DemographicsBox label="Gender" content={content.gender} />
         </div>
-      </Tooltip>
+      </Tooltip>}
+
+      {!content.gender &&
+        <div className="basis-1/4">
+          <DemographicsBox label="Gender" content={content.gender} />
+        </div>
+      }
 
       <Divider orientation="vertical" />
 
-      <Tooltip
+      {content.ell && <Tooltip
         className="bg-neutral-100"
         content={
           <div className="h-96 w-96">
@@ -128,11 +134,17 @@ function DemographicsRow({
         <div className="basis-1/4">
           <DemographicsBox label="English Learner?" content={content.ell} />
         </div>
-      </Tooltip>
+      </Tooltip>}
+
+      {!content.ell && 
+        <div className="basis-1/4">
+          <DemographicsBox label="English Learner?" content={content.ell} />
+        </div>
+      }
 
       <Divider orientation="vertical" />
 
-      <Tooltip
+      {content.ethnicity && <Tooltip
         className="bg-neutral-100"
         content={
           <div className="h-96 w-96">
@@ -151,7 +163,13 @@ function DemographicsRow({
         <div className="basis-1/4">
           <DemographicsBox label="Ethnicity" content={content.ethnicity} />
         </div>
-      </Tooltip>
+      </Tooltip>}
+
+      {!content.ethnicity && 
+        <div className="basis-1/4">
+          <DemographicsBox label="Ethnicity" content={content.ethnicity} />
+        </div>
+      }
     </div>
   );
 }

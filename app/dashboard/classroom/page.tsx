@@ -15,6 +15,8 @@ import { Card } from '@nextui-org/react';
 import RiskDropdown from '@/app/ui/RiskDropDown';
 import { BarChart } from '@/app/ui/charts/BarChart';
 import { BarChartTotal } from '@/app/ui/charts/total-demographics-charts';
+import ClassSearch from '@/app/ui/dashboard/cards/search/class-search-card';
+import ClassSearchInputOnly from '@/app/ui/dashboard/cards/search/class-search-input';
 
 function MidasRiskTooltipContent() {
   return (
@@ -32,7 +34,6 @@ export default async function Page() {
   const classLevel = useClassLevel();
   console.log(classLevel);
   const classroom = useSearchContext('classroom');
-  classroom.set;
   const selectedClass = classroom.get;
 
   const [midasRisk, setMidasRisk] = useState({
@@ -75,22 +76,36 @@ export default async function Page() {
 
   const nameRisk = getCurrentState(genderState);
 
-  if (!selectedClass || classLevel.confidenceLevel[selectedClass] === undefined)
+  // Stops proceeding to dashboard before uploading files
+  if (classLevel.confidenceLevel[selectedClass] === undefined && process.env.NODE_ENV !== 'development') {
     return (
-      <div className="flex h-full items-center justify-center">
-        <div>Enter the grade first</div>
+      <div className="flex flex-col h-full gap-2 items-center justify-center">
+        <div>Please upload all of the data files first.</div>
       </div>
     );
-  console.log(
-    classLevel.saebrsEmotion[selectedClass]['saebrs_emo']['High Risk'],
-  );
+  }
+
+  // Stops proceeding to dashboard before selecting a classroom level
+  if (!selectedClass && process.env.NODE_ENV !== 'development') {
+    return (
+      <div className="flex flex-col h-full gap-2 items-center justify-center">
+        <div>Please enter a classroom ID to view the dashboard.</div>
+        <div className='w-1/4'>
+          <ClassSearchInputOnly selectedClass={selectedClass} setSelectedClass={classroom.set}/>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <main>
       <div className="flex gap-4">
         {/* LEFT COL */}
         <div className="mb-4 flex basis-1/4 flex-col">
-          <div className="flex flex-col">
-            <div className="pb-4">
+          <div className="flex flex-col gap-3">
+            <ClassSearch selectedClass={selectedClass} setSelectedClass={classroom.set}/>
+
+            <div className="">
               <CardThreeValue
                 title="MIDAS Risk Scores"
                 values={[
@@ -103,7 +118,7 @@ export default async function Page() {
               />
             </div>
 
-            <div className="pb-4">
+            <div className="">
               <CardConfidenceVisualizer
                 missingVariables={1}
                 confidence={classLevel.confidenceLevel[selectedClass]}
@@ -111,7 +126,7 @@ export default async function Page() {
               />
             </div>
 
-            <div className="pb-4">
+            <div className="">
               <CardDisciplinarySummary
                 title={'Disciplinary Action Summary'}
                 valuesTop={[
@@ -197,6 +212,16 @@ export default async function Page() {
           </div>
         </div>
         <div className=" flex h-full w-full flex-col gap-y-28">
+            <SaebrsSummary 
+              saebrsTotal={['NA', 'NA', 'NA']} 
+              mySaebrsTotal={['NA', 'NA', 'NA']} 
+              saebrsEmotional={['NA', 'NA', 'NA']} 
+              mySaebrsEmotional={['NA', 'NA', 'NA']} 
+              saebrsSocial={['NA', 'NA', 'NA']} 
+              mySaebrsSocial={['NA', 'NA', 'NA']} 
+              saebrsAcademic={['NA', 'NA', 'NA']} 
+              mySaebrsAcademic={['NA', 'NA', 'NA']}/>
+          
           <div className="flex h-full w-full items-center justify-end">
             <Dropdown riskOptions={riskOptions} />
           </div>

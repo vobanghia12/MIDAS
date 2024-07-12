@@ -130,6 +130,7 @@ const FileModal = () => {
 
       let file1: File = values.document1?.[0];
 
+      // Check if current user is permitted to view this file
       if ((await CompareSchoolNames(file1)) == false) {
         toast.error('You are not permitted to open this file');
         // throw(new Error("User is not permitted to open this file."))

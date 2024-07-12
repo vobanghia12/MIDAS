@@ -1,5 +1,7 @@
 //High Risk Low Risk Some Risk
 
+import { SchoolLevelStore } from "@/hooks/useSchoolLevel";
+
 export const getmyRiskStatsSchoolLevel = (
   data: any,
   riskFactor: string,
@@ -194,3 +196,33 @@ export const getDemographic = (inputData: any, field: string) => {
 
   return hashMap;
 };
+
+
+export function CountMissingValues(obj: SchoolLevelStore): number {
+  let count = 0;
+
+  const keys = [
+    'saebrsEmotion',
+    'mySaebrsEmotion',
+    'saeberAcademic',
+    'mySaeberAcademic',
+    'saeberSocial',
+    'mySaeberSocial',
+    'riskMath',
+    'riskReading',
+    'riskSuspension',
+    'genderRisk',
+    'ethnicityRisk',
+    'ellRisk',
+    'riskODR'
+  ]
+
+  for (const key of keys as (keyof SchoolLevelStore)[]) {
+    console.log(obj[key]);
+    if (obj[key] === 'NA' || obj[key] === '' || obj[key] === undefined) {
+      count++;
+    }
+  }
+
+  return count;
+}

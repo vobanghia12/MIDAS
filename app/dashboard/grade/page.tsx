@@ -4,7 +4,7 @@ import { PopToRiskCharts } from '@/app/ui/dashboard/cards/population/demographic
 import { CardDisciplinarySummary } from '@/app/ui/dashboard/cards/population/disciplinary-summary';
 import { CardTestScoreSummary } from '@/app/ui/dashboard/cards/population/test-scores-summary';
 import { CardConfidenceVisualizer } from '@/app/ui/dashboard/cards/general/card-confidence';
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import { CardThreeValue } from '@/app/ui/dashboard/cards/general/card-three-value';
 import useGradeLevel from '@/hooks/useGradeLevel';
 import { useSearchContext } from '@/app/context/nav-search-context';
@@ -14,6 +14,8 @@ import { Card } from '@nextui-org/react';
 import RiskDropdown from '@/app/ui/RiskDropDown';
 import { BarChart } from '@/app/ui/charts/BarChart';
 import { BarChartTotal } from '@/app/ui/charts/total-demographics-charts';
+import GradeSearch from '@/app/ui/dashboard/cards/search/grade-search-card';
+import GradeSearchInputOnly from '@/app/ui/dashboard/cards/search/grade-search-input';
 
 function MidasRiskTooltipContent() {
   return (
@@ -30,7 +32,6 @@ export default async function Page() {
   const riskOptions = useRiskOptions();
   const gradeLevel = useGradeLevel();
   const grade = useSearchContext('grade');
-  grade.set;
   const selectedGrade = grade.get;
 
   const [midasRisk, setMidasRisk] = useState({
@@ -46,7 +47,7 @@ export default async function Page() {
     suspSome: '20%',
   });
 
-  // ASK SONJA WHAT THE VALUES FOR TEST RISK ARE
+
   const [testRisk, setTestRisk] = useState({});
 
   const [saebrsRisk, setSaebrsRisk] = useState({
@@ -73,22 +74,36 @@ export default async function Page() {
 
   const nameRisk = getCurrentState(genderState);
 
-  if (!selectedGrade || gradeLevel.confidenceLevel[selectedGrade] === undefined)
+  // Stops proceeding to dashboard before uploading files
+  if (gradeLevel.confidenceLevel[selectedGrade] === undefined && process.env.NODE_ENV !== 'development') {
     return (
-      <div className="flex h-full items-center justify-center">
-        <div>Enter the grade first</div>
+      <div className="flex flex-col h-full gap-2 items-center justify-center">
+        <div>Please upload all of the data files first.</div>
       </div>
     );
-  console.log(
-    gradeLevel.saebrsEmotion[selectedGrade]['saebrs_emo']['High Risk'],
-  );
+  }
+
+  // Stops proceeding to dashboard before selecting a grade level
+  if (!selectedGrade && process.env.NODE_ENV !== 'development') {
+    return (
+      <div className="flex flex-col h-full gap-2 items-center justify-center">
+        <div>Please enter a grade to view the dashboard.</div>
+        <div className='w-1/4'>
+          <GradeSearchInputOnly selectedGrade={selectedGrade} setSelectedGrade={grade.set} gradeList={['6', '7', '8']}/>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <main>
       <div className="flex gap-4">
         {/* LEFT COL */}
         <div className="mb-4 flex basis-1/4 flex-col">
-          <div className="flex flex-col">
-            <div className="pb-4">
+          <div className="flex flex-col gap-3">
+            <GradeSearch selectedGrade={selectedGrade} setSelectedGrade={grade.set} gradeList={['6', '7', '8']} classList={['C1', 'C2', 'C3']}/>
+
+            <div className="">
               <CardThreeValue
                 title="MIDAS Risk Scores"
                 values={[
@@ -101,7 +116,7 @@ export default async function Page() {
               />
             </div>
 
-            <div className="pb-4">
+            <div className="">
               <CardConfidenceVisualizer
                 missingVariables={1}
                 confidence={gradeLevel.confidenceLevel[selectedGrade]}
@@ -109,7 +124,7 @@ export default async function Page() {
               />
             </div>
 
-            <div className="pb-4">
+            <div className="">
               <CardDisciplinarySummary
                 title={'Disciplinary Action Summary'}
                 valuesTop={[
@@ -123,13 +138,9 @@ export default async function Page() {
                         'Some Risk'
                       ] + '%'
                     : '0%',
-                  gradeLevel.riskODR
-                    ? gradeLevel.riskODR[selectedGrade]['odr_risk'][
-                        'High Risk'
-                      ] + '%'
-                    : '0%',
+                
                 ]}
-                subtitlesTop={['Zero', 'One Plus', 'Zeo']}
+                subtitlesTop={['Zero', 'One Plus']}
                 valuesBottom={[
                   gradeLevel.riskSuspension
                     ? gradeLevel.riskSuspension[selectedGrade]['susp_risk'][
@@ -141,13 +152,9 @@ export default async function Page() {
                         'Some Risk'
                       ] + '%'
                     : '0%',
-                  gradeLevel.riskSuspension
-                    ? gradeLevel.riskSuspension[selectedGrade]['susp_risk'][
-                        'High Risk'
-                      ] + '%'
-                    : '0%',
+                  
                 ]}
-                subtitlesBottom={['Low', 'Some', 'High']}
+                subtitlesBottom={['Low', 'Some']}
               />
             </div>
 
@@ -165,13 +172,9 @@ export default async function Page() {
                         'Some Risk'
                       ] + '%'
                     : '0%',
-                  gradeLevel.riskMath
-                    ? gradeLevel.riskMath[selectedGrade]['math_risk'][
-                        'High Risk'
-                      ] + '%'
-                    : '0%',
+                  
                 ]}
-                subtitlesTop={['Low', 'Some', 'High']}
+                subtitlesTop={['Low', 'Some']}
                 valuesBottom={[
                   gradeLevel.riskReading
                     ? gradeLevel.riskReading[selectedGrade]['read_risk'][
@@ -183,18 +186,24 @@ export default async function Page() {
                         'Some Risk'
                       ] + '%'
                     : '0%',
-                  gradeLevel.riskReading
-                    ? gradeLevel.riskReading[selectedGrade]['read_risk'][
-                        'High Risk'
-                      ] + '%'
-                    : '0%',
+                  
                 ]}
-                subtitlesBottom={['Low', 'Some', 'High']}
+                subtitlesBottom={['Low', 'Some']}
               />
             </div>
           </div>
         </div>
         <div className=" flex h-full w-full flex-col gap-y-28">
+          <SaebrsSummary 
+            saebrsTotal={['NA', 'NA', 'NA']} 
+            mySaebrsTotal={['NA', 'NA', 'NA']} 
+            saebrsEmotional={['NA', 'NA', 'NA']} 
+            mySaebrsEmotional={['NA', 'NA', 'NA']} 
+            saebrsSocial={['NA', 'NA', 'NA']} 
+            mySaebrsSocial={['NA', 'NA', 'NA']} 
+            saebrsAcademic={['NA', 'NA', 'NA']} 
+            mySaebrsAcademic={['NA', 'NA', 'NA']}/>
+          
           <div className="flex h-full w-full items-center justify-end">
             <Dropdown riskOptions={riskOptions} />
           </div>

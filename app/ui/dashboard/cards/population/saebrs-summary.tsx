@@ -5,11 +5,19 @@ import {
   
 } from '@heroicons/react/24/outline';
 import MaterialSymbolsLightPersonAlertOutline from '../../../icons/MaterialSymbolsLightPersonAlertOutline';
-
-import clsx from 'clsx';
 import React from 'react';
-import { Card, Tooltip, Divider } from '@nextui-org/react';
+import { Card, Tooltip, Divider, useDisclosure } from '@nextui-org/react';
 import { Nunito } from "next/font/google";
+import TooltipModal from '@/app/ui/modals/tooltip-modal';
+import {
+   MySaebrsAcademicTooltip, 
+  MySaebrsEmotionalTooltip, 
+  MySaebrsSocialTooltip, 
+  MySaebrsTotalTooltip, 
+  SaebrsAcademicTooltip, 
+  SaebrsEmotionalTooltip, 
+  SaebrsSocialTooltip, 
+  SaebrsTotalTooltip } from '@/app/ui/textblocks/tooltips';
 const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['normal', 'italic']})
 
 function VerticalDivider() {
@@ -125,10 +133,76 @@ export function SaebrsSummary({
   mySaebrsAcademic: string[];
 }) {
 
+  const {isOpen: SaebrsTotalIsOpen, onOpen: SaebrsTotalOnOpen, onOpenChange: SaebrsTotalOnOpenChange} = useDisclosure();
+  const {isOpen: MySaebrsTotalIsOpen, onOpen: MySaebrsTotalOnOpen, onOpenChange: MySaebrsTotalOnOpenChange} = useDisclosure();
+  const {isOpen: SaebrsSocialIsOpen, onOpen: SaebrsSocialOnOpen, onOpenChange: SaebrsSocialOnOpenChange} = useDisclosure();
+  const {isOpen: MySaebrsSocialIsOpen, onOpen: MySaebrsSocialOnOpen, onOpenChange: MySaebrsSocialOnOpenChange} = useDisclosure();
+  const {isOpen: SaebrsEmotionalIsOpen, onOpen: SaebrsEmotionalOnOpen, onOpenChange: SaebrsEmotionalOnOpenChange} = useDisclosure();
+  const {isOpen: MySaebrsEmotionalIsOpen, onOpen: MySaebrsEmotionalOnOpen, onOpenChange: MySaebrsEmotionalOnOpenChange} = useDisclosure();
+  const {isOpen: SaebrsAcademicIsOpen, onOpen: SaebrsAcademicOnOpen, onOpenChange: SaebrsAcademicOnOpenChange} = useDisclosure();
+  const {isOpen: MySaebrsAcademicIsOpen, onOpen: MySaebrsAcademicOnOpen, onOpenChange: MySaebrsAcademicOnOpenChange} = useDisclosure();
+
 // min-w-fit max-w-sm on tooltip className if break
   return (
-      // MAIN ROW
-      <div className={`${nunito.className} flex flex-row gap-2 min-w-full w-full`}>
+    <>
+    {/* Load modals */}
+    <TooltipModal 
+    isOpen={SaebrsTotalIsOpen} 
+    onOpen={SaebrsTotalOnOpen} 
+    onOpenChange={SaebrsTotalOnOpenChange} 
+    title={"Saebrs Total Risk Score"} 
+    content={SaebrsTotalTooltip()}/>
+
+    <TooltipModal 
+    isOpen={MySaebrsTotalIsOpen} 
+    onOpen={MySaebrsTotalOnOpen} 
+    onOpenChange={MySaebrsTotalOnOpenChange} 
+    title={"MySaebrs Total Risk Score"} 
+    content={MySaebrsTotalTooltip()}/>
+
+    <TooltipModal 
+    isOpen={SaebrsSocialIsOpen} 
+    onOpen={SaebrsSocialOnOpen} 
+    onOpenChange={SaebrsSocialOnOpenChange} 
+    title={"Saebrs Social Risk Score"} 
+    content={SaebrsSocialTooltip()}/>
+
+    <TooltipModal 
+    isOpen={MySaebrsSocialIsOpen} 
+    onOpen={MySaebrsSocialOnOpen} 
+    onOpenChange={MySaebrsSocialOnOpenChange} 
+    title={"MySaebrs Social Risk Score"} 
+    content={MySaebrsSocialTooltip()}/>
+
+    <TooltipModal 
+    isOpen={SaebrsEmotionalIsOpen} 
+    onOpen={SaebrsEmotionalOnOpen} 
+    onOpenChange={SaebrsEmotionalOnOpenChange} 
+    title={"Saebrs Emotional Risk Score"} 
+    content={SaebrsEmotionalTooltip()}/>
+
+    <TooltipModal 
+    isOpen={MySaebrsEmotionalIsOpen} 
+    onOpen={MySaebrsEmotionalOnOpen} 
+    onOpenChange={MySaebrsEmotionalOnOpenChange} 
+    title={"MySaebrs Emotional Risk Score"} 
+    content={MySaebrsEmotionalTooltip()}/>
+
+    <TooltipModal 
+    isOpen={SaebrsAcademicIsOpen} 
+    onOpen={SaebrsAcademicOnOpen} 
+    onOpenChange={SaebrsAcademicOnOpenChange} 
+    title={"Saebrs Academic Risk Score"} 
+    content={SaebrsAcademicTooltip()}/>
+
+    <TooltipModal 
+    isOpen={MySaebrsAcademicIsOpen} 
+    onOpen={MySaebrsAcademicOnOpen} 
+    onOpenChange={MySaebrsAcademicOnOpenChange} 
+    title={"MySaebrs Academic Risk Score"} 
+    content={MySaebrsAcademicTooltip()}/>
+      
+      <div className={`${nunito.className} flex flex-col gap-4 lg:flex-row`}>
         <Card className='flex bg-neutral-100 pt-6 pb-3 px-2 basis-1/4 w-full'>
           {/* TOTAL RISK COLUMN */}
           <Tooltip content="Total Saebrs and MySaebrs score tooltip" placement='bottom'>
@@ -138,33 +212,22 @@ export function SaebrsSummary({
               </div>
               
               <div className='items-center justify-center'>
-                <RiskRow title='Saebrs' type='total' riskValues={saebrsTotal}/>
+                <div onClick={SaebrsTotalOnOpen}>
+                  <RiskRow title='Saebrs' type='total' riskValues={saebrsTotal}/>
+                </div>
+                
                 <Divider orientation='horizontal' className='-mt-1'/>
-                <RiskRow title='MySaebrs' type='total' riskValues={mySaebrsTotal}/>
+
+                <div onClick={MySaebrsTotalOnOpen}>
+                  <RiskRow title='MySaebrs' type='total' riskValues={mySaebrsTotal}/>
+                </div>
               </div>
               
             </div>
           </Tooltip>
           </Card>
           
-          <Card className='flex bg-neutral-100 pt-6 pb-3 px-2 basis-1/4 w-full'>
-
-          {/* EMOTIONAL RISK COLUMN */}
-          <Tooltip content="Emotional Saebrs and MySaebrs score tooltip" placement='bottom'>
-            <div className='flex flex-col  items-center'>  
-              <div className='ml-3 mr-auto'>
-                <RiskTitle title='Emotional' type='emotional'/>
-              </div>
-              
-              <div className='items-center justify-center'>
-                <RiskRow title='Saebrs' type='emotional' riskValues={saebrsEmotional}/>
-                <Divider orientation='horizontal' className='-mt-1'/>
-                <RiskRow title='MySaebrs' type='emotional' riskValues={mySaebrsEmotional}/>
-              </div>
-            </div>
-          </Tooltip>
-
-          </Card>
+          
 
           <Card className='flex  bg-neutral-100 pt-6 pb-3 px-2 basis-1/4 w-full'>
           {/* SOCIAL RISK COLUMN */}
@@ -175,9 +238,15 @@ export function SaebrsSummary({
               </div>
               
               <div className='items-center justify-center'>
-                <RiskRow title='Saebrs' type='social' riskValues={saebrsSocial}/>
+                <div onClick={SaebrsEmotionalOnOpen}>
+                  <RiskRow title='Saebrs' type='social' riskValues={saebrsSocial}/>
+                </div>
+                
                 <Divider orientation='horizontal' className='-mt-1'/>
-                <RiskRow title='MySaebrs' type='social' riskValues={mySaebrsSocial}/>
+
+                <div onClick={MySaebrsEmotionalOnOpen}>
+                  <RiskRow title='MySaebrs' type='social' riskValues={mySaebrsSocial}/>
+                </div>
               </div>
             </div>
           </Tooltip>
@@ -193,14 +262,46 @@ export function SaebrsSummary({
               </div>
               
               <div className='items-center justify-center'>
-                <RiskRow title='Saebrs' type='academic' riskValues={saebrsAcademic}/>
+                <div onClick={SaebrsAcademicOnOpen}>
+                  <RiskRow title='Saebrs' type='academic' riskValues={saebrsAcademic}/>
+                </div>
+                
                 <Divider orientation='horizontal' className='-mt-1'/>
-                <RiskRow title='MySaebrs' type='academic' riskValues={mySaebrsAcademic}/>
+
+                <div onClick={MySaebrsAcademicOnOpen}>
+                  <RiskRow title='MySaebrs' type='academic' riskValues={mySaebrsAcademic}/>
+                </div>
               </div>
             </div>
           </Tooltip>
         </Card>
+
+        <Card className='flex bg-neutral-100 pt-6 pb-3 px-2 basis-1/4 w-full'>
+
+            {/* EMOTIONAL RISK COLUMN */}
+            <Tooltip content="Emotional Saebrs and MySaebrs score tooltip" placement='bottom'>
+              <div className='flex flex-col  items-center'>  
+                <div className='ml-3 mr-auto'>
+                  <RiskTitle title='Emotional' type='emotional'/>
+                </div>
+                
+                <div className='items-center justify-center'>
+                  <div onClick={SaebrsEmotionalOnOpen}>
+                    <RiskRow title='Saebrs' type='emotional' riskValues={saebrsEmotional}/>
+                  </div>
+                  
+                  <Divider orientation='horizontal' className='-mt-1'/>
+
+                  <div onClick={MySaebrsEmotionalOnOpen}>
+                    <RiskRow title='MySaebrs' type='emotional' riskValues={mySaebrsEmotional}/>
+                  </div>
+                </div>
+              </div>
+            </Tooltip>
+
+          </Card>
       </div>
+    </>
   );
 }
 

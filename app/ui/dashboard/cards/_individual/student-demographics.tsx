@@ -1,10 +1,10 @@
 'use client';
 
-import { nunito } from '@/app/ui/fonts';
 import React from 'react';
 import {  Tooltip } from '@geist-ui/core';
 
 import { BarChartEnglishLearner, BarChartEthnicity, DonutChartGender } from '@/app/ui/charts/total-demographics-charts';
+
 
 export function CardStudentDemographics({
   title,

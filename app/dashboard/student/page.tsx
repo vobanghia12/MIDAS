@@ -148,17 +148,11 @@ export default function Page({ searchParams }: SearchProps) {
       type: 'file',
     });
   };
+
+  // mb-10 flex w-full justify-end
   return (
     <main className={`${nunito.className}`}>
-      <div className="mb-10 flex w-full justify-end">
-        <Button
-          className="bg-[#1e8434] hover:bg-[#1e8434a1]"
-          onClick={() => handleExport(schoolLevel?.listOfAllStudents)}
-        >
-          <ArrowDownTrayIcon className="w-6 pr-2" />
-          <p>Export</p>
-        </Button>
-      </div>
+      
       <div className="flex flex-col gap-4">
         {/* Top row */}
         <div className="flex w-full flex-row gap-8">
@@ -209,6 +203,16 @@ export default function Page({ searchParams }: SearchProps) {
             />
           </div>
         </div>
+      </div>
+
+      <div className="z-5 absolute bottom-10 right-52"> 
+        <Button
+          className="bg-[#1e8434] hover:bg-[#1e8434a1]"
+          onClick={() => handleExport(schoolLevel?.listOfAllStudents)}
+        >
+          <ArrowDownTrayIcon className="w-6 pr-2" />
+          <p>Export</p>
+        </Button>
       </div>
     </main>
   );
