@@ -151,14 +151,14 @@ const FileModal = () => {
       // const data5 = await file5.arrayBuffer();
       // const data6 = await file6.arrayBuffer();
 
-      let { data: schoolName, error } = await supabase
-      .rpc('get_school_name_from_username', {
-        _username: userName
-      })
-      if (error) console.error(error)
-      else console.log(schoolName)
+      // let { data: schoolName, error } = await supabase
+      // .rpc('get_school_name_from_username', {
+      //   _username: userName
+      // })
+      // if (error) console.error(error)
+      // else console.log(schoolName)
 
-      uploadAndCopyCSV(schoolName + "_data", convertCsvToJson(data1))
+      uploadAndCopyCSV(userName + "_data", convertCsvToJson(data1))
       
       selectedSchool.setData(convertCsvToJson(data1));
 
