@@ -5,6 +5,7 @@ const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['norma
 
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { FormEvent } from "react";
+import useFileModal from "@/hooks/useFileModal";
 
 
 export default function RegisterModal({
@@ -18,6 +19,8 @@ export default function RegisterModal({
   onOpenChange: any,
 }) {
   
+  const fileModal = useFileModal();
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -26,15 +29,20 @@ export default function RegisterModal({
       body: JSON.stringify({
         email: formData.get("email"),
         username: formData.get("username"),
-        password: formData.get("password")
+        password: formData.get("password"),
+        schoolName: formData.get("schoolName")
       }),
     });
+
+    fileModal.onOpen();
 
     console.log({response});
   };
 
-
+  
+  
   return (
+
     <Modal className={nunito.className} isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior='inside'>
       <ModalContent>
         {(onClose) => (
@@ -49,6 +57,7 @@ export default function RegisterModal({
                   <Input label='Email' name='email' required={true}/>
                   <Input label='Username' name='username' required={true}/>
                   <Input label='Password' name='password' type='password' required={true}/>
+                  <Input label='School Name' name='schoolName' required={true}/>
                   <Button type='submit' color="success" variant="faded" onPress={onClose}>
                     Register
                   </Button>

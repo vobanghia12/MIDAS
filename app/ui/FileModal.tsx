@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from './Modal';
 import Input from './Input';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
@@ -24,6 +24,11 @@ import { BounceLoader } from 'react-spinners';
 import { CompareSchoolNames } from '../api/file-auth/restrict-csv';
 import useGradeLevel from '@/hooks/useGradeLevel';
 import useClassLevel from '@/hooks/useClassLevel';
+import { uploadAndCopyCSV } from '../api/upload/school-data';
+import { getDistinctGradeLevels } from '@/action/fetch/getSchoolData';
+import useSelectedSchool from '@/hooks/useSelectedSchool';
+import { getSession } from 'next-auth/react';
+import { createClient } from '@supabase/supabase-js';
 
 const data_frame: string[] = [
   'odr_f',
@@ -41,6 +46,11 @@ const data_frame: string[] = [
   'saebrs_soc',
   'saebrs_aca',
 ];
+
+const supabaseUrl = 'https://kalbwmivszjzlnepcebm.supabase.co';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey!);
+
 
 export const convertCsvToJson = (data: ArrayBuffer) => {
   const workbook = read(data, { dense: true });
@@ -90,6 +100,19 @@ const FileModal = () => {
   const schooLevel = useSchoolLevel();
   const gradeLevel = useGradeLevel();
   const classLevel = useClassLevel();
+
+  const selectedSchool = useSelectedSchool();
+  const [userName, setUsername] = useState();
+
+  useEffect(() => {
+    const _getSession = async() => {
+        const session = await getSession();
+        setUsername(session?.user.name);
+    }
+    
+    _getSession();
+  }, [])
+
   //handle form
   const { register, handleSubmit, reset } = useForm<FieldValues>({
     defaultValues: {
@@ -128,6 +151,24 @@ const FileModal = () => {
       // const data5 = await file5.arrayBuffer();
       // const data6 = await file6.arrayBuffer();
 
+      let { data: schoolName, error } = await supabase
+      .rpc('get_school_name_from_username', {
+        _username: userName
+      })
+      if (error) console.error(error)
+      else console.log(schoolName)
+
+      uploadAndCopyCSV(schoolName + "_data", convertCsvToJson(data1))
+      
+      selectedSchool.setData(convertCsvToJson(data1));
+
+      console.log("SELECTED SCHOOL")
+      console.log(selectedSchool.data)
+
+
+      console.log(getDistinctGradeLevels(selectedSchool.data))
+      
+      
       let uploadData: any = convertCsvToJson(data1);
 
       // const inputData: any = convertCsvToJson(data2);

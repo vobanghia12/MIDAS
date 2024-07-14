@@ -7,6 +7,7 @@ import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import useSelectedSchool from "@/hooks/useSelectedSchool";
 
 
 export default function LoginModal({
@@ -19,6 +20,7 @@ export default function LoginModal({
   onOpen: any,
   onOpenChange: any,
 }) {
+  const selectedSchool = useSelectedSchool();
   const router = useRouter();
 
   // For displaying incorrect login message
@@ -39,6 +41,9 @@ export default function LoginModal({
 
     // If there was no error in the signIn function, go to dashboard/school
     if (!response?.error) {
+      // If table exists for this user's school, load it, else, idk
+      
+
       router.push('/dashboard/school');
       router.refresh();
       setIncorrectLogin(false);

@@ -12,7 +12,7 @@ import {
 import { Nunito } from 'next/font/google';
 import SimpleLineIconsMagnifier from '@/app/ui/icons/SimpleLineIconsMagnifier';
 import { DonutChart } from '@/app/ui/charts/donut-chart';
-import { StudentDemographics } from '@/app/types/student-demographics';
+import { StudentDemographics } from '@/types/student-demographics';
 const nunito = Nunito({
   weight: ['200', '200'],
   subsets: ['latin'],

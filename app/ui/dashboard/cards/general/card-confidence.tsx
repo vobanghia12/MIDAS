@@ -22,7 +22,7 @@ import {
 import { ConfidenceIntervalVisualizer } from '../../confidence-visualizer';
 import { Nunito } from 'next/font/google';
 import { JSXElementConstructor, ReactElement } from 'react';
-import { VariableWeightCell } from '@/app/types/variable-weight-cell';
+import { VariableWeightCell } from '@/types/variable-weight-cell';
 const nunito = Nunito({
   weight: ['200', '200'],
   subsets: ['latin'],

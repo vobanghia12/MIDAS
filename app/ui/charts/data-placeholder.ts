@@ -1,4 +1,4 @@
-import { RiskChartDataEntry } from "@/app/types/chart-data-entry"
+import { RiskChartDataEntry } from "@/types/chart-data-entry"
 
 export const dataGender: RiskChartDataEntry[] = [
   new RiskChartDataEntry('Male', [

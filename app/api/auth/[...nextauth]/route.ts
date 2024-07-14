@@ -125,6 +125,8 @@ const handler = NextAuth({
           // currentUser.setSchoolId(user.school_id);
 
           // console.log('Printing current user ', currentUser);
+          
+          
 
           return {
             id: user.id,

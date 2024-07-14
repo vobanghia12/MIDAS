@@ -14,6 +14,8 @@ import { ethnicity, genders, ell } from '@/constants/constants';
 import GradeSearchInputOnly from '@/app/ui/dashboard/cards/search/grade-search-input';
 import GradeSearch from '@/app/ui/dashboard/cards/search/grade-search-card';
 import useSchoolLevel from '@/hooks/useSchoolLevel';
+import useSelectedSchool from '@/hooks/useSelectedSchool';
+import { getDistinctClassroomIds, getDistinctGradeLevels } from '@/action/fetch/getSchoolData';
 function MidasRiskTooltipContent() {
   return (
     <div>Percentages of students at the three different MIDAS risk levels.</div>
@@ -40,8 +42,11 @@ export default async function Page() {
   const riskOptions = useRiskOptions();
   const gradeLevel = useGradeLevel();
   const grade = useSearchContext('grade');
-  grade.set;
   const selectedGrade = grade.get;
+
+  const selectedSchool = useSelectedSchool();
+  const distinctGrades = getDistinctGradeLevels(selectedSchool.data);
+  const distinctClassroomIds = getDistinctClassroomIds(selectedSchool.data);
 
   const [midasRisk, setMidasRisk] = useState({
     low: '45%',
@@ -100,11 +105,7 @@ export default async function Page() {
           <GradeSearchInputOnly
             selectedGrade={selectedGrade}
             setSelectedGrade={grade.set}
-            gradeList={[
-              '6',
-              '7',
-              '8'
-            ]}
+            gradeList={distinctGrades}
           />
         </div>
       </div>
@@ -120,12 +121,8 @@ export default async function Page() {
             <GradeSearch
               selectedGrade={selectedGrade}
               setSelectedGrade={grade.set}
-              gradeList={[
-                '6',
-                '7',
-                '8',
-              ]}
-              classList={['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']}
+              gradeList={distinctGrades}
+              classList={distinctClassroomIds}
             />
 
             <div className="">
