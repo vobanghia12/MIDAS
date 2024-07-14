@@ -3,10 +3,15 @@
 import { Nunito } from "next/font/google";
 const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['normal', 'italic']})
 
-import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
-import { FormEvent } from "react";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
+import { FormEvent, useEffect, useState } from "react";
 import useFileModal from "@/hooks/useFileModal";
 
+const schoolNames = [
+  'fake_middle',
+  'fake_elementary',
+  'fake_high'
+]
 
 export default function RegisterModal({
   isOpen,
@@ -19,10 +24,15 @@ export default function RegisterModal({
   onOpenChange: any,
 }) {
   
+
   const fileModal = useFileModal();
+
+  const [selectedSchoolDropdownItem, setSelectedSchoolDropdownItem] = useState("");
+  const [ canSubmit, setCanSubmit ] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const formData = new FormData(e.currentTarget);
     const response = await fetch('./api/auth/register', {
       method: "POST",
@@ -30,17 +40,24 @@ export default function RegisterModal({
         email: formData.get("email"),
         username: formData.get("username"),
         password: formData.get("password"),
-        schoolName: formData.get("schoolName")
+        schoolName: selectedSchoolDropdownItem
       }),
     });
 
-    fileModal.onOpen();
+    if (response) {
+      fileModal.onOpen();
 
-    console.log({response});
+      console.log({response});
+    }
+    
   };
+  
+  useEffect(() => {
+    if (selectedSchoolDropdownItem !== "") {
+      setCanSubmit(true);
+    }
+  }, [selectedSchoolDropdownItem]);
 
-  
-  
   return (
 
     <Modal className={nunito.className} isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior='inside'>
@@ -57,8 +74,33 @@ export default function RegisterModal({
                   <Input label='Email' name='email' required={true}/>
                   <Input label='Username' name='username' required={true}/>
                   <Input label='Password' name='password' type='password' required={true}/>
-                  <Input label='School Name' name='schoolName' required={true}/>
-                  <Button type='submit' color="success" variant="faded" onPress={onClose}>
+
+                  <Dropdown>
+                    <DropdownTrigger className='flex min-w-full'>
+                      <Button 
+                        variant="bordered" 
+                      >
+                        {selectedSchoolDropdownItem == "" ? "Select your school" : selectedSchoolDropdownItem} 
+                      </Button>
+                    </DropdownTrigger>
+
+                    <DropdownMenu aria-label="Static Actions">
+                      {schoolNames.map((schoolName: string) => {
+                        return (
+
+                          <DropdownItem key={schoolName}>
+                              <div className="w-full" onClick={() => setSelectedSchoolDropdownItem(schoolName)}>
+                                {schoolName}
+                              </div>
+                          </DropdownItem>
+
+                        );
+                      })}
+
+                    </DropdownMenu>
+                  </Dropdown>
+
+                  <Button type='submit' color="success" variant="faded" onPress={onClose} isDisabled={!canSubmit}>
                     Register
                   </Button>
                 </form>
