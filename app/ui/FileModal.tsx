@@ -158,7 +158,7 @@ const FileModal = () => {
       // if (error) console.error(error)
       // else console.log(schoolName)
 
-      uploadAndCopyCSV(userName + "_data", convertCsvToJson(data1))
+      // uploadAndCopyCSV(userName + "_data", convertCsvToJson(data1))
       
       selectedSchool.setData(convertCsvToJson(data1));
 
