@@ -104,14 +104,14 @@ const FileModal = () => {
   const selectedSchool = useSelectedSchool();
   const [userName, setUsername] = useState();
 
-  useEffect(() => {
-    const _getSession = async() => {
-        const session = await getSession();
-        setUsername(session?.user.name);
-    }
+  // useEffect(() => {
+  //   const _getSession = async() => {
+  //       const session = await getSession();
+  //       setUsername(session?.user.name);
+  //   }
     
-    _getSession();
-  }, [])
+  //   _getSession();
+  // }, [])
 
   //handle form
   const { register, handleSubmit, reset } = useForm<FieldValues>({
@@ -121,7 +121,7 @@ const FileModal = () => {
   });
 
   const onChange = (open: boolean) => {
-    if (!open) {
+    if (open) {
       reset();
       fileModal.onClose();
     }
@@ -133,11 +133,11 @@ const FileModal = () => {
 
       let file1: File = values.document1?.[0];
 
-      if ((await CompareSchoolNames(file1)) == false) {
-        toast.error('You are not permitted to open this file');
-        // throw(new Error("User is not permitted to open this file."))
-        return;
-      }
+      // if ((await CompareSchoolNames(file1)) == false) {
+      //   toast.error('You are not permitted to open this file');
+      //   // throw(new Error("User is not permitted to open this file."))
+      //   return;
+      // }
 
       if (!file1) {
         toast.error('Missing fields');
@@ -164,10 +164,9 @@ const FileModal = () => {
 
       console.log("SELECTED SCHOOL")
       console.log(selectedSchool.data)
-
-
       console.log(getDistinctGradeLevels(selectedSchool.data))
-      
+
+      uploadAndCopyCSV(selectedSchool.name + "_data", selectedSchool.data)
       
       let uploadData: any = convertCsvToJson(data1);
 

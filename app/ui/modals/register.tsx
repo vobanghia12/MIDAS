@@ -6,6 +6,7 @@ const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['norma
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { FormEvent, useEffect, useState } from "react";
 import useFileModal from "@/hooks/useFileModal";
+import useSelectedSchool from "@/hooks/useSelectedSchool";
 
 const schoolNames = [
   'fake_middle',
@@ -26,6 +27,7 @@ export default function RegisterModal({
   
 
   const fileModal = useFileModal();
+  const selectedSchool = useSelectedSchool();
 
   const [selectedSchoolDropdownItem, setSelectedSchoolDropdownItem] = useState("");
   const [ canSubmit, setCanSubmit ] = useState(false);
@@ -46,7 +48,6 @@ export default function RegisterModal({
 
     if (response) {
       fileModal.onOpen();
-
       console.log({response});
     }
     
@@ -55,6 +56,7 @@ export default function RegisterModal({
   useEffect(() => {
     if (selectedSchoolDropdownItem !== "") {
       setCanSubmit(true);
+      selectedSchool.setName(selectedSchoolDropdownItem)
     }
   }, [selectedSchoolDropdownItem]);
 

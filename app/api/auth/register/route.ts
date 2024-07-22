@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { hash } from 'bcrypt';
 import { createClient } from '@supabase/supabase-js';
+import useSelectedSchool from "@/hooks/useSelectedSchool";
+import { uploadAndCopyCSV } from "../../upload/school-data";
 
 export async function POST(request: Request) {
 
@@ -33,8 +35,8 @@ export async function POST(request: Request) {
     .rpc('get_school_name_from_username', {
       _username: username
     })
-    if (schoolNameError) console.error(schoolNameError)
-    else console.log(schoolNameData)
+    if (schoolNameError) console.error({schoolNameError})
+    else console.log({schoolNameData})
 
 
     // Create empty table for that new user's school
@@ -42,9 +44,10 @@ export async function POST(request: Request) {
     .rpc('create_school_data_table', {
       _table_name: schoolName + "_data"
     })
-    if (schoolTableError) console.error(schoolTableError)
-    else console.log(schoolTable)
+    if (schoolTableError) console.error({schoolTableError})
+    else console.log({schoolTable})
 
+    
 
   } catch(e) {
     console.log({e});
