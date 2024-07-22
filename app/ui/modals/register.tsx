@@ -4,8 +4,8 @@ import { Nunito } from "next/font/google";
 const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['normal', 'italic']})
 
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
-import { FormEvent } from "react";
-
+import { FormEvent, useState } from "react";
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 
 export default function RegisterModal({
   isOpen,
@@ -33,6 +33,8 @@ export default function RegisterModal({
     console.log({response});
   };
 
+  const [isVisible, setIsVisible] = useState(false);
+  const toggleVisibility = () => setIsVisible(!isVisible);
 
   return (
     <Modal className={nunito.className} isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior='inside'>
@@ -48,7 +50,21 @@ export default function RegisterModal({
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
                   <Input label='Email' name='email' required={true}/>
                   <Input label='Username' name='username' required={true}/>
-                  <Input label='Password' name='password' type='password' required={true}/>
+                  <Input 
+                    label='Password' 
+                    name='password' 
+                    type={isVisible ? "text" : "password"}
+                    required 
+                    endContent={
+                      <button className="focus:outline-none" type="button" onMouseDown={toggleVisibility} onMouseUp={toggleVisibility} aria-label="toggle password visibility">
+                        {isVisible ? (
+                          <IoIosEye className="text-2xl text-default-400 pointer-events-none" />
+                        ) : (
+                          <IoIosEyeOff className="text-2xl text-default-400 pointer-events-none" />
+                        )}
+                      </button>
+                    }
+                  />
                   <Button type='submit' color="success" variant="faded" onPress={onClose}>
                     Register
                   </Button>

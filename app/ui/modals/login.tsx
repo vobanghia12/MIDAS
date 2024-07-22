@@ -8,6 +8,8 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+
 
 export default function LoginModal({
   isOpen,
@@ -54,6 +56,9 @@ export default function LoginModal({
     setIncorrectLogin(false);
   };
 
+  const [isVisible, setIsVisible] = useState(false);
+  const toggleVisibility = () => setIsVisible(!isVisible);
+
   return (
     <Modal className={nunito.className} isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior='inside'>
       <ModalContent>
@@ -68,7 +73,23 @@ export default function LoginModal({
                 {incorrectLogin && <p className='text-red-500'>Username or password was incorrect.</p>}
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
                   <Input label='Username' name='username' required onKeyDown={handleTextUpdate}/>
-                  <Input label='Password' name='password' type='password' required onKeyDown={handleTextUpdate}/>
+                  <Input 
+                    label='Password' 
+                    name='password' 
+                    type={isVisible ? "text" : "password"}
+                    required 
+                    onKeyDown={handleTextUpdate}
+                    endContent={
+                      <button className="focus:outline-none" type="button" onMouseDown={toggleVisibility} onMouseUp={toggleVisibility} aria-label="toggle password visibility">
+                        {isVisible ? (
+                          <IoIosEye className="text-2xl text-default-400 pointer-events-none" />
+                        ) : (
+                          <IoIosEyeOff className="text-2xl text-default-400 pointer-events-none" />
+                        )}
+                      </button>
+                    }
+                  />
+
                   <Button type='submit' color="success" variant="faded">
                     Login
                   </Button>
