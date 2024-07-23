@@ -48,8 +48,13 @@ export default function RegisterModal({
         redirect: false
       });
 
-      router.push('/dashboard/school');
-      router.refresh();
+      if (!loginRedirectResponse?.error) {
+        router.push('/dashboard/school');
+        router.refresh();
+      }
+      else {
+        toast.error("There was an error while trying to log you in after registration. Try the login button, if the error persists, please contact support.")
+      }
     }
     else {
       toast.error("Account registration failed. Status: " + response.status + ", Status text: " + response.statusText + ". Please contact support from the home page.")
