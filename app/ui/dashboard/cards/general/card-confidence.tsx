@@ -84,7 +84,7 @@ const variables = [
   {
     name: 'Gender',
     weight: 'Medium',
-    missing: true,
+    missing: false,
   },
   {
     name: 'Ethnicity',
@@ -94,7 +94,7 @@ const variables = [
   {
     name: 'English Learner',
     weight: 'Low',
-    missing: true,
+    missing: false,
   },
   {
     name: 'Office Disciplinary Referrals',

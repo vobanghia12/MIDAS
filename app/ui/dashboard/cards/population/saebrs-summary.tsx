@@ -113,7 +113,7 @@ export function SaebrsSummary({
         <Tooltip content={'Saebrs Tooltip'} placement="bottom">
           <div>
             <Interior
-              title="Saebrs"
+              title="SAEBRS"
               values={valuesTop}
               subtitles={subtitlesTop}
               padding=""
@@ -127,7 +127,7 @@ export function SaebrsSummary({
         <Tooltip content={'MySaebrs Tooltip'} placement="bottom">
           <div>
             <Interior
-              title="MySaebrs"
+              title="mySAEBRS"
               values={valuesBottom}
               subtitles={subtitlesBottom}
               padding=""

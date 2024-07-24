@@ -117,10 +117,10 @@ export default function Page({ searchParams }: SearchProps) {
     });
 
     setTestScoreRisk({
-      math: data?.math_risk ?? 'NA',
-      reading: data?.read_risk ?? 'NA',
-      suspension: data?.susp_risk ?? 'NA',
-      odr: data?.odr_risk ?? 'NA',
+      math: data?.math_risk ?? 'NONE',
+      reading: data?.read_risk ?? 'NONE',
+      suspension: data?.susp_risk ?? 'NONE',
+      odr: data?.odr_risk ?? 'NONE',
     });
 
     setMidasSummary({
@@ -150,7 +150,6 @@ export default function Page({ searchParams }: SearchProps) {
   };
   return (
     <main className={`${nunito.className}`}>
-      
       <div className="flex flex-col gap-4">
         {/* Top row */}
         <div className="flex w-full flex-row gap-8">
@@ -182,7 +181,7 @@ export default function Page({ searchParams }: SearchProps) {
           <div className="flex basis-1/5 flex-col gap-2">
             <CardMidasRisk midasRisk={midasSummary.midasRisk} />
             <CardConfidenceVisualizer
-              confidence={confidence}
+              confidence={3}
               confidenceThresholds={[1, 2, 3, 4, 5]}
               missingVariables={0}
             />
@@ -203,7 +202,7 @@ export default function Page({ searchParams }: SearchProps) {
         </div>
       </div>
 
-      <div className="z-5 absolute bottom-10 right-28 opacity-75"> 
+      <div className="z-5 absolute bottom-10 right-28 opacity-75">
         <Button
           className="bg-[#1e8434] hover:bg-[#1e8434a1]"
           onClick={() => handleExport(schoolLevel?.listOfAllStudents)}

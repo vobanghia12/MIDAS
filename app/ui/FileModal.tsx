@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Modal from './Modal';
 import Input from './Input';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
@@ -24,6 +24,10 @@ import { BounceLoader } from 'react-spinners';
 import { CompareSchoolNames } from '../api/file-auth/restrict-csv';
 import useGradeLevel from '@/hooks/useGradeLevel';
 import useClassLevel from '@/hooks/useClassLevel';
+
+import { useDropzone } from 'react-dropzone';
+
+import { AiOutlineCloudUpload } from 'react-icons/ai';
 
 const data_frame: string[] = [
   'odr_f',
@@ -84,16 +88,42 @@ export const setSecondMatchingRiskFactor = (
 };
 
 const FileModal = () => {
+  // const [fileEnter, setFileEnter] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>();
   const fileModal = useFileModal();
   const router = useRouter();
   const schooLevel = useSchoolLevel();
   const gradeLevel = useGradeLevel();
   const classLevel = useClassLevel();
+
   //handle form
-  const { register, handleSubmit, reset } = useForm<FieldValues>({
-    defaultValues: {
-      document1: null,
+  const { register, handleSubmit, reset, setValue, watch } =
+    useForm<FieldValues>({
+      defaultValues: {
+        document1: null,
+      },
+    });
+
+  //watch the file change
+  const selectedFile = watch('document1');
+
+  //onDrop is a argument for react dropzone
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles && acceptedFiles.length > 0) {
+        setValue('document1', acceptedFiles, { shouldValidate: true });
+      }
+    },
+    [setValue],
+  );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [
+        '.xlsx',
+      ],
+      'text/csv': ['.csv'],
     },
   });
 
@@ -397,19 +427,45 @@ const FileModal = () => {
       >
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-y-4"
+          className="flex flex-col items-center justify-center gap-y-4"
         >
-          <div>
-            <p className="pb-1 text-left">School Upload File</p>
+          <div
+            {...getRootProps()}
+            className={` item-center flex h-72 w-full flex-col justify-center border-2 border-dashed p-3 ${
+              isDragActive
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-300 bg-gray-50'
+            }`}
+          >
+            <AiOutlineCloudUpload size={50} className="mx-auto" />
+            {selectedFile && selectedFile[0] ? (
+              <p className="mb-4 text-sm text-gray-500">
+                Selected file: {selectedFile[0].name}
+              </p>
+            ) : (
+              <p>
+                {isDragActive ? (
+                  <span>
+                    <b>Drop the document to get started</b> or click
+                  </span>
+                ) : (
+                  <span>
+                    <b>Click to Choose School File ( .xlsx or .csv )</b> or drag
+                    it here
+                  </span>
+                )}
+              </p>
+            )}
+
             <Input
-              type="file"
-              className="mt-1"
+              className="hidden"
+              {...getInputProps}
               id="document1"
               disabled={isLoading}
               {...register('document1', { required: true })}
-              accept=".csv"
             />
           </div>
+
           {isLoading ? (
             <BounceLoader className=" m-auto" color="blue" size={40} />
           ) : (

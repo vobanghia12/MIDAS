@@ -82,7 +82,7 @@ export default async function Page() {
   const colors = ['rose-500', 'yellow-400', 'green-500'];
 
   // Stops proceeding to dashboard before uploading data
-  const schoolLevel = useSchoolLevel()
+  const schoolLevel = useSchoolLevel();
   if (schoolLevel.listOfAllStudents === undefined) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-2">
@@ -100,12 +100,21 @@ export default async function Page() {
           <GradeSearchInputOnly
             selectedGrade={selectedGrade}
             setSelectedGrade={grade.set}
-            gradeList={[
-              '6',
-              '7',
-              '8'
-            ]}
+            gradeList={Object.keys(gradeLevel.mySaeberAcademic).map(
+              (grade) => grade,
+            )}
           />
+        </div>
+      </div>
+    );
+  }
+
+  if (gradeLevel.mySaeberAcademic[selectedGrade] === undefined) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <div>
+          The grade is not available and please enter a different grade to view
+          the dashboard.
         </div>
       </div>
     );
@@ -120,11 +129,9 @@ export default async function Page() {
             <GradeSearch
               selectedGrade={selectedGrade}
               setSelectedGrade={grade.set}
-              gradeList={[
-                '6',
-                '7',
-                '8',
-              ]}
+              gradeList={Object.keys(gradeLevel.mySaeberAcademic).map(
+                (grade) => grade,
+              )}
               classList={['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']}
             />
 
@@ -309,7 +316,7 @@ export default async function Page() {
 
           <div className="mt-16 flex flex-row justify-between gap-2">
             <Card
-              className="-mt-12 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
+              className="-mt-12 flex h-[68vh] w-[550px] rounded-xl bg-neutral-100"
               shadow="md"
             >
               <p className="-mb-8 p-2 text-xl font-bold">Ethnicity and Risk</p>
@@ -332,7 +339,7 @@ export default async function Page() {
               </div>
             </Card>
             <Card
-              className="-mt-12 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
+              className="-mt-12 flex h-[68vh] w-[400px] rounded-xl bg-neutral-100"
               shadow="md"
             >
               <p className="-mb-8 p-2 text-xl font-bold">
@@ -351,13 +358,13 @@ export default async function Page() {
                       'Low Risk': ell[ele]['Low Risk'],
                     }))}
                     colors={colors}
-                    legendVariable="Ell"
+                    legendVariable="ELL"
                   />
                 }
               </div>
             </Card>
             <Card
-              className="-mt-12 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
+              className="-mt-12 flex h-[68vh] w-[400px] rounded-xl bg-neutral-100"
               shadow="md"
             >
               <p className="-mb-8 p-2 text-xl font-bold">Gender and Risk</p>
