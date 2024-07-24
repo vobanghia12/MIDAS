@@ -3,14 +3,17 @@
 import Link from 'next/link';
 import NavLinks from '@/app/ui/dashboard/nav-links';
 import MidasLogoNoText from '@/app/ui/midas-logo-no-text';
-import { PowerIcon } from '@heroicons/react/24/outline';
+import { PowerIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import ConfirmSignoutModal from '../modals/confirm-signout';
 import { useDisclosure } from '@nextui-org/react';
 import { useState } from 'react';
 import clsx from 'clsx';
+import SupportModal from '../modals/tech-support';
 
 export default function SideNav() {
   const {isOpen: isOpenSignout, onOpen: onOpenSignout, onOpenChange: onOpenChangeSignout} = useDisclosure();
+  const {isOpen: isOpenSupport, onOpen: onOpenSupport, onOpenChange: onOpenChangeSupport} = useDisclosure();
+  
   const [ collapsed, setCollapsed] = useState(false);
   
   const arrows = {
@@ -26,6 +29,7 @@ export default function SideNav() {
       },
     )}>
       <ConfirmSignoutModal isOpen={isOpenSignout} onOpen={onOpenSignout} onOpenChange={onOpenChangeSignout}/>
+      <SupportModal isOpen={isOpenSupport} onOpen={onOpenSupport} onOpenChange={onOpenChangeSupport}/>
       <div
         className="mb-2 flex h-20 items-center justify-center rounded-md bg-gray-50 max-md:hidden md:h-24"
       >
@@ -35,11 +39,17 @@ export default function SideNav() {
       </div>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2 max-sm:w-fit">
         <NavLinks collapsed={collapsed}/>
+
+        <button onClick={onOpenSupport} className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-green-100 hover:text-green-600 md:flex-none md:justify-start md:p-2 md:px-2">
+          <QuestionMarkCircleIcon className="w-8" />
+          {!collapsed ? <div className="hidden md:block">Support</div> : <></>}
+        </button>
+
         <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
           <button className='bg-gray-50 rounded-md max-md:hidden' onClick={() => setCollapsed(!collapsed)}>
             {!collapsed ? <p className='text-3xl'>{arrows.left}</p> : <p className='text-3xl'>{arrows.right}</p>}
           </button>
-          
+
           <button onClick={onOpenSignout} className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-green-100 hover:text-green-600 md:flex-none md:justify-start md:p-2 md:px-2">
             <PowerIcon className="w-8" />
             {!collapsed ? <div className="hidden md:block">Sign Out</div> : <></>}

@@ -8,8 +8,8 @@ export async function POST(request: Request) {
     const { data, error } = await resend.emails.send({
       from: 'onboarding@resend.dev',
       to: `${emailFormat.receiver}`,
-      subject: 'Hello world',
-      html: '<h1>Welcome Mate</h1>',
+      subject: 'Dashboard Screenshot',
+      html: '<h1>Screenshot</h1>',
       attachments: [
         {
           filename: `screenshot.jpg`,
