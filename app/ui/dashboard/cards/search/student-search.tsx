@@ -13,6 +13,7 @@ import { Nunito } from 'next/font/google';
 import SimpleLineIconsMagnifier from '@/app/ui/icons/SimpleLineIconsMagnifier';
 import { DonutChart } from '@/app/ui/charts/donut-chart';
 import { StudentDemographics } from '@/app/types/student-demographics';
+import { FormError } from '@/app/ui/form-error';
 const nunito = Nunito({
   weight: ['200', '200'],
   subsets: ['latin'],
@@ -64,11 +65,10 @@ function DemographicsBox({
   content: string;
 }) {
   return (
-    <div className="flex h-full w-full basis-1/4 flex-col">
-      <p className="ml-0.5 mr-auto">{label}</p>
-      <div className="flex items-center justify-center">
-        <p className="mt-2 text-xl">{content}</p>
-      </div>
+    <div className="flex h-full w-full basis-1/4 flex-col items-center justify-center">
+      <p className=" px-2 text-sm">{label}</p>
+
+      <p className="mt-2 text-xl">{content}</p>
     </div>
   );
 }
@@ -86,90 +86,96 @@ function DemographicsRow({
 
       <Divider orientation="vertical" />
 
-      {content.gender && <Tooltip
-        className="bg-neutral-100"
-        content={
-          <div className="h-96 w-96">
-            <p className={`${nunito.className} -mb-4 text-xl`}>
-              School Gender demographics
-            </p>
-            <DonutChart
-              data={genderDataPlaceholder}
-              colors={['#f87171', '#a5f3fc']}
-              selectedSlice={content.gender}
-            />
+      {content.gender && (
+        <Tooltip
+          className="bg-neutral-100"
+          content={
+            <div className="h-96 w-96">
+              <p className={`${nunito.className} -mb-4 text-xl`}>
+                School Gender demographics
+              </p>
+              <DonutChart
+                data={genderDataPlaceholder}
+                colors={['#f87171', '#a5f3fc']}
+                selectedSlice={content.gender}
+              />
+            </div>
+          }
+          placement="bottom"
+        >
+          <div className="basis-1/4">
+            <DemographicsBox label="Gender" content={content.gender} />
           </div>
-        }
-        placement="bottom"
-      >
+        </Tooltip>
+      )}
+
+      {!content.gender && (
         <div className="basis-1/4">
           <DemographicsBox label="Gender" content={content.gender} />
         </div>
-      </Tooltip>}
-
-      {!content.gender &&
-        <div className="basis-1/4">
-          <DemographicsBox label="Gender" content={content.gender} />
-        </div>
-      }
+      )}
 
       <Divider orientation="vertical" />
 
-      {content.ell && <Tooltip
-        className="bg-neutral-100"
-        content={
-          <div className="h-96 w-96">
-            <p className={`${nunito.className} -mb-4 text-xl`}>
-              School English-learner demographics
-            </p>
-            <DonutChart
-              data={englishLearnerDataPlaceholder}
-              colors={['#a3a3a3', '#4ade80']}
-              selectedSlice={content.ell}
-            />
+      {content.ell && (
+        <Tooltip
+          className="bg-neutral-100"
+          content={
+            <div className="h-96 w-96">
+              <p className={`${nunito.className} -mb-4 text-xl`}>
+                School English-learner demographics
+              </p>
+              <DonutChart
+                data={englishLearnerDataPlaceholder}
+                colors={['#a3a3a3', '#4ade80']}
+                selectedSlice={content.ell}
+              />
+            </div>
+          }
+          placement="bottom"
+        >
+          <div className="basis-1/4">
+            <DemographicsBox label="English Learner" content={content.ell} />
           </div>
-        }
-        placement="bottom"
-      >
-        <div className="basis-1/4">
-          <DemographicsBox label="English Learner?" content={content.ell} />
-        </div>
-      </Tooltip>}
+        </Tooltip>
+      )}
 
-      {!content.ell && 
+      {!content.ell && (
         <div className="basis-1/4">
-          <DemographicsBox label="English Learner?" content={content.ell} />
+          <DemographicsBox label="English Learner" content={content.ell} />
         </div>
-      }
+      )}
 
       <Divider orientation="vertical" />
 
-      {content.ethnicity && <Tooltip
-        className="bg-neutral-100"
-        content={
-          <div className="h-96 w-96">
-            <p className={`${nunito.className} -mb-4 text-xl`}>
-              School Ethnicity demographics
-            </p>
-            <DonutChart
-              data={ethnicityDataPlaceholder}
-              colors={['#f87171', '#a5f3fc', '#4ade80']}
-              selectedSlice={content.ethnicity}
-            />
+      {content.ethnicity && (
+        <Tooltip
+          className="bg-neutral-100"
+          content={
+            <div className="h-96 w-96">
+              <p className={`${nunito.className} -mb-4 text-xl`}>
+                School Ethnicity demographics
+              </p>
+              <DonutChart
+                data={ethnicityDataPlaceholder}
+                colors={['#f87171', '#a5f3fc', '#4ade80']}
+                selectedSlice={content.ethnicity}
+              />
+            </div>
+          }
+          placement="bottom"
+        >
+          <div className="basis-1/4">
+            <DemographicsBox label="Ethnicity" content={content.ethnicity} />
           </div>
-        }
-        placement="bottom"
-      >
-        <div className="basis-1/4">
-          <DemographicsBox label="Ethnicity" content={content.ethnicity} />
-        </div>
-      </Tooltip>}
+        </Tooltip>
+      )}
 
-      {!content.ethnicity && 
+      {!content.ethnicity && (
         <div className="basis-1/4">
           <DemographicsBox label="Ethnicity" content={content.ethnicity} />
         </div>
-      }
+      )}
     </div>
   );
 }
@@ -200,7 +206,7 @@ export default function StudentSearch({
       </CardHeader>
       <CardBody className={`${nunito.className} -mt-4 flex w-full flex-row`}>
         <div className="flex w-max basis-full flex-col gap-1">
-          <form className="mb-4 flex w-full flex-row" action={SearchAction}>
+          <form className="flex w-full flex-row" action={SearchAction}>
             <div className="flex w-full">
               <Input
                 name="studentId"
@@ -212,6 +218,9 @@ export default function StudentSearch({
               </Button>
             </div>
           </form>
+          {!data && data !== '' && (
+            <FormError message="Student is not existed!" />
+          )}
 
           <DemographicsRow
             content={{

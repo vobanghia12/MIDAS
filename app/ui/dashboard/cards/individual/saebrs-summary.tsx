@@ -1,15 +1,24 @@
 import {
   FaceSmileIcon,
   AcademicCapIcon,
-  UsersIcon
-  
+  UsersIcon,
 } from '@heroicons/react/24/outline';
 import MaterialSymbolsLightPersonAlertOutline from '../../../icons/MaterialSymbolsLightPersonAlertOutline';
 
 import React from 'react';
-import { Card, Tooltip, Divider, CardHeader, CardBody } from '@nextui-org/react';
-import { Nunito } from "next/font/google";
-const nunito = Nunito({weight: ['200', '200'], subsets:['latin'], style: ['normal', 'italic']})
+import {
+  Card,
+  Tooltip,
+  Divider,
+  CardHeader,
+  CardBody,
+} from '@nextui-org/react';
+import { Nunito } from 'next/font/google';
+const nunito = Nunito({
+  weight: ['200', '200'],
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+});
 
 const iconMap = {
   total: MaterialSymbolsLightPersonAlertOutline,
@@ -28,33 +37,28 @@ function RiskTitle({
   const Icon = iconMap[type];
 
   return (
-    <div className={`${nunito.className} flex flex-row items-start justify-start -mb-4 -ml-1 mt-1`}>
+    <div
+      className={`${nunito.className} -mb-4 -ml-1 mt-1 flex flex-row items-start justify-start`}
+    >
       {Icon ? <Icon className="h-6 w-6 text-gray-700" /> : null}
-      <p className='pl-2'>{title}</p>
+      <p className="pl-2">{title}</p>
     </div>
-  )
+  );
 }
 
 function CapitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function Row({
-  header,
-  content,
-}:
-{
-  header: string;
-  content: string;
-}) {
+function Row({ header, content }: { header: string; content: string }) {
   return (
-    <div className=''>
-      <p className='items-start'>{header}</p>
+    <div className="">
+      <p className="items-start">{header}</p>
       <div className="flex flex-col items-center">
         <p className={`${nunito.className} text-3xl`}>{content}</p>
       </div>
     </div>
-  )
+  );
 }
 
 function CardSaebrs({
@@ -62,32 +66,33 @@ function CardSaebrs({
   saebrs,
   mySaebrs,
   tooltip,
-}:
-{
-  header: "total" | "emotional" | "social" | "academic";
+}: {
+  header: 'total' | 'emotional' | 'social' | 'academic';
   saebrs: string;
   mySaebrs: string;
   tooltip: string;
 }) {
-  return(
-  <Card className={`${nunito.className} bg-neutral-100 basis-1/4 w-full px-3 pb-4`}>
-    <CardHeader>
-      <RiskTitle title={CapitalizeFirstLetter(header)} type={header}/>
-    </CardHeader>
+  return (
+    <Card
+      className={`${nunito.className} w-full basis-1/4 bg-neutral-100 px-3 pb-4 transition-all hover:z-10 hover:scale-125`}
+    >
+      <CardHeader>
+        <RiskTitle title={CapitalizeFirstLetter(header)} type={header} />
+      </CardHeader>
 
-    <CardBody>
-      <Tooltip content={tooltip} placement='bottom'>
-        <div className='w-full mb-3 mt-auto'>
-          <div className={`${nunito.className} flex flex-col gap-4`}>
-            <Row header='Saebrs' content={saebrs}/>
-            <Divider orientation='horizontal' className=''/>
-            <Row header='MySaebrs' content={mySaebrs}/>
+      <CardBody>
+        <Tooltip content={tooltip} placement="bottom">
+          <div className="mb-3 mt-auto w-full">
+            <div className={`${nunito.className} flex flex-col gap-4`}>
+              <Row header="Saebrs" content={saebrs} />
+              <Divider orientation="horizontal" className="" />
+              <Row header="MySaebrs" content={mySaebrs} />
+            </div>
           </div>
-        </div>
-      </Tooltip>
-    </CardBody>
-  </Card>
-  )
+        </Tooltip>
+      </CardBody>
+    </Card>
+  );
 }
 
 export function SaebrsSummary({
@@ -109,20 +114,39 @@ export function SaebrsSummary({
   saebrsAcademic: string;
   mySaebrsAcademic: string;
 }) {
-
-// min-w-fit max-w-sm on tooltip className if break
+  // min-w-fit max-w-sm on tooltip className if break
   return (
-      // MAIN ROW
-      <div className={`${nunito.className} flex flex-col gap-4 lg:flex-row w-full `}>
-        
-          
-          <CardSaebrs header="total" saebrs={saebrsTotal} mySaebrs={mySaebrsTotal} tooltip="Total tooltip"/>
+    // MAIN ROW
+    <div
+      className={`${nunito.className} flex w-full flex-col gap-4 lg:flex-row `}
+    >
+      <CardSaebrs
+        header="total"
+        saebrs={saebrsTotal}
+        mySaebrs={mySaebrsTotal}
+        tooltip="Total tooltip"
+      />
 
-          <CardSaebrs header="emotional" saebrs={saebrsEmotional} mySaebrs={mySaebrsEmotional} tooltip="emotional tooltip"/>
+      <CardSaebrs
+        header="emotional"
+        saebrs={saebrsEmotional}
+        mySaebrs={mySaebrsEmotional}
+        tooltip="emotional tooltip"
+      />
 
-          <CardSaebrs header="social" saebrs={saebrsSocial} mySaebrs={mySaebrsSocial} tooltip="social tooltip"/>
+      <CardSaebrs
+        header="social"
+        saebrs={saebrsSocial}
+        mySaebrs={mySaebrsSocial}
+        tooltip="social tooltip"
+      />
 
-          <CardSaebrs header="academic" saebrs={saebrsAcademic} mySaebrs={mySaebrsAcademic} tooltip="academic tooltip"/>
-      </div>
+      <CardSaebrs
+        header="academic"
+        saebrs={saebrsAcademic}
+        mySaebrs={mySaebrsAcademic}
+        tooltip="academic tooltip"
+      />
+    </div>
   );
 }

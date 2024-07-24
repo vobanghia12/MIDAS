@@ -7,7 +7,7 @@ import { CardTestScoreSummary } from '@/app/ui/dashboard/cards/population/test-s
 import { CardConfidenceVisualizer } from '@/app/ui/dashboard/cards/general/card-confidence';
 import { useEffect, useState } from 'react';
 import { CardThreeValue } from '@/app/ui/dashboard/cards/general/card-three-value';
-import { Card, Tooltip } from '@nextui-org/react';
+import { Card, CardHeader, Tooltip } from '@nextui-org/react';
 import useSchoolLevel from '@/hooks/useSchoolLevel';
 import { BarChart } from '@/app/ui/charts/BarChart';
 import { ethnicity, genders, ell } from '@/constants/constants';
@@ -49,7 +49,7 @@ export default async function Page() {
 
   if (schoolLevel.listOfAllStudents === undefined) {
     return (
-      <div className="flex flex-col h-full gap-2 items-center justify-center">
+      <div className="flex h-full flex-col items-center justify-center gap-2">
         <div>Please upload all of the data files first.</div>
       </div>
     );
@@ -62,8 +62,16 @@ export default async function Page() {
     <main>
       <div className="flex gap-4">
         {/* LEFT COL */}
+
         <div className="mb-4 flex basis-1/4 flex-col">
           <div className="flex flex-col gap-3 ">
+            <Card className="w-full bg-neutral-100" shadow="md">
+              <CardHeader>
+                <h3 className="text-lg font-medium text-slate-800">
+                  Currently viewing school page{' '}
+                </h3>
+              </CardHeader>
+            </Card>
             <div className="">
               <CardThreeValue
                 title="MIDAS Risk Scores"
@@ -79,7 +87,7 @@ export default async function Page() {
 
             <div className="">
               <CardConfidenceVisualizer
-                missingVariables={1}
+                missingVariables={0}
                 confidence={3}
                 confidenceThresholds={[1, 2, 3, 4, 5]}
               />
@@ -107,8 +115,8 @@ export default async function Page() {
           </div>
         </div>
         {schoolLevel?.saebrsEmotion && (
-          <div className="h-full w-full flex-col basis-3/4">
-            <div className="flex flex-row gap-3 -mb-8 w-full">
+          <div className="h-full w-full basis-3/4 flex-col">
+            <div className="-mb-8 flex w-full flex-row gap-3">
               <div className="basis-1/4">
                 <SaebrsSummary
                   title={'Total'}
@@ -138,10 +146,12 @@ export default async function Page() {
                       ? schoolLevel.mySaeberSocial['MySaebrs']['Low Risk'] + '%'
                       : '0%',
                     schoolLevel
-                      ? schoolLevel.mySaeberSocial['MySaebrs']['Some Risk'] + '%'
+                      ? schoolLevel.mySaeberSocial['MySaebrs']['Some Risk'] +
+                        '%'
                       : '0%',
                     schoolLevel
-                      ? schoolLevel.mySaeberSocial['MySaebrs']['High Risk'] + '%'
+                      ? schoolLevel.mySaeberSocial['MySaebrs']['High Risk'] +
+                        '%'
                       : '0%',
                   ]}
                   subtitlesBottom={['Low', 'Some', 'High']}
@@ -196,7 +206,8 @@ export default async function Page() {
                   subtitlesTop={['Low', 'Some', 'High']}
                   valuesBottom={[
                     schoolLevel
-                      ? schoolLevel.mySaebrsEmotion['MySaebrs']['Low Risk'] + '%'
+                      ? schoolLevel.mySaebrsEmotion['MySaebrs']['Low Risk'] +
+                        '%'
                       : '0%',
                     schoolLevel
                       ? schoolLevel.mySaebrsEmotion['MySaebrs']['Some Risk'] +
@@ -212,9 +223,9 @@ export default async function Page() {
               </div>
             </div>
 
-            <div className="mt-16 flex flex-row gap-2 justify-between">
+            <div className="mt-16 flex justify-between gap-2">
               <Card
-                className="-mt-4 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
+                className="-mt-4 flex h-[68vh] w-[550px] rounded-xl bg-neutral-100"
                 shadow="md"
               >
                 <p className="-mb-8 p-2 text-xl font-bold">
@@ -223,7 +234,7 @@ export default async function Page() {
                 <p className="-mb-8 mt-6 pl-2 text-sm italic">
                   Distribution of those at risk for each ethnicity
                 </p>
-                <div className="mb-0 mt-auto flex h-full flex-col pt-10">
+                <div className="mb-0 mt-auto flex h-full flex-col pt-10 ">
                   {
                     <BarChart
                       data={Object.keys(ethnicity).map((ele: any) => ({
@@ -239,7 +250,7 @@ export default async function Page() {
                 </div>
               </Card>
               <Card
-                className="-mt-4 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
+                className="-mt-4 flex h-[68vh] w-[400px] rounded-xl bg-neutral-100"
                 shadow="md"
               >
                 <p className="-mb-8 p-2 text-xl font-bold">
@@ -258,13 +269,13 @@ export default async function Page() {
                         'Low Risk': ell[ele]['Low Risk'],
                       }))}
                       colors={colors}
-                      legendVariable="Ell"
+                      legendVariable="ELL"
                     />
                   }
                 </div>
               </Card>
               <Card
-                className="-mt-4 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
+                className="-mt-4 flex h-[68vh] w-[400px] rounded-xl bg-neutral-100"
                 shadow="md"
               >
                 <p className="-mb-8 p-2 text-xl font-bold">Gender and Risk</p>

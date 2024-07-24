@@ -89,7 +89,7 @@ export default async function Page() {
   const ellRisk = getCurrentState(ellState);
   const ethRisk = getCurrentState(ethnicityState);
 
-  const schoolLevel = useSchoolLevel()
+  const schoolLevel = useSchoolLevel();
   if (schoolLevel.listOfAllStudents === undefined) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-2">
@@ -113,6 +113,17 @@ export default async function Page() {
     );
   }
 
+  if (classLevel.mySaeberAcademic[selectedClass] === undefined) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <div>
+          The class is not available and please enter a different class to view
+          the dashboard.
+        </div>
+      </div>
+    );
+  }
+
   return (
     <main>
       <div className="flex h-full gap-4">
@@ -122,7 +133,7 @@ export default async function Page() {
             <ClassSearch
               selectedClass={selectedClass}
               setSelectedClass={classroom.set}
-              studentList={["6A_129", "6A_251", "6B_151", "6H_194"]}
+              studentList={['6A_129', '6A_251', '6B_151', '6H_194']}
             />
 
             <div className="">
@@ -347,7 +358,7 @@ export default async function Page() {
                       'Low Risk': ell[ele]['Low Risk'],
                     }))}
                     colors={colors}
-                    legendVariable="Ell"
+                    legendVariable="ELL"
                   />
                 }
               </div>

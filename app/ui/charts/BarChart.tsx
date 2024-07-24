@@ -19,7 +19,7 @@ export function BarChart({
       data={data}
       keys={['High Risk', 'Some Risk', 'Low Risk']}
       indexBy="id"
-      margin={{ top: 50, right: 40, bottom: 50, left: 60 }}
+      margin={{ top: 80, right: 40, bottom: 60, left: 60 }}
       padding={0.6}
       groupMode="stacked"
       colors={['#f87171', '#fde047', '#4ade80']}
@@ -43,11 +43,11 @@ export function BarChart({
         {
           dataFrom: 'keys',
           anchor: 'top-right',
-          direction: 'row',
+          direction: 'column',
           justify: true,
-          translateX: 0,
-          translateY: -50,
-          itemsSpacing: 50,
+          translateX: 30,
+          translateY: -70,
+          itemsSpacing: 0,
           itemWidth: 65,
           itemHeight: 20,
           itemDirection: 'left-to-right',
