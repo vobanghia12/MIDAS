@@ -9,6 +9,12 @@ export function DonutChart({
   colors: string[];
   selectedSlice?: string;
 }) {
+  if (selectedSlice === 'Yes') {
+    selectedSlice = 'ELL';
+  } else if (selectedSlice === 'No') {
+    selectedSlice = 'Not ELL';
+  }
+
   return (
     <ResponsivePie
       data={data}
