@@ -14,14 +14,26 @@ const CaptureScreenshotButton = () => {
     emailModal.setImage(img);
     return emailModal.onOpen();
   };
-  const handleCaptureClick = () => {
+  const handleCaptureClick = async () => {
     setLoading(true);
     setError(null);
+    await Promise.all(
+      Array.from(document.images)
+        .filter((img) => !img.complete)
+        .map(
+          (img) =>
+            new Promise((resolve) => {
+              img.onload = img.onerror = resolve;
+            }),
+        ),
+    );
     html2canvas(document.body, {
+      imageTimeout: 0,
+      foreignObjectRendering: true,
       useCORS: true,
-      scale: window.devicePixelRatio,
-      width: window.innerWidth,
-      height: window.innerHeight,
+      allowTaint: true,
+      scale: 2, // Improve resolution
+      logging: true, // For debugging
     })
       .then((canvas) => {
         const imgData = canvas.toDataURL('image/jpeg');
