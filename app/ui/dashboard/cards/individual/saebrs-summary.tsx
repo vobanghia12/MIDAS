@@ -128,13 +128,6 @@ export function SaebrsSummary({
       />
 
       <CardSaebrs
-        header="emotional"
-        saebrs={saebrsEmotional}
-        mySaebrs={mySaebrsEmotional}
-        tooltip="emotional tooltip"
-      />
-
-      <CardSaebrs
         header="social"
         saebrs={saebrsSocial}
         mySaebrs={mySaebrsSocial}
@@ -146,6 +139,13 @@ export function SaebrsSummary({
         saebrs={saebrsAcademic}
         mySaebrs={mySaebrsAcademic}
         tooltip="academic tooltip"
+      />
+
+      <CardSaebrs
+        header="emotional"
+        saebrs={saebrsEmotional}
+        mySaebrs={mySaebrsEmotional}
+        tooltip="emotional tooltip"
       />
     </div>
   );

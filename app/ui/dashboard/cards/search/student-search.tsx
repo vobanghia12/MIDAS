@@ -14,6 +14,7 @@ import SimpleLineIconsMagnifier from '@/app/ui/icons/SimpleLineIconsMagnifier';
 import { DonutChart } from '@/app/ui/charts/donut-chart';
 import { StudentDemographics } from '@/app/types/student-demographics';
 import { FormError } from '@/app/ui/form-error';
+import { useState } from 'react';
 const nunito = Nunito({
   weight: ['200', '200'],
   subsets: ['latin'],
@@ -189,11 +190,15 @@ export default function StudentSearch({
   setSelectedStudent: React.Dispatch<React.SetStateAction<string>>;
   data: any;
 }) {
+  const [input, setInput] = useState<string | undefined>('');
   const SearchAction = async (formData: FormData) => {
     const id = formData.get('studentId') || '';
+    if (id) setInput(id.toString().toUpperCase());
     setSelectedStudent(id.toString().toUpperCase());
     console.log({ selectedStudent });
   };
+
+  console.log(data);
 
   return (
     <Card className="w-full bg-neutral-100 pb-1" shadow="md">
@@ -218,9 +223,7 @@ export default function StudentSearch({
               </Button>
             </div>
           </form>
-          {!data && data !== '' && (
-            <FormError message="Student is not existed!" />
-          )}
+          {!data && input && <FormError message="Student is not existed!" />}
 
           <DemographicsRow
             content={{
