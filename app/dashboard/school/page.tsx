@@ -11,6 +11,11 @@ import { Card, CardHeader, Tooltip } from '@nextui-org/react';
 import useSchoolLevel from '@/hooks/useSchoolLevel';
 import { BarChart } from '@/app/ui/charts/BarChart';
 import { ethnicity, genders, ell } from '@/constants/constants';
+import MyBarChart from '@/app/ui/charts/bar-chart';
+import { registerables, Chart } from 'chart.js';
+
+Chart.register(...registerables)
+
 function MidasRiskTooltipContent() {
   return (
     <div>Percentages of students at the three different MIDAS risk levels.</div>
@@ -224,8 +229,9 @@ export default async function Page() {
             </div>
 
             <div className="mt-16 flex justify-between gap-2">
+              {/* ----- Ethnicity Chart Card ----- */}
               <Card
-                className="-mt-4 flex h-[68vh] w-[550px] rounded-xl bg-neutral-100"
+                className="-mt-4 flex h-[68vh] w-[400px] rounded-xl bg-neutral-100"
                 shadow="md"
               >
                 <p className="-mb-8 p-2 text-xl font-bold">
@@ -235,20 +241,16 @@ export default async function Page() {
                   Distribution of those at risk for each ethnicity
                 </p>
                 <div className="mb-0 mt-auto flex h-full flex-col pt-10 ">
-                  {
-                    <BarChart
-                      data={Object.keys(ethnicity).map((ele: any) => ({
-                        id: ele,
-                        'High Risk': ethnicity[ele]['High Risk'],
-                        'Some Risk': ethnicity[ele]['Some Risk'],
-                        'Low Risk': ethnicity[ele]['Low Risk'],
-                      }))}
-                      colors={colors}
-                      legendVariable="Ethnicity"
-                    />
-                  }
+                  <MyBarChart data={Object.keys(ethnicity).map((ele: any) => ({
+                    label: ele,
+                    highRisk: ethnicity[ele]['High Risk'],
+                    someRisk: ethnicity[ele]['Some Risk'],
+                    lowRisk: ethnicity[ele]['Low Risk'],
+                  }))}/>
                 </div>
               </Card>
+
+              {/* ----- English Learner Chart Card ----- */}
               <Card
                 className="-mt-4 flex h-[68vh] w-[400px] rounded-xl bg-neutral-100"
                 shadow="md"
@@ -257,23 +259,19 @@ export default async function Page() {
                   English Learner and Risk
                 </p>
                 <p className="-mb-8 mt-6 pl-2 text-sm italic">
-                  Distribution of those at risk for each english learner
+                Distribution of those at risk for English learners and speakers
                 </p>
                 <div className="mb-0 mt-auto flex h-full flex-col pt-10">
-                  {
-                    <BarChart
-                      data={Object.keys(ell).map((ele: any) => ({
-                        id: ele,
-                        'High Risk': ell[ele]['High Risk'],
-                        'Some Risk': ell[ele]['Some Risk'],
-                        'Low Risk': ell[ele]['Low Risk'],
-                      }))}
-                      colors={colors}
-                      legendVariable="ELL"
-                    />
-                  }
+                  <MyBarChart data={Object.keys(ell).map((ele: any) => ({
+                    label: ele,
+                    highRisk: ell[ele]['High Risk'],
+                    someRisk: ell[ele]['Some Risk'],
+                    lowRisk: ell[ele]['Low Risk'],
+                  }))}/>
                 </div>
               </Card>
+
+              {/* ----- Gender Chart Card ----- */}
               <Card
                 className="-mt-4 flex h-[68vh] w-[400px] rounded-xl bg-neutral-100"
                 shadow="md"
@@ -283,18 +281,12 @@ export default async function Page() {
                   Distribution of those at risk for each gender
                 </p>
                 <div className="mb-0 mt-auto flex h-full flex-col pt-10">
-                  {
-                    <BarChart
-                      data={Object.keys(genders).map((ele: any) => ({
-                        id: ele,
-                        'High Risk': genders[ele]['High Risk'],
-                        'Some Risk': genders[ele]['Some Risk'],
-                        'Low Risk': genders[ele]['Low Risk'],
-                      }))}
-                      colors={colors}
-                      legendVariable="Gender"
-                    />
-                  }
+                  <MyBarChart data={Object.keys(genders).map((ele: any) => ({
+                    label: ele,
+                    highRisk: genders[ele]['High Risk'],
+                    someRisk: genders[ele]['Some Risk'],
+                    lowRisk: genders[ele]['Low Risk'],
+                  }))}/>
                 </div>
               </Card>
             </div>

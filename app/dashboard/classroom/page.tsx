@@ -10,12 +10,11 @@ import useRiskOptions from '@/hooks/useRiskOptions';
 import useClassLevel from '@/hooks/useClassLevel';
 import { useSearchContext } from '@/app/context/nav-search-context';
 import { Card } from '@nextui-org/react';
-import RiskDropdown from '@/app/ui/RiskDropDown';
-import { BarChart } from '@/app/ui/charts/BarChart';
 import { ethnicity, genders, ell } from '@/constants/constants';
 import ClassSearch from '@/app/ui/dashboard/cards/search/class-search-card';
 import ClassSearchInputOnly from '@/app/ui/dashboard/cards/search/class-search-input';
 import useSchoolLevel from '@/hooks/useSchoolLevel';
+import MyBarChart from '@/app/ui/charts/bar-chart';
 
 function MidasRiskTooltipContent() {
   return (
@@ -314,79 +313,69 @@ export default async function Page() {
               />
             </div>
           </div>
-          <div className="mt-16 flex flex-row justify-between gap-2">
-            <Card
-              className="-mt-12 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
-              shadow="md"
-            >
-              <p className="-mb-8 p-2 text-xl font-bold">Ethnicity and Risk</p>
-              <p className="-mb-8 mt-6 pl-2 text-sm italic">
-                Distribution of those at risk for each ethnicity
-              </p>
-              <div className="mb-0 mt-auto flex h-full flex-col pt-10">
-                {
-                  <BarChart
-                    data={Object.keys(ethnicity).map((ele: any) => ({
-                      id: ele,
-                      'High Risk': ethnicity[ele]['High Risk'],
-                      'Some Risk': ethnicity[ele]['Some Risk'],
-                      'Low Risk': ethnicity[ele]['Low Risk'],
-                    }))}
-                    colors={colors}
-                    legendVariable="Ethnicity"
-                  />
-                }
-              </div>
-            </Card>
-            <Card
-              className="-mt-12 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
-              shadow="md"
-            >
-              <p className="-mb-8 p-2 text-xl font-bold">
-                English Learner and Risk
-              </p>
-              <p className="-mb-8 mt-6 pl-2 text-sm italic">
-                Distribution of those at risk for each english learner
-              </p>
-              <div className="mb-0 mt-auto flex h-full flex-col pt-10">
-                {
-                  <BarChart
-                    data={Object.keys(ell).map((ele: any) => ({
-                      id: ele,
-                      'High Risk': ell[ele]['High Risk'],
-                      'Some Risk': ell[ele]['Some Risk'],
-                      'Low Risk': ell[ele]['Low Risk'],
-                    }))}
-                    colors={colors}
-                    legendVariable="ELL"
-                  />
-                }
-              </div>
-            </Card>
-            <Card
-              className="-mt-12 flex h-[68vh] w-1/3 rounded-xl bg-neutral-100"
-              shadow="md"
-            >
-              <p className="-mb-8 p-2 text-xl font-bold">Gender and Risk</p>
-              <p className="-mb-8 mt-6 pl-2 text-sm italic">
-                Distribution of those at risk for each gender
-              </p>
-              <div className="mb-0 mt-auto flex h-full flex-col pt-10">
-                {
-                  <BarChart
-                    data={Object.keys(genders).map((ele: any) => ({
-                      id: ele,
-                      'High Risk': genders[ele]['High Risk'],
-                      'Some Risk': genders[ele]['Some Risk'],
-                      'Low Risk': genders[ele]['Low Risk'],
-                    }))}
-                    colors={colors}
-                    legendVariable="Gender"
-                  />
-                }
-              </div>
-            </Card>
-          </div>
+          <div className="mt-16 flex justify-between gap-2">
+              {/* ----- Ethnicity Chart Card ----- */}
+              <Card
+                className="-mt-4 flex h-[68vh] w-[400px] rounded-xl bg-neutral-100"
+                shadow="md"
+              >
+                <p className="-mb-8 p-2 text-xl font-bold">
+                  Ethnicity and Risk
+                </p>
+                <p className="-mb-8 mt-6 pl-2 text-sm italic">
+                  Distribution of those at risk for each ethnicity
+                </p>
+                <div className="mb-0 mt-auto flex h-full flex-col pt-10 ">
+                  <MyBarChart data={Object.keys(ethnicity).map((ele: any) => ({
+                    label: ele,
+                    highRisk: ethnicity[ele]['High Risk'],
+                    someRisk: ethnicity[ele]['Some Risk'],
+                    lowRisk: ethnicity[ele]['Low Risk'],
+                  }))}/>
+                </div>
+              </Card>
+
+              {/* ----- English Learner Chart Card ----- */}
+              <Card
+                className="-mt-4 flex h-[68vh] w-[400px] rounded-xl bg-neutral-100"
+                shadow="md"
+              >
+                <p className="-mb-8 p-2 text-xl font-bold">
+                  English Learner and Risk
+                </p>
+                <p className="-mb-8 mt-6 pl-2 text-sm italic">
+                  Distribution of those at risk for English learners and speakers
+                </p>
+                <div className="mb-0 mt-auto flex h-full flex-col pt-10">
+                  <MyBarChart data={Object.keys(ell).map((ele: any) => ({
+                    label: ele,
+                    highRisk: ell[ele]['High Risk'],
+                    someRisk: ell[ele]['Some Risk'],
+                    lowRisk: ell[ele]['Low Risk'],
+                  }))}/>
+                </div>
+              </Card>
+
+              {/* ----- Gender Chart Card ----- */}
+              <Card
+                className="-mt-4 flex h-[68vh] w-[400px] rounded-xl bg-neutral-100"
+                shadow="md"
+              >
+                <p className="-mb-8 p-2 text-xl font-bold">Gender and Risk</p>
+                <p className="-mb-8 mt-6 pl-2 text-sm italic">
+                  Distribution of those at risk for each gender
+                </p>
+                <div className="mb-0 mt-auto flex h-full flex-col pt-10">
+                  <MyBarChart data={Object.keys(genders).map((ele: any) => ({
+                    label: ele,
+                    highRisk: genders[ele]['High Risk'],
+                    someRisk: genders[ele]['Some Risk'],
+                    lowRisk: genders[ele]['Low Risk'],
+                  }))}/>
+                </div>
+              </Card>
+            </div>
+
           {/* <div className=" flex h-full w-full flex-col gap-y-28">
           <div className="flex h-full w-full items-center justify-end">
             <Dropdown riskOptions={riskOptions} />

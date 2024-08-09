@@ -14,6 +14,7 @@ import SimpleLineIconsMagnifier from '@/app/ui/icons/SimpleLineIconsMagnifier';
 import { DonutChart } from '@/app/ui/charts/donut-chart';
 import { StudentDemographics } from '@/app/types/student-demographics';
 import { FormError } from '@/app/ui/form-error';
+import { DemographicsType } from '@/app/ui/charts/demographics-type';
 const nunito = Nunito({
   weight: ['200', '200'],
   subsets: ['latin'],
@@ -22,37 +23,37 @@ const nunito = Nunito({
 
 const genderDataPlaceholder = [
   {
-    id: 'Male',
+    label: 'Male',
     value: 500,
   },
   {
-    id: 'Female',
+    label: 'Female',
     value: 548,
   },
 ];
 
 const ethnicityDataPlaceholder = [
   {
-    id: 'White',
+    label: 'White',
     value: 358,
   },
   {
-    id: 'Hispanic',
+    label: 'Hispanic',
     value: 300,
   },
   {
-    id: 'Other POC',
+    label: 'Other POC',
     value: 390,
   },
 ];
 
-const englishLearnerDataPlaceholder = [
+const englishLearnerDataPlaceholder: DemographicsType[] = [
   {
-    id: 'Not ELL',
+    label: 'Not ELL',
     value: 800,
   },
   {
-    id: 'ELL',
+    label: 'ELL',
     value: 248,
   },
 ];
@@ -91,13 +92,12 @@ function DemographicsRow({
           className="bg-neutral-100"
           content={
             <div className="h-96 w-96">
-              <p className={`${nunito.className} -mb-4 text-xl`}>
+              <p className={`${nunito.className} text-xl`}>
                 School Gender demographics
               </p>
               <DonutChart
                 data={genderDataPlaceholder}
                 colors={['#f87171', '#a5f3fc']}
-                selectedSlice={content.gender}
               />
             </div>
           }
@@ -122,13 +122,12 @@ function DemographicsRow({
           className="bg-neutral-100"
           content={
             <div className="h-96 w-96">
-              <p className={`${nunito.className} -mb-4 text-xl`}>
+              <p className={`${nunito.className} text-xl`}>
                 School English-learner demographics
               </p>
               <DonutChart
                 data={englishLearnerDataPlaceholder}
                 colors={['#a3a3a3', '#4ade80']}
-                selectedSlice={content.ell}
               />
             </div>
           }
@@ -153,13 +152,12 @@ function DemographicsRow({
           className="bg-neutral-100"
           content={
             <div className="h-96 w-96">
-              <p className={`${nunito.className} -mb-4 text-xl`}>
+              <p className={`${nunito.className} text-xl`}>
                 School Ethnicity demographics
               </p>
               <DonutChart
                 data={ethnicityDataPlaceholder}
                 colors={['#f87171', '#a5f3fc', '#4ade80']}
-                selectedSlice={content.ethnicity}
               />
             </div>
           }
