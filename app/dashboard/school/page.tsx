@@ -9,7 +9,6 @@ import { useEffect, useState } from 'react';
 import { CardThreeValue } from '@/app/ui/dashboard/cards/general/card-three-value';
 import { Card, CardHeader, Tooltip } from '@nextui-org/react';
 import useSchoolLevel from '@/hooks/useSchoolLevel';
-import { BarChart } from '@/app/ui/charts/BarChart';
 import { ethnicity, genders, ell } from '@/constants/constants';
 import MyBarChart from '@/app/ui/charts/bar-chart';
 import { registerables, Chart } from 'chart.js';
